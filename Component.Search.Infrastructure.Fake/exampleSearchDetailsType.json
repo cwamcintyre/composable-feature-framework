@@ -1,0 +1,41 @@
+{
+  "searchPage": {
+    "title": "Details of the person you selected",
+    "description": "This is a search page",
+    "columns": [
+      {
+        "label": "First Name",
+        "name": "firstName",
+        "type": "string",
+        "sortable": true,
+        "clickable": true
+      },
+      {
+        "label": "Last Name",
+        "name": "lastName",
+        "type": "string",
+        "sortable": true,
+        "clickable": false
+      },
+      {
+        "label": "Date of Birth",
+        "name": "dateOfBirth",
+        "type": "date",
+        "sortable": true,
+        "clickable": false
+      }
+    ],
+    "filters": [
+      {
+        "name": "Name",
+        "type": "text",
+        "label": "Search by name"
+      },
+      {
+        "name": "Date of Birth",
+        "type": "dateRange",
+        "label": "Select date range"
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "searchPage": {
+    "title": "Results for the search you entered",
+    "description": "This is a search page",
+    "columns": [
+      {
+        "label": "Name",
+        "name": "name",
+        "type": "string",
+        "sortable": true,
+        "clickable": true
+      },
+      {
+        "label": "Date of Birth",
+        "name": "dateOfBirth",
+        "type": "date",
+        "sortable": true,
+        "clickable": false
+      },
+      {
+        "label": "City",
+        "name": "city",
+        "type": "text",
+        "sortable": true,
+        "clickable": false
+      }
+    ],
+    "filters": [
+      {
+        "name": "Name",
+        "type": "text",
+        "label": "Search by name"
+      },
+      {
+        "name": "Date of Birth",
+        "type": "dateRange",
+        "label": "Select date range"
+      }
+    ]
+  }
+}

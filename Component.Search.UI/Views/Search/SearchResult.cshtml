@@ -1,0 +1,73 @@
+﻿@model SearchViewModel
+@{
+    string title = Model.SearchTypeModel.SearchPage.Title;
+    int currentPage = Model.CurrentPage;
+    int totalPages = Model.TotalPages;
+}
+
+<h1 class="govuk-heading-l">@title</h1>
+
+<form method="POST" enctype="multipart/form-data" asp-controller="Search" asp-action="Results">
+
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">Search results</caption>
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+            @foreach (var column in Model.SearchTypeModel.SearchPage.Columns)
+            {
+                <th scope="col" class="govuk-table__header">@column.Label</th>
+            }
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var data in Model.Data)
+            {
+                <tr class="govuk-table__row">
+                    @foreach (var column in Model.SearchTypeModel.SearchPage.Columns)
+                    {
+                        <td class="govuk-table__cell">
+                            @if (column.Clickable)
+                            {
+                                <a asp-controller="Detail" asp-route-id="@data["id"]" target="_blank" class="govuk-link">@data[@column.Name]</a>
+                            }
+                            else
+                            {
+                                @data[@column.Name]
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (totalPages > 1)
+    {
+        <govuk-pagination>
+            @if (currentPage > 1)
+            {
+                <govuk-pagination-previous href="@Url.Action("ResultsFromPagination", new { page = Model.PreviousPage })" />
+            }
+            @foreach (var item in Model.PaginationItems)
+            {
+                if (item == -1)
+                {
+                    <govuk-pagination-ellipsis />
+                }
+                else if (item == currentPage)
+                {
+                    <govuk-pagination-item href="@Url.Action("ResultsFromPagination", new { page = item })" is-current="true">@item</govuk-pagination-item>
+                }
+                else
+                {
+                    <govuk-pagination-item href="@Url.Action("ResultsFromPagination", new { page = item })">@item</govuk-pagination-item>
+                }
+            }
+            @if (currentPage < totalPages)
+            {
+                <govuk-pagination-next href="@Url.Action("ResultsFromPagination", new { page = Model.NextPage })" />
+            }
+        </govuk-pagination>
+    }
+
+</form>

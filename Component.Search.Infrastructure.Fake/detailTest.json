@@ -1,0 +1,52 @@
+{
+  "detailsPage": {
+    "title": "Details of the person you selected",
+    "sections": [
+      {
+        "title": "Personal Information",
+        "fields": [
+          {
+            "label": "Name",
+            "type": "text",
+            "name": "name"
+          },
+          {
+            "label": "Email",
+            "type": "email",
+            "name": "email"
+          },
+          {
+            "label": "Date of Birth",
+            "type": "date",
+            "name": "dateOfBirth"
+          }
+        ]
+      },
+      {
+        "title": "Address",
+        "fields": [
+          {
+            "label": "Street",
+            "type": "text",
+            "name": "street"
+          },
+          {
+            "label": "City",
+            "type": "text",
+            "name": "city"
+          },
+          {
+            "label": "State",
+            "type": "text",
+            "name": "state"
+          },
+          {
+            "label": "Zip Code",
+            "type": "text",
+            "name": "zipCode"
+          }
+        ]
+      }
+    ]
+  }
+}

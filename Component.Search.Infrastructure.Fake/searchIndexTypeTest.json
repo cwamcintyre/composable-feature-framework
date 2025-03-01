@@ -1,0 +1,19 @@
+{
+  "searchIndexPage": {
+    "title": "Search for a person",
+    "indexFields": [
+      {
+        "name": "name",
+        "type": "text",
+        "label": "Name",
+        "placeholder": "Enter name"
+      },
+      {
+        "name": "city",
+        "type": "text",
+        "label": "City",
+        "placeholder": "Enter city"
+      }
+    ]
+  }
+}

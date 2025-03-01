@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "component-library",
+			"path": "."
+		}
+	],
+	"settings": {
+		"azureFunctions.deploySubpath": "Component.Form.API/bin/Release/net8.0/publish",
+		"azureFunctions.projectLanguage": "C#",
+		"azureFunctions.projectRuntime": "~4",
+		"debug.internalConsoleOptions": "neverOpen",
+		"azureFunctions.preDeployTask": "publish (functions)"
+	}
+}

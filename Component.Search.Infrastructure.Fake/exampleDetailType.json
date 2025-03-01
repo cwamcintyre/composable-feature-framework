@@ -1,0 +1,57 @@
+{
+  "detailsPage": {
+    "title": "Details",
+    "sections": [
+      {
+        "title": "Personal Information",
+        "fields": [
+          {
+            "label": "First Name",
+            "type": "text",
+            "name": "firstName"
+          },
+          {
+            "label": "Last Name",
+            "type": "text",
+            "name": "lastName"
+          },
+          {
+            "label": "Email",
+            "type": "email",
+            "name": "email"
+          },
+          {
+            "label": "Date of Birth",
+            "type": "date",
+            "name": "dateOfBirth"
+          }
+        ]
+      },
+      {
+        "title": "Address",
+        "fields": [
+          {
+            "label": "Street",
+            "type": "text",
+            "name": "street"
+          },
+          {
+            "label": "City",
+            "type": "text",
+            "name": "city"
+          },
+          {
+            "label": "State",
+            "type": "text",
+            "name": "state"
+          },
+          {
+            "label": "Zip Code",
+            "type": "text",
+            "name": "zipCode"
+          }
+        ]
+      }
+    ]
+  }
+}

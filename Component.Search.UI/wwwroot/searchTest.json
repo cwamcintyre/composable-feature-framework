@@ -1,0 +1,35 @@
+{
+  "searchPage": {
+    "title": "Search Page",
+    "description": "This is a search page",
+    "columns": [
+      {
+        "name": "First Name",
+        "type": "string",
+        "sortable": true
+      },
+      {
+        "name": "Last Name",
+        "type": "string",
+        "sortable": true
+      },
+      {
+        "name": "Date of Birth",
+        "type": "date",
+        "sortable": true
+      }
+    ],
+    "filters": [
+      {
+        "name": "Name",
+        "type": "text",
+        "label": "Search by name"
+      },
+      {
+        "name": "Date of Birth",
+        "type": "dateRange",
+        "label": "Select date range"
+      }
+    ]
+  }
+}

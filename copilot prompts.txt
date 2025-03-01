@@ -1,0 +1,10 @@
+using exampleForm.json as an example configuration, make me a form, put the configuration into test.json. It has 5 pages. Each page contains 1 question. The first question is "What is your name?" which takes text input. The second question is "What is your quest?" which takes 3 options, "To find the holy grail", "To become a knight", "to do nothing". The third question is "What is your favourite colour?". The fourth question is "What did you think of the form?" which takes text as an input. The fifth question is "Any other comments?".
+
+Add pagination logic to SearchPresenter.HandleIndex. If there is only one page, do not show pagination. If there is two pages, on page one show the next button. On page two show the previous button. if there are up to 5 pages show previous, 1, 2, 3, 4 5, next. If there are more than 5 pages, show previous, 1, ellipsis, 2, 3, 4, ellipsis, last page, next. The current page should use the govuk-pagination-item is-current="true" attribute. As the user changes pages, calculate the middle numbers so that the current page is in the middle 
+
+refactor FakeSearchDataStore so it uses the Filters, Queries, SortKey, SortOrder, ItemsPerPage and PageNumber in SearchDetails to search in Data
+
+add example configuration and logic for conditional branching between questions. 
+A condition can be based on any rule against a question answer in the form.
+Conditions are C# based logic that can be interpreted by the Roslyn compiler. 
+The form data will be in a dictionary, the answer will have a key using the name property in the configuration.  

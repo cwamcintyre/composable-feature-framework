@@ -1,0 +1,114 @@
+{
+    "formId": "survey_002",
+    "title": "Monty Pythons Flying Form",
+    "description": "Please fill out this form.",
+    "currentPage": 1,
+    "totalPages": 7,
+    "pages": [
+        {
+            "pageId": "page_1",
+            "title": "Page 1",
+            "questions": [
+                {
+                    "questionId": "q1",
+                    "type": "text",
+                    "label": "What is your name?",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "pageId": "page_2",
+            "title": "Page 2",
+            "questions": [
+                {
+                    "questionId": "q2",
+                    "type": "select",
+                    "label": "What is your quest?",
+                    "options": {
+                        "To find the holy grail": "To find the holy grail",
+                        "To become a knight": "To become a knight",
+                        "To allow claimants to edit their redundancy claim" : "To allow claimants to edit their redundancy claim", 
+                        "To do nothing": "To do nothing"
+                    },
+                    "required": true
+                }
+            ]
+        },
+        {
+            "pageId": "page_3",
+            "title": "Page 3",
+            "questions": [
+                {
+                    "questionId": "q3",
+                    "type": "text",
+                    "label": "What is your favourite colour?",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "pageId": "page_4",
+            "title": "Page 4",
+            "questions": [
+                {
+                    "questionId": "q7",
+                    "type": "select",
+                    "label": "Can github copilot cope with adding a page in the middle of my form?",
+                    "options": {
+                        "Yes": "Yes",
+                        "No": "No"
+                    },
+                    "required": true
+                }
+            ]
+        },
+        {
+            "pageId": "page_5",
+            "title": "Page 5",
+            "questions": [
+                {
+                    "questionId": "q4",
+                    "type": "text",
+                    "label": "What did you think of the form?",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "pageId": "page_6",
+            "title": "Page 6",
+            "questions": [
+                {
+                    "questionId": "q5",
+                    "type": "text",
+                    "label": "Any other comments?",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "pageId": "page_7",
+            "title": "Page 7",
+            "questions": [
+                {
+                    "questionId": "q6",
+                    "type": "select",
+                    "label": "Can github copilot cope with adding a new page at the end?",
+                    "options": {
+                        "Yes": "Yes",
+                        "No": "No"
+                    },
+                    "required": true
+                }
+            ]
+        }
+    ],
+    "submission": {
+        "method": "POST",
+        "endpoint": "https://api.example.com/submit",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
