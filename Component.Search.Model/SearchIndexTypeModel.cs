@@ -9,6 +9,8 @@ namespace Component.Search.Model
     {
         public string Title { get; set; } = string.Empty;
         public string SearchType { get; set;} = string.Empty;
+        public string SearchTypeId { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public List<IndexField> IndexFields { get; set; } = new List<IndexField>();
         public RelatedContent RelatedContent { get; set; }
     }

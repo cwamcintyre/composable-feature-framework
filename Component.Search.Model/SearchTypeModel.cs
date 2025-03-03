@@ -11,6 +11,7 @@ public class SearchTypeModel
 public class SearchPage
 {
     public string Title { get; set; }
+    public string SearchTypeId { get; set; }
     public string Description { get; set; }
     public List<Column> Columns { get; set; }
     public List<Filter> Filters { get; set; }

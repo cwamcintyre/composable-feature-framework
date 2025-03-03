@@ -8,7 +8,7 @@ public class FakeDetailTypeStore : IDetailTypeStore
 {
     public async Task<DetailTypeModel> GetDetailType(string id)
     {
-        var json = File.ReadAllText("detailTest.json");
+        var json = File.ReadAllText($"{id}DetailType.json");
         var detailType = JsonConvert.DeserializeObject<DetailTypeModel>(json);
 
         if (detailType != null)

@@ -2,11 +2,13 @@
 
 @{
     var searchPageType = Model.SearchIndexType.SearchIndexPage;
+    var searchPageTypeId = Model.SearchIndexType.SearchIndexPage.SearchTypeId;
 }
 
 <form asp-controller="Search" asp-action="Results" method="post" role="search" class="govuk-!-margin-bottom-6">
 
     <input hidden name="pageNumber" value="1" />
+    <input hidden name="searchTypeId" value="@searchPageTypeId" />
 
     @foreach (var searchField in searchPageType.IndexFields)
     {

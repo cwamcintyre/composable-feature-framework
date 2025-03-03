@@ -17,13 +17,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="detailTest.json">
+    <None Update="eiirDetailType.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="searchTest.json">
+    <None Update="eiirSearchResultsType.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="searchIndexTypeTest.json">
+    <None Update="eiirSearchIndexType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="fipDetailType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="fipSearchResultsType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="fipSearchIndexType.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

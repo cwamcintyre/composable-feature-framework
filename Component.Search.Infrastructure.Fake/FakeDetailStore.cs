@@ -7,9 +7,9 @@ namespace Component.Search.Infrastructure.Fake
 {
     public class FakeDetailStore : IDetailStore
     {
-        public async Task<Dictionary<string, string>> GetDetail(string detailId)
+        public async Task<Dictionary<string, string>> GetDetail(string detailTypeId, string detailId)
         {
-            return FakeData.Instance.GetDetail(detailId);
+            return FakeData.Instance.GetDetail(detailTypeId, detailId);
         }
     }
 }

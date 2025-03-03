@@ -17,7 +17,7 @@ public class DetailService
     public async Task<GetDataItemResponseModel> GetDetailAsync(GetDataItemRequestModel request)
     {
         var detailType = await _detailTypeStore.GetDetailType(request.ItemTypeId);
-        var detail = await _detailStore.GetDetail(request.ItemId);
+        var detail = await _detailStore.GetDetail(request.ItemTypeId, request.ItemId);
 
         return new GetDataItemResponseModel
         {

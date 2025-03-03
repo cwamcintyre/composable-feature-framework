@@ -1,7 +1,8 @@
 {
   "searchPage": {
-    "title": "Details of the person you selected",
-    "description": "This is a search page",
+    "searchTypeId": "fip",
+    "title": "Search results",
+    "description": "<p class=\"govuk-body\">You have found <span class=\"govuk-!-font-weight-bold\">{total}</span> records. Click on the Name link to see the details</p>",
     "columns": [
       {
         "label": "First Name",
@@ -15,12 +16,19 @@
         "name": "lastName",
         "type": "string",
         "sortable": true,
+        "clickable": true
+      },
+      {
+        "label": "Company",
+        "name": "company",
+        "type": "text",
+        "sortable": true,
         "clickable": false
       },
       {
-        "label": "Date of Birth",
-        "name": "dateOfBirth",
-        "type": "date",
+        "label": "Postcode",
+        "name": "postCode",
+        "type": "text",
         "sortable": true,
         "clickable": false
       }

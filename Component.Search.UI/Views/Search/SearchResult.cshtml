@@ -1,6 +1,7 @@
 ﻿@model SearchViewModel
 @{
     string title = Model.SearchTypeModel.SearchPage.Title;
+    string searchTypeId = Model.SearchTypeModel.SearchPage.SearchTypeId;
     int currentPage = Model.CurrentPage;
     int totalPages = Model.TotalPages;
 }
@@ -36,7 +37,7 @@
                         <td class="govuk-table__cell">
                             @if (column.Clickable)
                             {
-                                <a asp-controller="Detail" asp-route-id="@data["id"]" target="_blank" class="govuk-link">@data[@column.Name]</a>
+                                <a asp-controller="Detail" asp-action="Index" asp-route-itemTypeId="@searchTypeId" asp-route-itemId="@data["id"]" target="_blank" class="govuk-link">@data[@column.Name]</a>
                             }
                             else
                             {
@@ -54,7 +55,7 @@
         <govuk-pagination>
             @if (currentPage > 1)
             {
-                <govuk-pagination-previous href="@Url.Action("ResultsFromPagination", new { page = Model.PreviousPage })" />
+                <govuk-pagination-previous asp-controller="Search" asp-action="ResultsFromPagination" asp-route-page="@Model.PreviousPage" asp-route-searchIndexTypeId="@searchTypeId" />
             }
             @foreach (var item in Model.PaginationItems)
             {
@@ -64,16 +65,16 @@
                 }
                 else if (item == currentPage)
                 {
-                    <govuk-pagination-item href="@Url.Action("ResultsFromPagination", new { page = item })" is-current="true">@item</govuk-pagination-item>
+                    <govuk-pagination-item asp-controller="Search" asp-action="ResultsFromPagination" asp-route-page="@item" asp-route-searchIndexTypeId="@searchTypeId" is-current="true">@item</govuk-pagination-item>
                 }
                 else
                 {
-                    <govuk-pagination-item href="@Url.Action("ResultsFromPagination", new { page = item })">@item</govuk-pagination-item>
+                    <govuk-pagination-item asp-controller="Search" asp-action="ResultsFromPagination" asp-route-page="@item" asp-route-searchIndexTypeId="@searchTypeId">@item</govuk-pagination-item>
                 }
             }
             @if (currentPage < totalPages)
             {
-                <govuk-pagination-next href="@Url.Action("ResultsFromPagination", new { page = Model.NextPage })" />
+                <govuk-pagination-next asp-controller="Search" asp-action="ResultsFromPagination" asp-route-page="@Model.NextPage" asp-route-searchIndexTypeId="@searchTypeId" />
             }
         </govuk-pagination>
     }

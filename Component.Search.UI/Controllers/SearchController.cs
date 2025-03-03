@@ -20,10 +20,10 @@ namespace Component.Search.UI.Controllers
             _searchPresenter = searchPresenter;
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult> Index()
+        [HttpGet("search/{searchTypeId}")]
+        public async Task<ActionResult> Index(string searchTypeId)
         {
-            var apiResult = await _searchAPIService.GetSearchIndexTypeAsync();
+            var apiResult = await _searchAPIService.GetSearchIndexTypeAsync(searchTypeId);
             var viewModel = await _searchPresenter.HandleIndex(apiResult);
             return View(viewModel.ViewName, viewModel);
         }
@@ -54,7 +54,7 @@ namespace Component.Search.UI.Controllers
 
             var apiResult = await _searchAPIService.SearchAsync(new GetDataRequestModel()
             {
-                SearchDataTypeId = "search",
+                SearchDataTypeId = Request.Form["searchTypeId"],
                 SearchDetail = searchDetail
             });
             
@@ -62,15 +62,15 @@ namespace Component.Search.UI.Controllers
             return View(viewModel.ViewName, viewModel);
         }
 
-        [HttpGet("search/results/{page?}")]
-        public async Task<ActionResult> ResultsFromPagination(int page = 1)
+        [HttpGet("search/{searchIndexTypeId}/results/{page?}")]
+        public async Task<ActionResult> ResultsFromPagination(string searchIndexTypeId, int page = 1)
         {
             var searchDetail = JsonConvert.DeserializeObject<SearchDetail>(HttpContext.Session.GetString(SessionSearchKey));
             searchDetail.PageNumber = page;
 
             var apiResult = await _searchAPIService.SearchAsync(new GetDataRequestModel()
             {
-                SearchDataTypeId = "search",
+                SearchDataTypeId = searchIndexTypeId,
                 SearchDetail = searchDetail
             });
 

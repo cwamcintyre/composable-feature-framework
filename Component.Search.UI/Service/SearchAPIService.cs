@@ -79,11 +79,11 @@ public class SearchAPIService
         }
     }
 
-    public async Task<GetSearchIndexResponseModel> GetSearchIndexTypeAsync()
+    public async Task<GetSearchIndexResponseModel> GetSearchIndexTypeAsync(string searchIndexTypeId)
     {
         try
         {
-            var response = await _retryPolicy.ExecuteAsync(() => _httpClient.GetAsync("api/searchIndexType"));
+            var response = await _retryPolicy.ExecuteAsync(() => _httpClient.GetAsync($"api/searchIndexType/{searchIndexTypeId}"));
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(responseString))

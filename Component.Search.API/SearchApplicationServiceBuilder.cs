@@ -39,7 +39,7 @@ public static class SearchApplicationServiceBuilder
         services.AddScoped<SearchService>();
         services.AddScoped<IRequestResponseUseCase<GetDataRequestModel, GetDataResponseModel>, GetData>();
 
-        services.AddScoped<IResponseUseCase<GetSearchIndexResponseModel>, GetSearchIndexConfiguration>();
+        services.AddScoped<IRequestResponseUseCase<GetSearchIndexRequestModel, GetSearchIndexResponseModel>, GetSearchIndexConfiguration>();
 
         return services;
     }

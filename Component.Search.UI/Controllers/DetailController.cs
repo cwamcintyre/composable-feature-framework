@@ -2,6 +2,7 @@ using Component.Search.UI.Presenters;
 using Component.Search.UI.Service;
 using Component.Search.UI.Service.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Component.Search.UI.Controllers
 {

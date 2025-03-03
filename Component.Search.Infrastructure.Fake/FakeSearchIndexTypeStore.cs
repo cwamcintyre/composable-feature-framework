@@ -6,9 +6,9 @@ namespace Component.Search.Infrastructure.Fake;
 
 public class FakeSearchIndexTypeStore : ISearchIndexTypeStore
 {
-    public async Task<SearchIndexTypeModel> GetSearchIndexTypeAsync()
+    public async Task<SearchIndexTypeModel> GetSearchIndexTypeAsync(string searchIndexTypeId)
     {
-        var json = await File.ReadAllTextAsync("searchIndexTypeTest.json");
+        var json = await File.ReadAllTextAsync($"{searchIndexTypeId}SearchIndexType.json");
         return JsonConvert.DeserializeObject<SearchIndexTypeModel>(json);
     }
 }

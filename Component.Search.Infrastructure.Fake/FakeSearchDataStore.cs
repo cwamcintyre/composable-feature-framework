@@ -6,9 +6,9 @@ namespace Component.Search.Infrastructure.Fake;
 
 public class FakeSearchDataStore : ISearchDataStore
 {
-    public async Task<DataStoreResponseModel> GetDataAsync(SearchDetail searchDetail)
+    public async Task<DataStoreResponseModel> GetDataAsync(string searchDataTypeId, SearchDetail searchDetail)
     {
-        var data = FakeData.Instance.GetDetails();
+        var data = FakeData.Instance.GetDetails(searchDataTypeId);
 
         // Filter data based on searchDetail properties
         var filteredData = data.Where(d =>

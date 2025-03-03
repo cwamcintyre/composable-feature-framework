@@ -5,5 +5,5 @@ namespace Component.Search.Application.UseCase.GetSearchIndexConfiguration.Infra
 
 public interface ISearchIndexTypeStore
 {
-    Task<SearchIndexTypeModel> GetSearchIndexTypeAsync();
+    Task<SearchIndexTypeModel> GetSearchIndexTypeAsync(string searchIndexTypeId);
 }

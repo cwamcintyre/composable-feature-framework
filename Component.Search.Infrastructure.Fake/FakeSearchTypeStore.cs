@@ -9,7 +9,7 @@ public class FakeSearchTypeStore : ISearchTypeStore
 {
     public async Task<SearchTypeModel> GetSearchTypeAsync(string searchTypeId)
     {
-        var json = File.ReadAllText("searchTest.json");
+        var json = File.ReadAllText($"{searchTypeId}SearchResultsType.json");
         var searchType = JsonConvert.DeserializeObject<SearchTypeModel>(json);
 
         if (searchType != null)

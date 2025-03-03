@@ -5,5 +5,5 @@ namespace Component.Search.Application.UseCase.GetData.infrastructure;
 
 public interface ISearchDataStore
 {
-    Task<DataStoreResponseModel> GetDataAsync(SearchDetail searchDetail);
+    Task<DataStoreResponseModel> GetDataAsync(string searchDataTypeId, SearchDetail searchDetail);
 }

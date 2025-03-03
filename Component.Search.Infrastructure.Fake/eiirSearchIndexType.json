@@ -1,5 +1,6 @@
 {
   "searchIndexPage": {
+    "searchTypeId": "eiir",
     "title": "Search the Individual Insolvency Register",
     "searchType": "simpleWithRelatedContent",
     "indexFields": [

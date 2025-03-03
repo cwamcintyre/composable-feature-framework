@@ -11,19 +11,37 @@ public class FakeData
 
     public static FakeData Instance => instance.Value;
 
-    private static Dictionary<string, Dictionary<string, string>> Details;    
+    private static Dictionary<string, Dictionary<string, Dictionary<string, string>>> Details = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();    
 
     private FakeData()
     {
         // Private constructor to prevent instantiation
+    }
 
-        var json = File.ReadAllText("detailTest.json");
+    public Dictionary<string, string> GetDetail(string searchType, string id)
+    {
+        return Details[searchType].ContainsKey(id) ?Details[searchType][id] : null;
+    }
+
+    public List<Dictionary<string, string>> GetDetails(string searchType)
+    {
+        if (!Details.ContainsKey(searchType))
+        {
+            Details[searchType] = GenerateFakeData(searchType);
+        }
+
+        return Details[searchType].Values.ToList();
+    }
+
+    private static Dictionary<string, Dictionary<string, string>> GenerateFakeData(string searchType) 
+    {
+        var json = File.ReadAllText($"{searchType}DetailType.json");
         var detailTest = JsonConvert.DeserializeObject<DetailTypeModel>(json);
 
         var faker = new Faker();
         faker.Random = new Randomizer(1337);
 
-        Details = new Dictionary<string, Dictionary<string, string>>();
+        var newDetails = new Dictionary<string, Dictionary<string, string>>();
 
         for (int i = 0; i < 100; i++)
         {
@@ -47,18 +65,10 @@ public class FakeData
                 }
             }
 
-            Details.Add(id.ToString(), innerDetails);
+            newDetails.Add(id.ToString(), innerDetails);
         }
-    }
 
-    public Dictionary<string, string> GetDetail(string id)
-    {
-        return Details.ContainsKey(id) ? Details[id] : null;
-    }
-
-    public List<Dictionary<string, string>> GetDetails()
-    {
-        return Details.Values.ToList();
+        return newDetails;
     }
 
     private static string GenerateFieldValue(string fieldName, string fieldType, string fieldLabel, Faker faker)
@@ -74,10 +84,18 @@ public class FakeData
 
     private static string GenerateTextFieldValue(string fieldName, string fieldLabel, Faker faker)
     {
-        if (fieldLabel.Contains("name", StringComparison.OrdinalIgnoreCase))
+        var surnames = new string[] { "Smith", "Jones", "Taylor", "Brown", "Williams" };
+        if (fieldName.Equals("name", StringComparison.OrdinalIgnoreCase))
         {
-            var surnames = new string[] { "Smith", "Jones", "Taylor", "Brown", "Williams" };
             return $"{faker.Name.FirstName()} {faker.PickRandom(surnames)}";
+        }
+        if (fieldName.Equals("firstName", StringComparison.OrdinalIgnoreCase))
+        {
+            return faker.Name.FirstName();
+        }
+        if (fieldName.Equals("lastName", StringComparison.OrdinalIgnoreCase))
+        {
+            return faker.PickRandom(surnames);
         }
         if (fieldLabel.Equals("City", StringComparison.OrdinalIgnoreCase))
         {

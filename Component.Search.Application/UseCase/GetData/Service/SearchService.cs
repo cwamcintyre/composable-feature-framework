@@ -17,7 +17,7 @@ public class SearchService
     public async Task<GetDataResponseModel> GetDataAsync(GetDataRequestModel request)
     {
         var searchType = await _searchTypeStore.GetSearchTypeAsync(request.SearchDataTypeId);
-        var data = await _searchDataStore.GetDataAsync(request.SearchDetail);
+        var data = await _searchDataStore.GetDataAsync(request.SearchDataTypeId, request.SearchDetail);
         
         return new GetDataResponseModel
         {

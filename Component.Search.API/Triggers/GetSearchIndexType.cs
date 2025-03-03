@@ -9,19 +9,24 @@ namespace Component.Search.API.Triggers
     public class GetSearchIndexType
     {
         private readonly ILogger<GetSearchIndexType> _logger;
-        private readonly IResponseUseCase<GetSearchIndexResponseModel> _getSearchIndexConfigurationUseCase;
+        private readonly IRequestResponseUseCase<GetSearchIndexRequestModel, GetSearchIndexResponseModel> _getSearchIndexConfigurationUseCase;
 
-        public GetSearchIndexType(ILogger<GetSearchIndexType> logger, IResponseUseCase<GetSearchIndexResponseModel> getSearchIndexConfigurationUseCase)
+        public GetSearchIndexType(ILogger<GetSearchIndexType> logger, IRequestResponseUseCase<GetSearchIndexRequestModel, GetSearchIndexResponseModel> getSearchIndexConfigurationUseCase)
         {
             _logger = logger;
             _getSearchIndexConfigurationUseCase = getSearchIndexConfigurationUseCase;
         }
 
         [Function("GetSearchIndexType")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "searchIndexType")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "searchIndexType/{searchIndexTypeId}")] HttpRequest req, string searchIndexTypeId)
         {
             _logger.LogInformation("GetSearchIndexType function called.");
-            var searchIndexType = await _getSearchIndexConfigurationUseCase.HandleAsync();
+            
+            var searchIndexType = await _getSearchIndexConfigurationUseCase.HandleAsync(new GetSearchIndexRequestModel()
+            {
+                SearchIndexTypeId = searchIndexTypeId
+            });
+
             return new OkObjectResult(searchIndexType);
         }
     }

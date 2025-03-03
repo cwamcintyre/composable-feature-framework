@@ -5,7 +5,7 @@ using Component.Search.Application.UseCase.GetSearchIndexConfiguration.Model;
 
 namespace Component.Search.Application.UseCase.GetSearchIndexConfiguration;
 
-public class GetSearchIndexConfiguration : IResponseUseCase<GetSearchIndexResponseModel>
+public class GetSearchIndexConfiguration : IRequestResponseUseCase<GetSearchIndexRequestModel, GetSearchIndexResponseModel>
 {
     private readonly ISearchIndexTypeStore _searchIndexTypeStore;
 
@@ -14,9 +14,9 @@ public class GetSearchIndexConfiguration : IResponseUseCase<GetSearchIndexRespon
         _searchIndexTypeStore = searchIndexTypeStore;
     }
 
-    public async Task<GetSearchIndexResponseModel> HandleAsync()
+    public async Task<GetSearchIndexResponseModel> HandleAsync(GetSearchIndexRequestModel request)
     {
-        var searchIndexType = await _searchIndexTypeStore.GetSearchIndexTypeAsync();
+        var searchIndexType = await _searchIndexTypeStore.GetSearchIndexTypeAsync(request.SearchIndexTypeId);
         return new GetSearchIndexResponseModel
         {
             SearchIndexType = searchIndexType
