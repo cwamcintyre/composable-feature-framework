@@ -1,0 +1,511 @@
+{
+    "formId": "employer_details_form",
+    "title": "Employer Details Form",
+    "description": "Form to collect employer details for redundancy notifications.",
+    "currentPage": 1,
+    "totalPages": 30,
+    "pages": [
+        {
+            "pageId": "page_1",
+            "title": "How to complete this form",
+            "components": [
+                {
+                    "questionId": "q1",
+                    "type": "html",
+                    "content": "<h2 class=\"govuk-heading-m\">Eligibility</h2>\n<p class=\"govuk-body\">Only complete this form to notify us if you're making 20 or more people redundant in an establishment on one form.</p>\n<p class=\"govuk-body\">You do not need to notify us if you're making less than 20 people redundant.</p>\n<p class=\"govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work.</p>\n<p class=\"govuk-body\">If you operate from more than one site, each site is treated separately for notification and consultation purposes.</p>\n<p class=\"govuk-body\">If your division or team has employees in various locations, the division or team is considered as an establishment so only give one address.</p>\n<p class=\"govuk-!-font-weight-bold\">What you need to know before starting</p>\n<p class=\"govuk-body\">This form has 8 parts and takes on average 40 minutes.</p>\n<p class=\"govuk-body\">The form will not save your information until you submit it at the end. If you close or leave the page for longer than 90 mins, you'll need to start again.</p>\n<p class=\"govuk-body\">Before submitting, make sure you save/print the final summary page. We only send an email confirming receipt of your form (not a copy of the answers provided).</p>\n<p class=\"govuk-body\">You'll need the following information to hand:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk\">find company information (opens in new tab)</a></li>\n<li>nature of the business - <a target=\"_blank\" href=\"https://resources.companieshouse.gov.uk/sic\">find (SIC code) (opens in new tab)</a></li>\n<li>timing and location of redundancies</li>\n<li>expected number of redundancies</li>\n<li>reasons for redundancies</li>\n<li>trade union and/or employee representative(s) details</li>\n</ul>\n<h2 class=\"govuk-heading-m\">Part 1: Employer’s details</h2>\n<h2 class=\"govuk-heading-m\">What is the company or organisation's name?<h2>"
+                },
+                {
+                    "questionId": "q2",
+                    "type": "text",
+                    "label": "What is the company or organisation's name?",
+                    "name": "company_or_organisation_name",
+                    "hint": "The name should match Companies House website"
+                }
+            ],
+            "nextPageId": "page_2"
+        },
+        {
+            "pageId": "page_2",
+            "title": "Where to find the company number",
+            "components": [
+                {
+                    "questionId": "q3",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">You can find this on the Companies House register or the charity register using the following links:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">find company information (opens in new tab)</a></li>\n<li>charity number - <a target=\"_blank\" href=\"https://www.gov.uk/find-charity-information\">search the charity register (opens in new tab)</a></li>\n</ul>\n"
+                },
+                {
+                    "questionId": "q4",
+                    "type": "text",
+                    "label": "What is the company or charity number?",
+                    "name": "company_or_charity_number",
+                    "hint": "If you do not have either number please explain why, for example: public body."
+                }
+            ],
+            "nextPageId": "page_3"
+        },
+        {
+            "pageId": "page_3",
+            "title": "What is the registered address?",
+            "components": [
+                {
+                    "questionId": "q5",
+                    "type": "ukaddress",
+                    "label": "What is the registered address?",
+                    "name": "registered_address",
+                    "hint": "Enter the company address as it is on the Companies House register"
+                }
+            ],
+            "nextPageId": "page_4"
+        },
+        {
+            "pageId": "page_4",
+            "title": "What is the company contact number?",
+            "components": [
+                {
+                    "questionId": "q6",
+                    "type": "phonenumber",
+                    "label": "What is the company contact number?",
+                    "name": "company_contact_number"
+                }
+            ],
+            "nextPageId": "page_5"
+        },
+        {
+            "pageId": "page_5",
+            "title": "What is the company email address?",
+            "components": [
+                {
+                    "questionId": "q7",
+                    "type": "email",
+                    "label": "What is the company email address?",
+                    "name": "company_email_address",
+                    "hint": "Enter the main company email address, for example: office@yourcompany.co.uk"
+                }
+            ],
+            "nextPageId": "page_6"
+        },
+        {
+            "pageId": "page_6",
+            "title": "Company nature of business (SIC) code",
+            "components": [
+                {
+                    "questionId": "q8",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">You can find the nature of business (SIC) code on the <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">Companies House register (opens in new tab)</a>.\n\n<p class=\"govuk-body\">Only enter the main nature of business (SIC) code for your company (even if you have several).</p>"
+                },
+                {
+                    "questionId": "q9",
+                    "type": "text",
+                    "label": "What is the nature of business (SIC) and description?",
+                    "name": "nature_of_business_sic",
+                    "hint": "If you do not have a SIC code, please explain why"
+                }
+            ],
+            "nextPageId": "page_7"
+        },
+        {
+            "pageId": "page_7",
+            "title": "Part 2: Named person to contact",
+            "components": [
+                {
+                    "questionId": "q10",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">Give the name of the person we should contact to discuss the redundancies, for example: Company director, Head of HR, etc.</p>\n<h2 class=\"govuk-heading-m\">What is the person's name?</h2>"
+                },
+                {
+                    "questionId": "q11",
+                    "type": "text",
+                    "label": "Contact first name",
+                    "name": "contact_first_name"
+                },
+                {
+                    "questionId": "q12",
+                    "type": "text",
+                    "label": "Contact last name",
+                    "name": "contact_last_name"
+                }
+            ],
+            "nextPageId": "page_8"
+        },
+        {
+            "pageId": "page_8",
+            "title": "What is their work contact number?",
+            "components": [
+                {
+                    "questionId": "q13",
+                    "type": "phonenumber",
+                    "label": "What is their work contact number?",
+                    "name": "work_contact_number",
+                    "hint": "Enter a work related number (and extension) or a mobile phone number for the named contact."
+                }
+            ],
+            "nextPageId": "page_9"
+        },
+        {
+            "pageId": "page_9",
+            "title": "Work Email Address",
+            "components": [
+                {
+                    "questionId": "q14",
+                    "type": "text",
+                    "label": "What is their work email address?",
+                    "name": "what_is_their_work_email_address",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_10"
+        },
+        {
+            "pageId": "page_10",
+            "title": "Establishment where redundancies are proposed",
+            "components": [
+                {
+                    "questionId": "q15",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">If you operate from more than one site, each one is treated separately for notification and consultation purposes.</p>\n\n<p class=\"govuk-body govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work (base).</p>\n\n<p class=\"govuk-body\">You must complete a form for each site where 20 or more redundancies are proposed on one form.</p>"
+                },
+                {
+                    "questionId": "q16",
+                    "type": "text",
+                    "label": "Where will the redundancies occur?",
+                    "name": "where_will_the_redundancies_occur"
+                }
+            ],
+            "nextPageId": "page_11"
+        },
+        {
+            "pageId": "page_11",
+            "title": "Company, Establishment or Business Closing",
+            "components": [
+                {
+                    "questionId": "q17",
+                    "type": "yesno",
+                    "label": "Is the company, establishment or business closing?",
+                    "name": "is_the_company_establishment_or_business_closing",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_12"
+        },
+        {
+            "pageId": "page_12",
+            "title": "Current Employee Numbers",
+            "components": [
+                {
+                    "questionId": "q18",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">We need to know the total number of employees across all the establishment(s) where there will be redundancies.</p>\n\n<p class=\"govuk-body\">You'll be asked for the proposed number of redundancies next.</p>"
+                },
+                {
+                    "questionId": "q19",
+                    "type": "text",
+                    "label": "What is the total number of employees across all affected establishments?",
+                    "name": "total_number_of_employees"
+                }
+            ],
+            "nextPageId": "page_13"
+        },
+        {
+            "pageId": "page_14",
+            "title": "Total Number of Redundancies",
+            "components": [
+                {
+                    "questionId": "q20",
+                    "type": "number",
+                    "label": "What is the total number of redundancies you plan to make?",
+                    "name": "total_number_of_redundancies",
+                    "hint": "You should only be reporting 20 or more redundancies to us on one form"
+                }
+            ],
+            "nextPageId": "page_15"
+        },
+        {
+            "pageId": "page_15",
+            "title": "Timing of Redundancies",
+            "components": [
+                {
+                    "questionId": "q21",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">You should give:</p>\n\n<ul>\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p class=\"govuk-body\">For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
+                },
+                {
+                    "questionId": "q22",
+                    "type": "dateparts",
+                    "label": "What is the date of the first proposed dismissal?",
+                    "name": "date_of_first_proposed_dismissal"
+                }
+            ],
+            "nextPageId": "page_16"
+        },
+        {
+            "pageId": "page_16",
+            "title": "Date of Last Proposed Dismissal",
+            "components": [
+                {
+                    "questionId": "q23",
+                    "type": "dateparts",
+                    "label": "What is the date of the last proposed dismissal?",
+                    "name": "date_of_last_proposed_dismissal",
+                    "options": {
+                        "hideTitle": true
+                    },
+                    "hint": "If this date is not known, please give an estimate. You can email us later with correct date."
+                }
+            ],
+            "nextPageId": "page_17"
+        },
+        {
+            "pageId": "page_17",
+            "title": "Notification Period Explanation",
+            "components": [
+                {
+                    "questionId": "q24",
+                    "type": "textarea",
+                    "label": "If you have given less than the required 30/45 day notification period, explain why",
+                    "name": "notification_period_explanation",
+                    "hint": "Enter N/A if you have given 30/45 day notification"
+                }
+            ],
+            "nextPageId": "page_18"
+        },
+        {
+            "pageId": "page_18",
+            "title": "How and Why Redundancies are Happening",
+            "components": [
+                {
+                    "questionId": "q25",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">We need to know why you making redundancies.</p>"
+                },
+                {
+                    "questionId": "q26",
+                    "type": "checkbox",
+                    "label": "What are the reasons for the redundancies?",
+                    "name": "reasons_for_redundancies",
+                    "hint": "Select all that apply",
+                    "options": {
+                        "Feature A": "Feature A",
+                        "Feature B": "Feature B",
+                        "Feature C": "Feature C"
+                    }
+                }
+            ],
+            "nextPageId": "page_19"
+        },
+        {
+            "pageId": "page_19",
+            "title": "How did you decide who would be made redundant?",
+            "components": [
+                {
+                    "questionId": "q27",
+                    "type": "multilinetext",
+                    "label": "How did you decide who would be made redundant?",
+                    "name": "how_did_you_decide_who_would_be_made_redundant",
+                    "hint": "Briefly explain the method you used",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_20"
+        },
+        {
+            "pageId": "page_20",
+            "title": "Part 7: Consultation with appropriate representatives",
+            "components": [
+                {
+                    "questionId": "q28",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">The next section asks for information about recognised unions and employees’ elected representatives.</p>\n\n<p class=\"govuk-body\">These will be different in every organisation.</p>"
+                },
+                {
+                    "questionId": "q29",
+                    "type": "yesno",
+                    "label": "Is a trade union representing any groups of employees?",
+                    "name": "is_a_trade_union_representing_any_groups_of_employees"
+                }
+            ],
+            "nextPageId": "page_21"
+        },
+        {
+            "pageId": "page_21",
+            "title": "Please provide:",
+            "components": [
+                {
+                    "questionId": "q30",
+                    "type": "html",
+                    "content": "<ul>\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
+                },
+                {
+                    "questionId": "q31",
+                    "type": "multilinetext",
+                    "label": "Start a new line for each one",
+                    "name": "union_details"
+                }
+            ],
+            "nextPageId": "page_22"
+        },
+        {
+            "pageId": "page_22",
+            "title": "Is an elected person representing any groups of employees?",
+            "components": [
+                {
+                    "questionId": "q6",
+                    "type": "yesno",
+                    "label": "Is an elected person representing any groups of employees?",
+                    "name": "is_an_elected_person_representing_any_groups_of_employees",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_23"
+        },
+        {
+            "pageId": "page_23",
+            "title": "Please provide:",
+            "components": [
+                {
+                    "questionId": "q7",
+                    "type": "html",
+                    "content": "<ul>\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n<ul>"
+                },
+                {
+                    "questionId": "q8",
+                    "type": "multilinetext",
+                    "label": "Start a new line for each one",
+                    "name": "elected_person_details"
+                }
+            ],
+            "nextPageId": "page_24"
+        },
+        {
+            "pageId": "page_24",
+            "title": "Have you started the consultation process with the appropriate representative?",
+            "components": [
+                {
+                    "questionId": "q9",
+                    "type": "yesno",
+                    "label": "Have you started the consultation process with the appropriate representative?",
+                    "name": "have_you_started_the_consultation_process_with_the_appropriate_representative",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_25"
+        },
+        {
+            "pageId": "page_25",
+            "title": "What date did the consultation start?",
+            "components": [
+                {
+                    "questionId": "q10",
+                    "type": "dateparts",
+                    "label": "What date did the consultation start?",
+                    "name": "what_date_did_the_consultation_start",
+                    "hint": "For example, 27 3 2007",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_26"
+        },
+        {
+            "pageId": "page_26",
+            "title": "Have you given individual notices of dismissal to the employees?",
+            "components": [
+                {
+                    "questionId": "q11",
+                    "type": "yesno",
+                    "label": "Have you given individual notices of dismissal to the employees?",
+                    "name": "have_you_given_individual_notices_of_dismissal_to_the_employees",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_27"
+        },
+        {
+            "pageId": "page_27",
+            "title": "Part 8: Declaration",
+            "components": [
+                {
+                    "questionId": "q12",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n>li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
+                },
+                {
+                    "questionId": "q13",
+                    "type": "text",
+                    "label": "Responsible person's first name",
+                    "name": "responsible_person_first_name"
+                },
+                {
+                    "questionId": "q14",
+                    "type": "text",
+                    "label": "Responsible person's last name",
+                    "name": "responsible_person_last_name"
+                }
+            ],
+            "nextPageId": "page_28"
+        },
+        {
+            "pageId": "page_28",
+            "title": "Email address of person completing the form",
+            "components": [
+                {
+                    "questionId": "q15",
+                    "type": "email",
+                    "label": "Email address of person completing the form",
+                    "name": "email_address_of_person_completing_the_form",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ],
+            "nextPageId": "page_29"
+        },
+        {
+            "pageId": "page_29",
+            "title": "Please upload any attachments",
+            "components": [
+                {
+                    "questionId": "q16",
+                    "type": "fileupload",
+                    "label": "Please upload any attachments",
+                    "name": "please_upload_any_attachments",
+                    "hint": "Only upload documents that explain what you have already entered in this form. For example, spreadsheets.",
+                    "options": {
+                        "hideTitle": true,
+                        "multiple": true
+                    }
+                }
+            ],
+            "nextPageId": "page_30"
+        },
+        {
+            "pageId": "page_30",
+            "title": "Summary",
+            "components": [
+                {
+                    "questionId": "q16",
+                    "type": "summary"
+                }
+            ]
+        }
+    ],
+    "submission": {
+        "method": "POST",
+        "endpoint": "https://api.example.com/submit",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

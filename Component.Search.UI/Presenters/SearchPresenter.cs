@@ -1,4 +1,6 @@
+using System.Globalization;
 using Component.Search.Model;
+using Component.Search.UI.Helpers;
 using Component.Search.UI.Service.Model;
 
 namespace Component.Search.UI.Presenters;
@@ -18,9 +20,11 @@ public class SearchPresenter : ISearchPresenter
 
     public async Task<SearchIndexModel> HandleIndex(GetSearchIndexResponseModel responseModel)
     {
+        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+        var viewName = textInfo.ToTitleCase(responseModel.SearchIndexType.SearchIndexPage.SearchType);
         var viewModel = new SearchIndexModel
         {
-            ViewName = IndexViewName,
+            ViewName = viewName,
             SearchIndexType = responseModel.SearchIndexType
         };
 
@@ -35,6 +39,7 @@ public class SearchPresenter : ISearchPresenter
         var viewModel = new SearchViewModel
         {
             ViewName = ResultViewName,
+            SearchDescription = SearchResultsHelper.EnrichSearchDescription(responseModel),
             SearchDetail = searchDetail,
             SearchTypeModel = responseModel.SearchType,
             Data = responseModel.Data,
@@ -92,9 +97,11 @@ public class SearchViewModel
     public SearchTypeModel SearchTypeModel { get; set; } = new SearchTypeModel();
     public List<Dictionary<string, string>> Data { get; set; } = new List<Dictionary<string, string>>();
     public SearchDetail SearchDetail { get; set; } = new SearchDetail();
+    public string SearchDescription { get; set; }
     public int PreviousPage { get; set; }
     public int NextPage { get; set; }
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
+    public int TotalRecords { get; set; }
     public List<int> PaginationItems { get; set; } = new List<int>();
 }

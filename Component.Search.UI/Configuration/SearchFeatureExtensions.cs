@@ -24,7 +24,7 @@ public static class SearchFeatureExtensions
         
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration["SearchUI:RedisCache:ConnectionString"];
+            options.Configuration = configuration["RedisCache:ConnectionString"];
             options.InstanceName = "SessionInstance";
         });
 

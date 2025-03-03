@@ -1,0 +1,891 @@
+{
+    "metadata": {},
+    "startPage": "/employers-details",
+    "pages": [
+      {
+        "title": "How to complete this form",
+        "path": "/employers-details",
+        "components": [
+          {
+            "name": "qkedOh",
+            "options": {},
+            "type": "Html",
+            "content": "<h2 class=\"govuk-heading-m\">Eligibility</h2>\n<p>Only complete this form to notify us if you're making 20 or more people redundant in an establishment on one form.</p>\n<p>You do not need to notify us if you're making less than 20 people redundant.</p>\n<p class=\"govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work.</p>\n<p>If you operate from more than one site, each site is treated separately for notification and consultation purposes.</p>\n<p>If your division or team has employees in various locations, the division or team is considered as an establishment so only give one address.</p>\n<p class=\"govuk-!-font-weight-bold\">What you need to know before starting</p>\n<p>This form has 8 parts and takes on average 40 minutes.</p>\n<p>The form will not save your information until you submit it at the end. If you close or leave the page for longer than 90 mins, you'll need to start again.</p>\n<p>Before submitting, make sure you save/print the final summary page. We only send an email confirming receipt of your form (not a copy of the answers provided).</p>\n<p>You'll need the following information to hand:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk\">find company information (opens in new tab)</a></li>\n<li>nature of the business - <a target=\"_blank\" href=\"https://resources.companieshouse.gov.uk/sic\">find (SIC code) (opens in new tab)</a></li>\n<li>timing and location of redundancies</li>\n<li>expected number of redundancies</li>\n<li>reasons for redundancies</li>\n<li>trade union and/or employee representative(s) details</li>\n</ul>\n<h2 class=\"govuk-heading-m\">Part 1: Employer’s details</h2>\n<h2 class=\"govuk-heading-m\">What is the company or organisation's name?<h2>"
+          },
+          {
+            "name": "company-or-organisation-name",
+            "options": {
+              "hideTitle": true,
+              "exposeToContext": false
+            },
+            "type": "TextField",
+            "nameHasError": false,
+            "title": "What is the company or organisation's name?",
+            "hint": "The name should match Companies House website"
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-number"
+          }
+        ]
+      },
+      {
+        "path": "/company-number",
+        "title": "Where to find the company number",
+        "components": [
+          {
+            "name": "kRVIcW",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You can find this on the Companies House register or the charity register using the following links:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">find company information (opens in new tab)</a></li>\n<li>charity number - <a target=\"_blank\" href=\"https://www.gov.uk/find-charity-information\">search the charity register (opens in new tab)</a></li>\n</ul>\n"
+          },
+          {
+            "name": "company-or-charity-number",
+            "options": {},
+            "type": "TextField",
+            "title": "What is the company or charity number?",
+            "hint": "If you do not have either number please explain why, for example: public body.",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-registered-address"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-registered-address",
+        "title": "What is the registered address?",
+        "components": [
+          {
+            "name": "address",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "UkAddressField",
+            "hint": "Enter the company address as it is on the Companies House register",
+            "nameHasError": false,
+            "title": "What is the registered address?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-contact-number"
+          }
+        ]
+      },
+      {
+        "path": "/company-contact-number",
+        "title": "What is the company contact number?",
+        "components": [
+          {
+            "name": "company-contact-number",
+            "options": {},
+            "type": "TelephoneNumberField",
+            "nameHasError": false,
+            "title": "What is the company contact number?",
+            "hint": ""
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-company-email-address"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-company-email-address",
+        "title": "What is the company email address?",
+        "components": [
+          {
+            "name": "company-email-address",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "EmailAddressField",
+            "title": "What is the company email address?",
+            "hint": "Enter the main company email address, for example: office@yourcompany.co.uk",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-nature-of-business-sic-code"
+          }
+        ]
+      },
+      {
+        "path": "/company-nature-of-business-sic-code",
+        "title": "Company nature of business (SIC) code",
+        "components": [
+          {
+            "name": "POHyph",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You can find the nature of business (SIC) code on the <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">Companies House register (opens in new tab)</a>.\n\n<p>Only enter the main nature of business (SIC) code for your company (even if you have several).</p>"
+          },
+          {
+            "name": "company-sic-code",
+            "options": {},
+            "type": "TextField",
+            "title": "What is the nature of business (SIC) and description?",
+            "hint": "If you do not have a SIC code, please explain why",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-2-named-person-to-contact"
+          }
+        ]
+      },
+      {
+        "path": "/part-2-named-person-to-contact",
+        "title": "Part 2: Named person to contact",
+        "components": [
+          {
+            "name": "DqZkwv",
+            "options": {},
+            "type": "Html",
+            "content": "<p>Give the name of the person we should contact to discuss the redundancies, for example: Company director, Head of HR, etc.</p>\n<h2 class=\"govuk-heading-m\">What is the person's name?</h2>"
+          },
+          {
+            "name": "contact-first-name",
+            "options": {},
+            "type": "TextField",
+            "title": "Contact first name",
+            "nameHasError": false
+          },
+          {
+            "name": "contact-last-name",
+            "options": {},
+            "type": "TextField",
+            "title": "Contact last name",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-their-work-contact-number"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-their-work-contact-number",
+        "title": "What is their work contact number?",
+        "components": [
+          {
+            "name": "named-contact-work-number",
+            "options": {},
+            "type": "TelephoneNumberField",
+            "nameHasError": false,
+            "title": "What is their work contact number?",
+            "hint": "Enter a work related number (and extension) or a mobile phone number for the named contact."
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-their-work-email-address"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-their-work-email-address",
+        "title": "What is their work email address?",
+        "components": [
+          {
+            "name": "hDSFNd",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "TextField",
+            "title": "What is their work email address?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-3-establishment-where-redundancies-are-proposed"
+          }
+        ]
+      },
+      {
+        "path": "/part-3-establishment-where-redundancies-are-proposed",
+        "title": "Part 3: Establishment where redundancies are proposed",
+        "components": [
+          {
+            "name": "CXNuzF",
+            "options": {},
+            "type": "Html",
+            "content": "<p class=\"govuk-body\">If you operate from more than one site, each one is treated separately for notification and consultation purposes.</p>\n\n<p class=\"govuk-body govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work (base).</p>\n\n<p class=\"govuk-body\">You must complete a form for each site where 20 or more redundancies are proposed on one form.</p>"
+          },
+          {
+            "name": "LFpxVE",
+            "options": {
+              "hideTitle": false
+            },
+            "type": "TextField",
+            "title": "Where will the redundancies occur?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/is-the-company-establishment-or-business-closing"
+          }
+        ]
+      },
+      {
+        "path": "/is-the-company-establishment-or-business-closing",
+        "title": "Is the company, establishment or business closing?",
+        "components": [
+          {
+            "name": "company-closing",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Is the company, establishment or business closing?",
+            "nameHasError": false,
+            "values": {
+              "type": "listRef"
+            }
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-4-current-employee-numbers"
+          }
+        ]
+      },
+      {
+        "path": "/part-4-current-employee-numbers",
+        "title": "Part 4: Current employee numbers",
+        "components": [
+          {
+            "name": "igwdfV",
+            "options": {},
+            "type": "Html",
+            "content": "<p>We need to know the total number of employees across all the establishment(s) where there will be redundancies.</p>\n\n<p>You'll be asked for the proposed number of redundancies next.</p>"
+          },
+          {
+            "name": "sgOEHQ",
+            "options": {},
+            "type": "TextField",
+            "title": "What is the total number of employees across all affected establishments?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-total-number-of-redundancies-you-plan-to-make"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-total-number-of-redundancies-you-plan-to-make",
+        "title": "What is the total number of redundancies you plan to make?",
+        "components": [
+          {
+            "name": "YFPQct",
+            "options": {},
+            "type": "NumberField",
+            "title": "What is the total number of redundancies you plan to make?",
+            "hint": "You should only be reporting 20 or more redundancies to us on one form"
+          }
+        ],
+        "next": [
+          {
+            "path": "/you-do-not-need-to-fill-in-this-form",
+            "condition": "NpzRWP"
+          },
+          {
+            "path": "/part-5-timing-of-redundancies",
+            "condition": "oJSiEB"
+          }
+        ]
+      },
+      {
+        "path": "/you-do-not-need-to-fill-in-this-form",
+        "title": "You do not need to fill in this form",
+        "components": [
+          {
+            "name": "bmBkai",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You do not need to notify us if you're making less than 20 people redundant.</p>"
+          }
+        ],
+        "next": []
+      },
+      {
+        "path": "/part-5-timing-of-redundancies",
+        "title": "Part 5: Timing of redundancies",
+        "components": [
+          {
+            "name": "mmMnwN",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You should give:</p>\n\n<ul>\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p>For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
+          },
+          {
+            "name": "JfBheg",
+            "options": {},
+            "type": "DatePartsField",
+            "title": "What is the date of the first proposed dismissal?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-date-of-the-last-proposed-dismissal"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-date-of-the-last-proposed-dismissal",
+        "title": "What is the date of the last proposed dismissal?",
+        "components": [
+          {
+            "name": "YRXQHW",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "DatePartsField",
+            "title": "What is the date of the last proposed dismissal?",
+            "hint": "\nIf this date is not known, please give an estimate. You can email us later with correct date."
+          }
+        ],
+        "next": [
+          {
+            "path": "/less-than-the-required-notification-period-explain-why"
+          }
+        ]
+      },
+      {
+        "path": "/less-than-the-required-notification-period-explain-why",
+        "title": "If you have given less than the required 30/45 day notification period, explain why",
+        "components": [
+          {
+            "name": "BmTIVP",
+            "options": {},
+            "type": "MultilineTextField",
+            "title": "If you have given less than the required 30/45 day notification period, explain why",
+            "hint": "Enter N/A if you have given 30/45 day notification"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-6-how-and-why-redundancies-are-happening"
+          }
+        ]
+      },
+      {
+        "path": "/part-6-how-and-why-redundancies-are-happening",
+        "title": "Part 6: How and why redundancies are happening",
+        "components": [
+          {
+            "name": "PyZlpa",
+            "options": {},
+            "type": "Html",
+            "content": "<p>We need to know why you making redundancies.</p>"
+          },
+          {
+            "name": "pHnXLG",
+            "options": {},
+            "type": "CheckboxesField",
+            "title": "What are the reasons for the redundancies?",
+            "hint": "Select all that apply",
+            "list": "NEDXIs"
+          }
+        ],
+        "next": [
+          {
+            "path": "/how-did-you-decide-who-would-be-made-redundant"
+          }
+        ]
+      },
+      {
+        "path": "/how-did-you-decide-who-would-be-made-redundant",
+        "title": "How did you decide who would be made redundant?",
+        "components": [
+          {
+            "name": "aQgMMN",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "MultilineTextField",
+            "title": "How did you decide who would be made redundant?",
+            "hint": "Briefly explain the method you used"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-7-consultation-with-appropriate-representatives"
+          }
+        ]
+      },
+      {
+        "path": "/part-7-consultation-with-appropriate-representatives",
+        "title": "Part 7: Consultation with appropriate representatives",
+        "components": [
+          {
+            "name": "opoWgm",
+            "options": {},
+            "type": "Html",
+            "content": "<p>The next section asks for information about recognised unions and employees’ elected representatives.</p>\n\n<p>These will be different in every organisation.</p>"
+          },
+          {
+            "name": "QHCJtX",
+            "options": {},
+            "type": "YesNoField",
+            "title": "Is a trade union representing any groups of employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-provide-details-of-unions",
+            "condition": "RSiANo"
+          },
+          {
+            "path": "/is-an-elected-person-representing-any-groups-of-employees",
+            "condition": "LnyNlm"
+          }
+        ]
+      },
+      {
+        "path": "/please-provide-details-of-unions",
+        "title": "Please provide:",
+        "components": [
+          {
+            "name": "DuxVBU",
+            "options": {},
+            "type": "Html",
+            "content": "<ul>\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
+          },
+          {
+            "name": "LwnPsn",
+            "options": {},
+            "type": "MultilineTextField",
+            "title": "Start a new line for each one"
+          }
+        ],
+        "next": [
+          {
+            "path": "/is-an-elected-person-representing-any-groups-of-employees"
+          }
+        ]
+      },
+      {
+        "path": "/is-an-elected-person-representing-any-groups-of-employees",
+        "title": "Is an elected person representing any groups of employees?",
+        "components": [
+          {
+            "name": "RYNuCx",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Is an elected person representing any groups of employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-provide-elected-person-details",
+            "condition": "IWWTYO"
+          },
+          {
+            "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative",
+            "condition": "thBjEz"
+          }
+        ]
+      },
+      {
+        "path": "/please-provide-elected-person-details",
+        "title": "Please provide:",
+        "components": [
+          {
+            "name": "DcDwIm",
+            "options": {},
+            "type": "Html",
+            "content": "<ul>\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n<ul>"
+          },
+          {
+            "name": "AsicwP",
+            "options": {},
+            "type": "MultilineTextField",
+            "title": "Start a new line for each one"
+          }
+        ],
+        "next": [
+          {
+            "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative"
+          }
+        ]
+      },
+      {
+        "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative",
+        "title": "Have you started the consultation process with the appropriate representative?",
+        "components": [
+          {
+            "name": "OePdHM",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Have you started the consultation process with the appropriate representative?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-date-did-the-consultation-start",
+            "condition": "QjnuLO"
+          },
+          {
+            "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees",
+            "condition": "tdCotY"
+          }
+        ]
+      },
+      {
+        "path": "/what-date-did-the-consultation-start",
+        "title": "What date did the consultation start?",
+        "components": [
+          {
+            "name": "RtjNMK",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "DatePartsField",
+            "title": "What date did the consultation start?",
+            "hint": "For example, 27 3 2007"
+          }
+        ],
+        "next": [
+          {
+            "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees"
+          }
+        ]
+      },
+      {
+        "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees",
+        "title": "Have you given individual notices of dismissal to the employees?",
+        "components": [
+          {
+            "name": "XygRbs",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Have you given individual notices of dismissal to the employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-8-declaration"
+          }
+        ]
+      },
+      {
+        "path": "/part-8-declaration",
+        "title": "Part 8: Declaration",
+        "components": [
+          {
+            "name": "SFZkat",
+            "options": {},
+            "type": "Html",
+            "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n>li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
+          },
+          {
+            "name": "DQxlvU",
+            "options": {},
+            "type": "TextField",
+            "title": "Responsible person's first name"
+          },
+          {
+            "name": "YCArCb",
+            "options": {},
+            "type": "TextField",
+            "title": "Responsible person's last name"
+          }
+        ],
+        "next": [
+          {
+            "path": "/email-address-of-person-completing-the-form"
+          }
+        ]
+      },
+      {
+        "path": "/email-address-of-person-completing-the-form",
+        "title": "Email address of person completing the form",
+        "components": [
+          {
+            "name": "MhfUeO",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "EmailAddressField",
+            "title": "Email address of person completing the form"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-upload-any-attachments"
+          }
+        ]
+      },
+      {
+        "path": "/please-upload-any-attachments",
+        "title": "Please upload any attachments",
+        "components": [
+          {
+            "name": "nPGSLo",
+            "options": {
+              "hideTitle": true,
+              "multiple": true
+            },
+            "type": "FileUploadField",
+            "title": "Please upload any attachments",
+            "hint": "Only upload documents that explain what you have already entered in this form. For example, spreadsheets."
+          }
+        ],
+        "next": [
+          {
+            "path": "/summary"
+          }
+        ]
+      }
+    ],
+    "lists": [
+      {
+        "title": "What are the reasons for the redundancies?",
+        "name": "NEDXIs",
+        "type": "string",
+        "items": [
+          {
+            "text": "lower demand for products or services",
+            "value": "lower demand for products or services"
+          },
+          {
+            "text": "all or part of a contract has been completed",
+            "value": "all or part of a contract has been completed"
+          },
+          {
+            "text": "work has been transferred to another site or employer",
+            "value": "work has been transferred to another site or employer"
+          },
+          {
+            "text": "we’ve introduced new technology/plant/machinery",
+            "value": "we’ve introduced new technology/plant/machinery"
+          },
+          {
+            "text": "changes in work methods",
+            "value": "changes in work methods"
+          },
+          {
+            "text": "organisation/company insolvency",
+            "value": "organisation/company insolvency"
+          }
+        ]
+      }
+    ],
+    "sections": [],
+    "conditions": [
+      {
+        "displayName": "redundancies-less-than-20",
+        "name": "NpzRWP",
+        "value": {
+          "name": "redundancies-less-than-20",
+          "conditions": [
+            {
+              "field": {
+                "name": "YFPQct",
+                "type": "NumberField",
+                "display": "What is the total number of redundancies you plan to make?"
+              },
+              "operator": "is less than",
+              "value": {
+                "type": "Value",
+                "value": "20",
+                "display": "20"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "redundancies-at-least-20",
+        "name": "oJSiEB",
+        "value": {
+          "name": "redundancies-at-least-20",
+          "conditions": [
+            {
+              "field": {
+                "name": "YFPQct",
+                "type": "NumberField",
+                "display": "What is the total number of redundancies you plan to make?"
+              },
+              "operator": "is at least",
+              "value": {
+                "type": "Value",
+                "value": "20",
+                "display": "20"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "is-a-trade-union-representing-employees-yes",
+        "name": "RSiANo",
+        "value": {
+          "name": "is-a-trade-union-representing-employees-yes",
+          "conditions": [
+            {
+              "field": {
+                "name": "QHCJtX",
+                "type": "YesNoField",
+                "display": "Is a trade union representing any groups of employees?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "true",
+                "display": "true"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "is-a-trade-union-representing-employees-no",
+        "name": "LnyNlm",
+        "value": {
+          "name": "is-a-trade-union-representing-employees-no",
+          "conditions": [
+            {
+              "field": {
+                "name": "QHCJtX",
+                "type": "YesNoField",
+                "display": "Is a trade union representing any groups of employees?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "false",
+                "display": "false"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "is-an-elected-person-representing-employees-yes",
+        "name": "IWWTYO",
+        "value": {
+          "name": "is-an-elected-person-representing-employees-yes",
+          "conditions": [
+            {
+              "field": {
+                "name": "RYNuCx",
+                "type": "YesNoField",
+                "display": "Is an elected person representing any groups of employees?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "true",
+                "display": "true"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "is-an-elected-person-representing-employees-no",
+        "name": "thBjEz",
+        "value": {
+          "name": "is-an-elected-person-representing-employees-no",
+          "conditions": [
+            {
+              "field": {
+                "name": "RYNuCx",
+                "type": "YesNoField",
+                "display": "Is an elected person representing any groups of employees?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "false",
+                "display": "false"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "has-consultation-with-representative-started-yes",
+        "name": "QjnuLO",
+        "value": {
+          "name": "has-consultation-with-representative-started-yes",
+          "conditions": [
+            {
+              "field": {
+                "name": "OePdHM",
+                "type": "YesNoField",
+                "display": "Have you started the consultation process with the appropriate representative?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "true",
+                "display": "true"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "displayName": "has-consultation-with-representative-started-no",
+        "name": "tdCotY",
+        "value": {
+          "name": "has-consultation-with-representative-started-no",
+          "conditions": [
+            {
+              "field": {
+                "name": "OePdHM",
+                "type": "YesNoField",
+                "display": "Have you started the consultation process with the appropriate representative?"
+              },
+              "operator": "is",
+              "value": {
+                "type": "Value",
+                "value": "false",
+                "display": "false"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "fees": [],
+    "outputs": [
+      {
+        "name": "QTGqlh",
+        "title": "Agree and submit",
+        "type": "webhook",
+        "outputConfiguration": {
+          "url": "http://localhost:7163/api/v1/submit",
+          "allowRetry": true
+        }
+      }
+    ],
+    "version": 2,
+    "skipSummary": false,
+    "feeOptions": {},
+    "name": "HR1 -Advanced Notification of Redundancies",
+    "feedback": {
+      "feedbackForm": false,
+      "url": ""
+    },
+    "phaseBanner": {},
+    "declaration": "<p class=\"govuk-body\">I certify that the information given on this form is, as far as I know, correct and complete.</p><p class=\"govuk-body\">I understand that I need to give copies of this form to all trade union and elected representatives.</p>"
+  }

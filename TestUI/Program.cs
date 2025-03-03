@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews()
     .AddSearchFeature();
 
 builder.Services
-    .AddFormFeatureServices()
+    .AddFormFeatureServices(builder.Configuration)
     .AddSearchFeatureServices(builder.Configuration);
 
 var app = builder.Build();

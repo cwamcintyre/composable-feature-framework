@@ -1,28 +1,58 @@
 {
-    "formId": "survey_002",
+    "formId": "test",
     "title": "Monty Pythons Flying Form",
     "description": "Please fill out this form.",
     "currentPage": 1,
     "totalPages": 7,
+    "startPage": "do-you-want-to-fill-in-this-form",
     "pages": [
         {
-            "pageId": "page_1",
-            "title": "Page 1",
-            "questions": [
+            "pageId": "do-you-want-to-fill-in-this-form",
+            "components": [
                 {
-                    "questionId": "q1",
-                    "type": "text",
-                    "label": "What is your name?",
-                    "required": true
+                    "questionId": "0",
+                    "type": "yesno",
+                    "label": "Do you want to fill in this form?",
+                    "name": "do_you_want_to_fill_in_this_form"
                 }
-            ]
+            ],
+            "conditions": [
+                {
+                    "expression": "FormData[\"do_you_want_to_fill_in_this_form\"] == \"no\"",
+                    "nextPageId": "stop"
+                }
+            ],
+            "nextPageId": "what-is-your-name"
         },
         {
-            "pageId": "page_2",
-            "title": "Page 2",
-            "questions": [
+            "pageId": "what-is-your-name",
+            "title": "",
+            "components": [
                 {
-                    "questionId": "q2",
+                    "questionId": "1",
+                    "type": "text",
+                    "label": "What is your name?",
+                    "name": "what_is_your_name",
+                    "validationRules": [
+                        {
+                            "expression": "FormData[\"what_is_your_name\"] != null && FormData[\"what_is_your_name\"].Trim() != \"\" ",
+                            "errorMessage": "You must provide an answer to the question: What is your name?"
+                        },
+                        {
+                            "expression": "FormData[\"what_is_your_name\"] != \"BOB\"",
+                            "errorMessage": "We all know that Bob is not your real name. Please provide your real name."
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "what-is-your-quest"
+        },
+        {
+            "pageId": "what-is-your-quest",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "2",
                     "type": "select",
                     "label": "What is your quest?",
                     "options": {
@@ -31,75 +61,77 @@
                         "To allow claimants to edit their redundancy claim" : "To allow claimants to edit their redundancy claim", 
                         "To do nothing": "To do nothing"
                     },
-                    "required": true
+                    "name": "what_is_your_quest"
                 }
-            ]
+            ],
+            "conditions": [
+                {
+                    "expression" : "FormData[\"what_is_your_quest\"] != null && FormData[\"what_is_your_quest\"] != \"To allow claimants to edit their redundancy claim\"",
+                    "nextPageId": "why-dont-you-want-to-help-claimants"
+                }
+            ],   
+            "nextPageId": "what-is-your-favourite-colour"
         },
         {
-            "pageId": "page_3",
-            "title": "Page 3",
-            "questions": [
+            "pageId": "why-dont-you-want-to-help-claimants",
+            "title": "",
+            "components": [
                 {
-                    "questionId": "q3",
+                    "questionId": "7",
+                    "type": "multilineText",
+                    "label": "Why don't you want to help claimants edit their redundancy claim?",
+                    "name": "why_not_help_claimants",
+                    "validationRules": [
+                        {
+                            "expression": "FormData[\"why_not_help_claimants\"] != null && FormData[\"why_not_help_claimants\"].Trim() != \"\"",
+                            "errorMessage": "You must provide an answer to the question: What is your favourite colour?"
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "what-is-your-favourite-colour"
+        },
+        {
+            "pageId": "what-is-your-favourite-colour",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "3",
                     "type": "text",
                     "label": "What is your favourite colour?",
-                    "required": true
+                    "name": "what_is_your_favourite_colour",
+                    "validationRules": [
+                        {
+                            "expression": "FormData[\"what_is_your_favourite_colour\"] != null && FormData[\"what_is_your_favourite_colour\"].Trim() != \"\"",
+                            "errorMessage": "You must provide an answer to the question: What is your favourite colour?"
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "summary"
+        },
+        {
+            "pageId": "summary",
+            "title": "Check your answers before sending your application",
+            "pageType": "summary",
+            "components": [                
+                {
+                    "type": "summary"
+                },
+                {
+                    "type": "html",
+                    "content": "<h2 class=\"govuk-heading-m\">Now send your application</h2><p class=\"govuk-body\">By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>"
                 }
             ]
         },
         {
-            "pageId": "page_4",
-            "title": "Page 4",
-            "questions": [
-                {
-                    "questionId": "q7",
-                    "type": "select",
-                    "label": "Can github copilot cope with adding a page in the middle of my form?",
-                    "options": {
-                        "Yes": "Yes",
-                        "No": "No"
-                    },
-                    "required": true
-                }
-            ]
-        },
-        {
-            "pageId": "page_5",
-            "title": "Page 5",
-            "questions": [
-                {
-                    "questionId": "q4",
-                    "type": "text",
-                    "label": "What did you think of the form?",
-                    "required": true
-                }
-            ]
-        },
-        {
-            "pageId": "page_6",
-            "title": "Page 6",
-            "questions": [
-                {
-                    "questionId": "q5",
-                    "type": "text",
-                    "label": "Any other comments?",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "pageId": "page_7",
-            "title": "Page 7",
-            "questions": [
-                {
-                    "questionId": "q6",
-                    "type": "select",
-                    "label": "Can github copilot cope with adding a new page at the end?",
-                    "options": {
-                        "Yes": "Yes",
-                        "No": "No"
-                    },
-                    "required": true
+            "pageId": "stop",
+            "pageType": "stop",
+            "title": "Then you dont have to :)",
+            "components": [
+                {                    
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">Ok no worries. Hope you have a nice day!</p>"
                 }
             ]
         }

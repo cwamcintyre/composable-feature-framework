@@ -1,0 +1,5 @@
+﻿@model Component.Form.Model.Component
+
+<input type="file" name="@Model.Name" class="form-control"
+        accept="@string.Join(",", Model.FileOptions?.AcceptedFormats ?? new List<string>())" />
+

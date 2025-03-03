@@ -1,0 +1,23 @@
+﻿@model Component.Form.Model.Component
+
+<govuk-select name="@Model.Name">
+    <govuk-select-label is-page-heading="true" class="govuk-label--l">
+        @Model.Label
+    </govuk-select-label>
+    @foreach (var option in Model.Options)
+    {
+        <govuk-select-item value="@option.Key">@option.Value</govuk-select-item>
+    }
+    @if (Model.Hint != null)
+    {
+        <govuk-select-hint>
+            @Model.Hint
+        </govuk-select-hint>
+    }
+    @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+    {
+        <govuk-select-error-message>
+            @ViewBag.Errors[Model.Name]
+        </govuk-select-error-message>
+    }
+</govuk-select>

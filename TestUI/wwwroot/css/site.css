@@ -29,3 +29,8 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.app-related-items {
+  border-top: 2px solid #1d70b8;
+  padding-top: 10px;
+}

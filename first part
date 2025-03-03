@@ -1,0 +1,191 @@
+[
+{
+        "title": "How to complete this form",
+        "path": "/employers-details",
+        "components": [
+          {
+            "name": "qkedOh",
+            "options": {},
+            "type": "Html",
+            "content": "<h2 class=\"govuk-heading-m\">Eligibility</h2>\n<p>Only complete this form to notify us if you're making 20 or more people redundant in an establishment on one form.</p>\n<p>You do not need to notify us if you're making less than 20 people redundant.</p>\n<p class=\"govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work.</p>\n<p>If you operate from more than one site, each site is treated separately for notification and consultation purposes.</p>\n<p>If your division or team has employees in various locations, the division or team is considered as an establishment so only give one address.</p>\n<p class=\"govuk-!-font-weight-bold\">What you need to know before starting</p>\n<p>This form has 8 parts and takes on average 40 minutes.</p>\n<p>The form will not save your information until you submit it at the end. If you close or leave the page for longer than 90 mins, you'll need to start again.</p>\n<p>Before submitting, make sure you save/print the final summary page. We only send an email confirming receipt of your form (not a copy of the answers provided).</p>\n<p>You'll need the following information to hand:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk\">find company information (opens in new tab)</a></li>\n<li>nature of the business - <a target=\"_blank\" href=\"https://resources.companieshouse.gov.uk/sic\">find (SIC code) (opens in new tab)</a></li>\n<li>timing and location of redundancies</li>\n<li>expected number of redundancies</li>\n<li>reasons for redundancies</li>\n<li>trade union and/or employee representative(s) details</li>\n</ul>\n<h2 class=\"govuk-heading-m\">Part 1: Employer’s details</h2>\n<h2 class=\"govuk-heading-m\">What is the company or organisation's name?<h2>"
+          },
+          {
+            "name": "company-or-organisation-name",
+            "options": {
+              "hideTitle": true,
+              "exposeToContext": false
+            },
+            "type": "TextField",
+            "nameHasError": false,
+            "title": "What is the company or organisation's name?",
+            "hint": "The name should match Companies House website"
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-number"
+          }
+        ]
+      },
+      {
+        "path": "/company-number",
+        "title": "Where to find the company number",
+        "components": [
+          {
+            "name": "kRVIcW",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You can find this on the Companies House register or the charity register using the following links:</p>\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>company number - <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">find company information (opens in new tab)</a></li>\n<li>charity number - <a target=\"_blank\" href=\"https://www.gov.uk/find-charity-information\">search the charity register (opens in new tab)</a></li>\n</ul>\n"
+          },
+          {
+            "name": "company-or-charity-number",
+            "options": {},
+            "type": "TextField",
+            "title": "What is the company or charity number?",
+            "hint": "If you do not have either number please explain why, for example: public body.",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-registered-address"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-registered-address",
+        "title": "What is the registered address?",
+        "components": [
+          {
+            "name": "address",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "UkAddressField",
+            "hint": "Enter the company address as it is on the Companies House register",
+            "nameHasError": false,
+            "title": "What is the registered address?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-contact-number"
+          }
+        ]
+      },
+      {
+        "path": "/company-contact-number",
+        "title": "What is the company contact number?",
+        "components": [
+          {
+            "name": "company-contact-number",
+            "options": {},
+            "type": "TelephoneNumberField",
+            "nameHasError": false,
+            "title": "What is the company contact number?",
+            "hint": ""
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-the-company-email-address"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-the-company-email-address",
+        "title": "What is the company email address?",
+        "components": [
+          {
+            "name": "company-email-address",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "EmailAddressField",
+            "title": "What is the company email address?",
+            "hint": "Enter the main company email address, for example: office@yourcompany.co.uk",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/company-nature-of-business-sic-code"
+          }
+        ]
+      },
+      {
+        "path": "/company-nature-of-business-sic-code",
+        "title": "Company nature of business (SIC) code",
+        "components": [
+          {
+            "name": "POHyph",
+            "options": {},
+            "type": "Html",
+            "content": "<p>You can find the nature of business (SIC) code on the <a target=\"_blank\" href=\"https://find-and-update.company-information.service.gov.uk/\">Companies House register (opens in new tab)</a>.\n\n<p>Only enter the main nature of business (SIC) code for your company (even if you have several).</p>"
+          },
+          {
+            "name": "company-sic-code",
+            "options": {},
+            "type": "TextField",
+            "title": "What is the nature of business (SIC) and description?",
+            "hint": "If you do not have a SIC code, please explain why",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-2-named-person-to-contact"
+          }
+        ]
+      },
+      {
+        "path": "/part-2-named-person-to-contact",
+        "title": "Part 2: Named person to contact",
+        "components": [
+          {
+            "name": "DqZkwv",
+            "options": {},
+            "type": "Html",
+            "content": "<p>Give the name of the person we should contact to discuss the redundancies, for example: Company director, Head of HR, etc.</p>\n<h2 class=\"govuk-heading-m\">What is the person's name?</h2>"
+          },
+          {
+            "name": "contact-first-name",
+            "options": {},
+            "type": "TextField",
+            "title": "Contact first name",
+            "nameHasError": false
+          },
+          {
+            "name": "contact-last-name",
+            "options": {},
+            "type": "TextField",
+            "title": "Contact last name",
+            "nameHasError": false
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-their-work-contact-number"
+          }
+        ]
+      },
+      {
+        "path": "/what-is-their-work-contact-number",
+        "title": "What is their work contact number?",
+        "components": [
+          {
+            "name": "named-contact-work-number",
+            "options": {},
+            "type": "TelephoneNumberField",
+            "nameHasError": false,
+            "title": "What is their work contact number?",
+            "hint": "Enter a work related number (and extension) or a mobile phone number for the named contact."
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-is-their-work-email-address"
+          }
+        ]
+      }
+    ]

@@ -1,0 +1,162 @@
+{
+    "formId": "redundancy_notification_001",
+    "title": "Redundancy Notification Form",
+    "description": "Form to notify about proposed redundancies.",
+    "currentPage": 1,
+    "totalPages": 9,
+    "pages": [
+        {
+            "pageId": "page_1",
+            "title": "Work Email Address",
+            "components": [
+                {
+                    "questionId": "q1",
+                    "type": "text",
+                    "label": "What is their work email address?",
+                    "name": "what_is_their_work_email_address",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_2",
+            "title": "Establishment where redundancies are proposed",
+            "components": [
+                {
+                    "questionId": "q2",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">If you operate from more than one site, each one is treated separately for notification and consultation purposes.</p>\n\n<p class=\"govuk-body govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work (base).</p>\n\n<p class=\"govuk-body\">You must complete a form for each site where 20 or more redundancies are proposed on one form.</p>"
+                },
+                {
+                    "questionId": "q3",
+                    "type": "text",
+                    "label": "Where will the redundancies occur?",
+                    "name": "where_will_the_redundancies_occur"
+                }
+            ]
+        },
+        {
+            "pageId": "page_3",
+            "title": "Company, Establishment or Business Closing",
+            "components": [
+                {
+                    "questionId": "q4",
+                    "type": "yesno",
+                    "label": "Is the company, establishment or business closing?",
+                    "name": "is_the_company_establishment_or_business_closing",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_4",
+            "title": "Current Employee Numbers",
+            "components": [
+                {
+                    "questionId": "q5",
+                    "type": "html",
+                    "content": "<p>We need to know the total number of employees across all the establishment(s) where there will be redundancies.</p>\n\n<p>You'll be asked for the proposed number of redundancies next.</p>"
+                },
+                {
+                    "questionId": "q6",
+                    "type": "text",
+                    "label": "What is the total number of employees across all affected establishments?",
+                    "name": "total_number_of_employees"
+                }
+            ]
+        },
+        {
+            "pageId": "page_5",
+            "title": "Total Number of Redundancies",
+            "components": [
+                {
+                    "questionId": "q7",
+                    "type": "number",
+                    "label": "What is the total number of redundancies you plan to make?",
+                    "name": "total_number_of_redundancies",
+                    "hint": "You should only be reporting 20 or more redundancies to us on one form"
+                }
+            ]
+        },
+        {
+            "pageId": "page_6",
+            "title": "Timing of Redundancies",
+            "components": [
+                {
+                    "questionId": "q8",
+                    "type": "html",
+                    "content": "<p>You should give:</p>\n\n<ul>\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p>For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
+                },
+                {
+                    "questionId": "q9",
+                    "type": "dateparts",
+                    "label": "What is the date of the first proposed dismissal?",
+                    "name": "date_of_first_proposed_dismissal"
+                }
+            ]
+        },
+        {
+            "pageId": "page_7",
+            "title": "Date of Last Proposed Dismissal",
+            "components": [
+                {
+                    "questionId": "q10",
+                    "type": "dateparts",
+                    "label": "What is the date of the last proposed dismissal?",
+                    "name": "date_of_last_proposed_dismissal",
+                    "options": {
+                        "hideTitle": true
+                    },
+                    "hint": "If this date is not known, please give an estimate. You can email us later with correct date."
+                }
+            ]
+        },
+        {
+            "pageId": "page_8",
+            "title": "Notification Period Explanation",
+            "components": [
+                {
+                    "questionId": "q11",
+                    "type": "textarea",
+                    "label": "If you have given less than the required 30/45 day notification period, explain why",
+                    "name": "notification_period_explanation",
+                    "hint": "Enter N/A if you have given 30/45 day notification"
+                }
+            ]
+        },
+        {
+            "pageId": "page_9",
+            "title": "How and Why Redundancies are Happening",
+            "components": [
+                {
+                    "questionId": "q12",
+                    "type": "html",
+                    "content": "<p>We need to know why you making redundancies.</p>"
+                },
+                {
+                    "questionId": "q13",
+                    "type": "checkbox",
+                    "label": "What are the reasons for the redundancies?",
+                    "name": "reasons_for_redundancies",
+                    "hint": "Select all that apply",
+                    "options": {
+                        "Feature A": "Feature A",
+                        "Feature B": "Feature B",
+                        "Feature C": "Feature C"
+                    }
+                }
+            ]
+        }
+    ],
+    "submission": {
+        "method": "POST",
+        "endpoint": "https://api.example.com/submit",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

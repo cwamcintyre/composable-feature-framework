@@ -5,7 +5,15 @@
     int totalPages = Model.TotalPages;
 }
 
-<h1 class="govuk-heading-l">@title</h1>
+@if (!String.IsNullOrEmpty(title)) 
+{
+    <h1 class="govuk-heading-l">@title</h1>
+}
+
+@if (!String.IsNullOrEmpty(Model.SearchDescription))
+{
+    @Html.Raw(Model.SearchDescription)
+}
 
 <form method="POST" enctype="multipart/form-data" asp-controller="Search" asp-action="Results">
 

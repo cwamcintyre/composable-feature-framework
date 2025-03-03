@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace Component.Form.Model
 {
-    public class Question
+    public class Component
     {
         public required string QuestionId { get; set; }
         public required string Type { get; set; }
         public required string Label { get; set; }
+        public required string Name { get; set; }
+        public string? Hint { get; set; }
         public required bool Required { get; set; }
+        public bool LabelIsPageTitle { get; set; }
+        public string? Answer { get; set; }
         public Dictionary<string, string> Options { get; set; }
         public FileOptions FileOptions { get; set; }
-
-        public Dictionary<string, string> Branching { get; set; }
+        public string? Content { get; set; }
+        public List<ValidationRule> ValidationRules { get; set; }
+        public bool IsQuestionType { get { return Type != "html" && Type != "summary"; } }
     }
 }

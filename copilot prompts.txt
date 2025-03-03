@@ -8,3 +8,8 @@ add example configuration and logic for conditional branching between questions.
 A condition can be based on any rule against a question answer in the form.
 Conditions are C# based logic that can be interpreted by the Roslyn compiler. 
 The form data will be in a dictionary, the answer will have a key using the name property in the configuration.  
+
+add example validation and logic for validation for questions.
+A validation rule can be based on any question answer in the form.
+Validation rules are C# based logic that can be interpreted by the Roslyn compiler.
+The form data will be in a dictionary, the answer will have a key using the name property in the configuration.  

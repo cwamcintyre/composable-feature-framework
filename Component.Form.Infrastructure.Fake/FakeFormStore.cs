@@ -8,7 +8,7 @@ public class FakeFormStore : IFormStore
 {
     public async Task<FormModel> GetFormAsync(string formId)
     {
-        var json = File.ReadAllText("test.json");
+        var json = File.ReadAllText($"{formId}.json");
         var formModel = JsonConvert.DeserializeObject<FormModel>(json);
 
         return formModel;

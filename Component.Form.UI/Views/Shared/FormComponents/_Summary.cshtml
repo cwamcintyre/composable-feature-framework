@@ -1,0 +1,21 @@
+﻿@model Component.Form.Model.FormModel
+
+<govuk-summary-list>
+    @foreach (var page in @Model.Pages)
+    {
+        @foreach (var component in page.Components.Where(c => c.IsQuestionType))
+        {
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key>
+                    @component.Label
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value>
+                    @(String.IsNullOrEmpty(component.Answer) ? "Not provided" : component.Answer)
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-actions>
+                    <govuk-summary-list-row-action href="#" visually-hidden-text="name">Change</govuk-summary-list-row-action>
+                </govuk-summary-list-row-actions>
+            </govuk-summary-list-row>
+        }
+    }
+</govuk-summary-list>

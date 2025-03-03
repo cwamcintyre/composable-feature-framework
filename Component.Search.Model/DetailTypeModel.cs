@@ -17,6 +17,13 @@ public class DetailsPage
 public class Section
 {
     public string Title { get; set; }
+    public List<DetailComponent> Components { get; set; }
+}
+
+public class DetailComponent
+{
+    public string Type { get; set; }
+    public string Content { get; set; }
     public List<Field> Fields { get; set; }
 }
 

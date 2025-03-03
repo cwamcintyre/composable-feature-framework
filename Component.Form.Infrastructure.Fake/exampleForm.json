@@ -3,74 +3,102 @@
     "title": "Customer Feedback Form",
     "description": "Help us improve by answering these questions.",
     "currentPage": 1,
-    "totalPages": 3,
+    "totalPages": 4,
     "pages": [
         {
-        "pageId": "page_1",
-        "title": "Personal Information",
-        "questions": [
-            {
-                "questionId": "q1",
-                "type": "text",
-                "label": "What is your full name?",
-                "name": "what_is_your_full_name",
-                "required": true,
-                "validation": {
-                    "pattern": "^[a-zA-Z\\s]+$",
-                    "errorMessage": "Only letters and spaces are allowed."
-                }
-            },
-            {
-                "questionId": "q2",
-                "type": "select",
-                "label": "How did you hear about us?",
-                "name": "how_did_you_hear_about_us",
-                "options": {
-                    "Google" : "Google",
-                    "Social Media": "Social Media",
-                    "Friend" : "Friend",
-                    "Other" : "Other"
-                },
-                "required": true
-            },
-            {
-                "questionId": "q3",
-                "type": "radio",
-                "label": "Are you satisfied with our service?",
-                "name": "are_you_satisfied_with_our_service",
-                "options": {
-                    "yes" : "Yes",
-                    "no" : "No"
-                },
-                "required": true,
-                "branching": {
-                    "no": "page_3",
-                    "yes": "page_2"
-                }
-            }
-        ]
-        },
-        {
-            "pageId": "page_2",
-            "title": "Improvement Suggestions",
-            "conditions": {
-                "previousQuestionId": "q3",
-                "expectedAnswer": "no"
-            },
-            "questions": [
+            "pageId": "page_1",
+            "title": "Personal Information",
+            "components": [
                 {
-                "questionId": "q4",
-                "type": "textarea",
-                "label": "What can we improve?",
-                "name": "what_can_we_improve",
-                "required": true
+                    "questionId": "q1",
+                    "type": "text",
+                    "label": "What is your full name?",
+                    "name": "what_is_your_full_name"
+                },
+                {
+                    "questionId": "q2",
+                    "type": "select",
+                    "label": "How did you hear about us?",
+                    "name": "how_did_you_hear_about_us",
+                    "options": {
+                        "Google" : "Google",
+                        "Social Media": "Social Media",
+                        "Friend" : "Friend",
+                        "Other" : "Other"
+                    }
+                },
+                {
+                    "questionId": "q3",
+                    "type": "radio",
+                    "label": "Are you satisfied with our service?",
+                    "name": "are_you_satisfied_with_our_service",
+                    "options": {
+                        "yes" : "Yes",
+                        "no" : "No"
+                    },
+                    "required": true
+                },
+                {
+                    "questionId": "q8",
+                    "type": "email",
+                    "label": "What is your email address?",
+                    "name": "what_is_your_email_address"
+                },
+                {
+                    "questionId": "q9",
+                    "type": "phonenumber",
+                    "label": "What is your phone number?",
+                    "name": "what_is_your_phone_number"
+                },
+                {
+                    "questionId": "q10",
+                    "type": "dateparts",
+                    "label": "What is your date of birth?",
+                    "name": "what_is_your_date_of_birth"
                 }
             ]
         },
         {
+            "pageId": "page_2",
+            "title": "Improvement Suggestions",
+            "conditions": [
+                {
+                    "expression": "FormData[\"are_you_satisfied_with_our_service\"] != null && FormData[\"are_you_satisfied_with_our_service\"].ToString() == \"no\"",
+                    "nextPageId": "page_4"
+                }
+            ],
+            "components": [
+                {
+                    "questionId": "q4",
+                    "type": "textarea",
+                    "label": "What can we improve?",
+                    "name": "what_can_we_improve",
+                    "required": true,
+                    "validationRules": [
+                        {
+                            "expression": "FormData[\"are_you_satisfied_with_our_service\"] != null && FormData[\"are_you_satisfied_with_our_service\"].ToString() == \"yes\"",
+                            "errorMessage": "You must provide improvement suggestions if you are not satisfied."
+                        }
+                    ]
+                },
+                {
+                    "questionId": "q11",
+                    "type": "yesno",
+                    "label": "Would you recommend us to others?",
+                    "name": "would_you_recommend_us_to_others"
+                },
+                {
+                    "questionId": "q12",
+                    "type": "ukaddress",
+                    "label": "What is your UK address?",
+                    "name": "what_is_your_uk_address"
+                }
+            ]            
+        },
+        {
             "pageId": "page_3",
             "title": "Final Thoughts",
-            "questions": [
+            "components": [
                 {
                     "questionId": "q5",
                     "type": "checkbox",
@@ -81,7 +109,13 @@
                         "Feature B": "Feature B",
                         "Feature C": "Feature C"
                     }
-                },
+                }
+            ]
+        },
+        {
+            "pageId": "page_4",
+            "title": "Additional Comments",
+            "components": [
                 {
                     "questionId": "q6",
                     "type": "text",
@@ -97,7 +131,7 @@
                     "required": false,
                     "fileOptions": {
                         "maxSizeMB": 5,
-                        "acceptedFormats": [ "image/png", "image/jpeg", "application/pdf" ]
+                        "acceptedFormats": ["image/png", "image/jpeg", "application/pdf"]
                     }
                 }
             ]

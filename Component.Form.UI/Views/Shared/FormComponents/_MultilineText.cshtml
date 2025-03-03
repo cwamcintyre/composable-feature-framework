@@ -1,0 +1,19 @@
+﻿@model Component.Form.Model.Component
+
+<govuk-textarea name="@Model.Name">
+    <govuk-textarea-label class="" is-page-heading="true">
+        @Model.Label
+    </govuk-textarea-label>
+    @if (Model.Hint != null)
+    {
+        <govuk-textarea-hint>
+            @Model.Hint
+        </govuk-textarea-hint>
+    }
+    @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+    {
+        <govuk-textarea-error-message>
+            @ViewBag.Errors[Model.Name]
+        </govuk-textarea-error-message>
+    }
+</govuk-textarea>

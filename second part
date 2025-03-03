@@ -1,0 +1,214 @@
+[
+  {
+    "path": "/what-is-their-work-email-address",
+    "title": "What is their work email address?",
+    "components": [
+      {
+        "name": "hDSFNd",
+        "options": {
+          "hideTitle": true
+        },
+        "type": "TextField",
+        "title": "What is their work email address?"
+      }
+    ],
+    "next": [
+      {
+        "path": "/part-3-establishment-where-redundancies-are-proposed"
+      }
+    ]
+  },
+  {
+    "path": "/part-3-establishment-where-redundancies-are-proposed",
+    "title": "Part 3: Establishment where redundancies are proposed",
+    "components": [
+      {
+        "name": "CXNuzF",
+        "options": {},
+        "type": "Html",
+        "content": "<p class=\"govuk-body\">If you operate from more than one site, each one is treated separately for notification and consultation purposes.</p>\n\n<p class=\"govuk-body govuk-!-font-weight-bold\">An establishment is the site where an employee is assigned to work (base).</p>\n\n<p class=\"govuk-body\">You must complete a form for each site where 20 or more redundancies are proposed on one form.</p>"
+      },
+      {
+        "name": "LFpxVE",
+        "options": {
+          "hideTitle": false
+        },
+        "type": "TextField",
+        "title": "Where will the redundancies occur?"
+      }
+    ],
+    "next": [
+      {
+        "path": "/is-the-company-establishment-or-business-closing"
+      }
+    ]
+  },
+  {
+    "path": "/is-the-company-establishment-or-business-closing",
+    "title": "Is the company, establishment or business closing?",
+    "components": [
+      {
+        "name": "company-closing",
+        "options": {
+          "hideTitle": true
+        },
+        "type": "YesNoField",
+        "title": "Is the company, establishment or business closing?",
+        "nameHasError": false,
+        "values": {
+          "type": "listRef"
+        }
+      }
+    ],
+    "next": [
+      {
+        "path": "/part-4-current-employee-numbers"
+      }
+    ]
+  },
+  {
+    "path": "/part-4-current-employee-numbers",
+    "title": "Part 4: Current employee numbers",
+    "components": [
+      {
+        "name": "igwdfV",
+        "options": {},
+        "type": "Html",
+        "content": "<p>We need to know the total number of employees across all the establishment(s) where there will be redundancies.</p>\n\n<p>You'll be asked for the proposed number of redundancies next.</p>"
+      },
+      {
+        "name": "sgOEHQ",
+        "options": {},
+        "type": "TextField",
+        "title": "What is the total number of employees across all affected establishments?"
+      }
+    ],
+    "next": [
+      {
+        "path": "/what-is-the-total-number-of-redundancies-you-plan-to-make"
+      }
+    ]
+  },
+  {
+    "path": "/what-is-the-total-number-of-redundancies-you-plan-to-make",
+    "title": "What is the total number of redundancies you plan to make?",
+    "components": [
+      {
+        "name": "YFPQct",
+        "options": {},
+        "type": "NumberField",
+        "title": "What is the total number of redundancies you plan to make?",
+        "hint": "You should only be reporting 20 or more redundancies to us on one form"
+      }
+    ],
+    "next": [
+      {
+        "path": "/you-do-not-need-to-fill-in-this-form",
+        "condition": "NpzRWP"
+      },
+      {
+        "path": "/part-5-timing-of-redundancies",
+        "condition": "oJSiEB"
+      }
+    ]
+  },
+  {
+    "path": "/you-do-not-need-to-fill-in-this-form",
+    "title": "You do not need to fill in this form",
+    "components": [
+      {
+        "name": "bmBkai",
+        "options": {},
+        "type": "Html",
+        "content": "<p>You do not need to notify us if you're making less than 20 people redundant.</p>"
+      }
+    ],
+    "next": []
+  },
+  {
+    "path": "/part-5-timing-of-redundancies",
+    "title": "Part 5: Timing of redundancies",
+    "components": [
+      {
+        "name": "mmMnwN",
+        "options": {},
+        "type": "Html",
+        "content": "<p>You should give:</p>\n\n<ul>\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p>For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
+      },
+      {
+        "name": "JfBheg",
+        "options": {},
+        "type": "DatePartsField",
+        "title": "What is the date of the first proposed dismissal?"
+      }
+    ],
+    "next": [
+      {
+        "path": "/what-is-the-date-of-the-last-proposed-dismissal"
+      }
+    ]
+  },
+  {
+    "path": "/what-is-the-date-of-the-last-proposed-dismissal",
+    "title": "What is the date of the last proposed dismissal?",
+    "components": [
+      {
+        "name": "YRXQHW",
+        "options": {
+          "hideTitle": true
+        },
+        "type": "DatePartsField",
+        "title": "What is the date of the last proposed dismissal?",
+        "hint": "\nIf this date is not known, please give an estimate. You can email us later with correct date."
+      }
+    ],
+    "next": [
+      {
+        "path": "/less-than-the-required-notification-period-explain-why"
+      }
+    ]
+  },
+  {
+    "path": "/less-than-the-required-notification-period-explain-why",
+    "title": "If you have given less than the required 30/45 day notification period, explain why",
+    "components": [
+      {
+        "name": "BmTIVP",
+        "options": {},
+        "type": "MultilineTextField",
+        "title": "If you have given less than the required 30/45 day notification period, explain why",
+        "hint": "Enter N/A if you have given 30/45 day notification"
+      }
+    ],
+    "next": [
+      {
+        "path": "/part-6-how-and-why-redundancies-are-happening"
+      }
+    ]
+  },
+  {
+    "path": "/part-6-how-and-why-redundancies-are-happening",
+    "title": "Part 6: How and why redundancies are happening",
+    "components": [
+      {
+        "name": "PyZlpa",
+        "options": {},
+        "type": "Html",
+        "content": "<p>We need to know why you making redundancies.</p>"
+      },
+      {
+        "name": "pHnXLG",
+        "options": {},
+        "type": "CheckboxesField",
+        "title": "What are the reasons for the redundancies?",
+        "hint": "Select all that apply",
+        "list": "NEDXIs"
+      }
+    ],
+    "next": [
+      {
+        "path": "/how-did-you-decide-who-would-be-made-redundant"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+﻿@model Component.Form.Model.Component
+
+<div class="govuk-form-group">
+  <label class="govuk-label" for="@Model.Name-email">
+    @Model.Label
+  </label>
+  @if (Model.Hint != null)
+  {
+    <div id="@Model.Name-email-hint" class="govuk-hint">
+      @Model.Hint
+    </div>
+  }
+  <input class="govuk-input" id="@Model.Name-email" name="@Model.Name-email" type="email" spellcheck="false" aria-describedby="email-hint" autocomplete="email">
+</div>

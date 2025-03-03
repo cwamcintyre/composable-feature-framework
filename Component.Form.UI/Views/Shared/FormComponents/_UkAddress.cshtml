@@ -1,0 +1,39 @@
+﻿@model Component.Form.Model.Component
+
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">
+      @Model.Label
+    </h1>
+  </legend>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="@Model.Name-address-line-1">
+      Address line 1
+    </label>
+    <input class="govuk-input" id="@Model.Name-address-line-1" name="@Model.Name-addressLine1" type="text" autocomplete="address-line1">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="@Model.Name-address-line-2">
+      Address line 2 (optional)
+    </label>
+    <input class="govuk-input" id="@Model.Name-address-line-2" name="@Model.Name-addressLine2" type="text" autocomplete="address-line2">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="@Model.Name-address-town">
+      Town or city
+    </label>
+    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-town" name="@Model.Name-addressTown" type="text" autocomplete="address-level2">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="@Model.Name-address-county">
+      County (optional)
+    </label>
+    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-county" name="@Model.Name-addressCounty" type="text">
+  </div>
+  <div class="govuk-form-group">
+    <label class="govuk-label" for="@Model.Name-address-postcode">
+      Postcode
+    </label>
+    <input class="govuk-input govuk-input--width-10" id="@Model.Name-address-postcode" name="@Model.Name-addressPostcode" type="text" autocomplete="postal-code">
+  </div>
+</fieldset>

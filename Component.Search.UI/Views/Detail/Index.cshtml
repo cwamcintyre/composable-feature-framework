@@ -1,26 +1,33 @@
 ﻿@model DetailViewModel
 @{
-    string title = Model.DetailTypeModel.DetailsPage.Title;
+    var pageModel = Model.PageModel;
+    string title = pageModel.Title;
 }
 
-<h1 class="govuk-heading-l">@title</h1>
+@if (!String.IsNullOrEmpty(title))
+{
+    <h1 class="govuk-heading-l">@title</h1>
+}
 
 <govuk-accordion id="accordion-with-summary-sections" heading-level="3">
 
-@foreach (var sectionDetail in Model.DetailTypeModel.DetailsPage.Sections)
+@foreach (var sectionDetail in pageModel.Sections)
 {   
     <govuk-accordion-item expanded="true">
         <govuk-accordion-item-heading>@sectionDetail.Title</govuk-accordion-item-heading>
         <govuk-accordion-item-content>
-            <dl class="govuk-summary-list">
-                @foreach (var field in sectionDetail.Fields)
+            @foreach (var sectionComponent in sectionDetail.Components)
+            {
+                switch (sectionComponent.Component.Type) 
                 {
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">@field.Label</dt>
-                        <dd class="govuk-summary-list__value">@Model.Data[field.Name]</dd>
-                    </div>
+                    case "detailList":
+                        @await Html.PartialAsync("SearchComponents/_DetailList", sectionComponent);
+                        break;
+                    case "html":
+                        @Html.Raw(sectionComponent.Component.Content);
+                        break;
                 }
-            </dl>
+            }
         </govuk-accordion-item-content>
     </govuk-accordion-item>    
 }    

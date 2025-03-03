@@ -1,6 +1,7 @@
 using Bogus;
 using Newtonsoft.Json;
 using Component.Search.Model;
+using Component.Search.Infrastructure.Fake.Helpers;
 
 namespace Component.Search.Infrastructure.Fake;
 
@@ -10,32 +11,7 @@ public class FakeData
 
     public static FakeData Instance => instance.Value;
 
-    private static Dictionary<string, Dictionary<string, string>> Details;
-
-    private static string GenerateFieldValue(string fieldName, string fieldType, string fieldLabel, Faker faker)
-    {
-        return fieldType switch
-        {
-            "text" => GenerateTextFieldValue(fieldName, fieldLabel, faker),
-            "email" => faker.Internet.Email(),
-            "date" => faker.Date.Past(30, DateTime.Now.AddYears(-18)).ToString("yyyy-MM-dd"),
-            _ => faker.Lorem.Word()
-        };
-    }
-
-    private static string GenerateTextFieldValue(string fieldName, string fieldLabel, Faker faker)
-    {
-        if (fieldLabel.Contains("name", StringComparison.OrdinalIgnoreCase))
-        {
-            return faker.Name.FullName();
-        }
-        if (fieldLabel.Equals("City", StringComparison.OrdinalIgnoreCase))
-        {
-            var cities = new[] { "London", "Edinburgh", "Paris", "Milan", "Novi Sad" };
-            return faker.PickRandom(cities);
-        }
-        return faker.Lorem.Word();
-    }
+    private static Dictionary<string, Dictionary<string, string>> Details;    
 
     private FakeData()
     {
@@ -57,9 +33,17 @@ public class FakeData
 
             foreach (var section in detailTest.DetailsPage.Sections)
             {
-                foreach (var field in section.Fields)
+                foreach (var component in section.Components)
                 {
-                    innerDetails[field.Name] = GenerateFieldValue(field.Name, field.Type, field.Label, faker);
+                    if (component.Fields == null)
+                    {
+                        continue;
+                    }
+                    
+                    foreach (var field in component.Fields)
+                    {
+                        innerDetails[field.Name] = GenerateFieldValue(field.Name, field.Type, field.Label, faker);
+                    }
                 }
             }
 
@@ -75,5 +59,35 @@ public class FakeData
     public List<Dictionary<string, string>> GetDetails()
     {
         return Details.Values.ToList();
+    }
+
+    private static string GenerateFieldValue(string fieldName, string fieldType, string fieldLabel, Faker faker)
+    {
+        return fieldType switch
+        {
+            "text" => GenerateTextFieldValue(fieldName, fieldLabel, faker),
+            "email" => faker.Internet.Email(),
+            "date" => faker.Date.Past(30, DateTime.Now.AddYears(-18)).ToString("yyyy-MM-dd"),
+            _ => faker.Lorem.Word()
+        };
+    }
+
+    private static string GenerateTextFieldValue(string fieldName, string fieldLabel, Faker faker)
+    {
+        if (fieldLabel.Contains("name", StringComparison.OrdinalIgnoreCase))
+        {
+            var surnames = new string[] { "Smith", "Jones", "Taylor", "Brown", "Williams" };
+            return $"{faker.Name.FirstName()} {faker.PickRandom(surnames)}";
+        }
+        if (fieldLabel.Equals("City", StringComparison.OrdinalIgnoreCase))
+        {
+            var cities = new[] { "London", "Edinburgh", "Paris", "Milan", "Novi Sad" };
+            return faker.PickRandom(cities);
+        }
+        if (fieldLabel.Equals("Postcode", StringComparison.OrdinalIgnoreCase))
+        {
+            return RandomUKPostCodeGenerator.GenerateRandomPostcode();
+        }
+        return faker.Lorem.Word();
     }   
 }

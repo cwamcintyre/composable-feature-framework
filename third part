@@ -1,0 +1,251 @@
+[      {
+        "path": "/how-did-you-decide-who-would-be-made-redundant",
+        "title": "How did you decide who would be made redundant?",
+        "components": [
+          {
+            "name": "aQgMMN",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "MultilineTextField",
+            "title": "How did you decide who would be made redundant?",
+            "hint": "Briefly explain the method you used"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-7-consultation-with-appropriate-representatives"
+          }
+        ]
+      },
+      {
+        "path": "/part-7-consultation-with-appropriate-representatives",
+        "title": "Part 7: Consultation with appropriate representatives",
+        "components": [
+          {
+            "name": "opoWgm",
+            "options": {},
+            "type": "Html",
+            "content": "<p>The next section asks for information about recognised unions and employees’ elected representatives.</p>\n\n<p>These will be different in every organisation.</p>"
+          },
+          {
+            "name": "QHCJtX",
+            "options": {},
+            "type": "YesNoField",
+            "title": "Is a trade union representing any groups of employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-provide-details-of-unions",
+            "condition": "RSiANo"
+          },
+          {
+            "path": "/is-an-elected-person-representing-any-groups-of-employees",
+            "condition": "LnyNlm"
+          }
+        ]
+      },
+      {
+        "path": "/please-provide-details-of-unions",
+        "title": "Please provide:",
+        "components": [
+          {
+            "name": "DuxVBU",
+            "options": {},
+            "type": "Html",
+            "content": "<ul>\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
+          },
+          {
+            "name": "LwnPsn",
+            "options": {},
+            "type": "MultilineTextField",
+            "title": "Start a new line for each one"
+          }
+        ],
+        "next": [
+          {
+            "path": "/is-an-elected-person-representing-any-groups-of-employees"
+          }
+        ]
+      },
+      {
+        "path": "/is-an-elected-person-representing-any-groups-of-employees",
+        "title": "Is an elected person representing any groups of employees?",
+        "components": [
+          {
+            "name": "RYNuCx",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Is an elected person representing any groups of employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-provide-elected-person-details",
+            "condition": "IWWTYO"
+          },
+          {
+            "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative",
+            "condition": "thBjEz"
+          }
+        ]
+      },
+      {
+        "path": "/please-provide-elected-person-details",
+        "title": "Please provide:",
+        "components": [
+          {
+            "name": "DcDwIm",
+            "options": {},
+            "type": "Html",
+            "content": "<ul>\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n<ul>"
+          },
+          {
+            "name": "AsicwP",
+            "options": {},
+            "type": "MultilineTextField",
+            "title": "Start a new line for each one"
+          }
+        ],
+        "next": [
+          {
+            "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative"
+          }
+        ]
+      },
+      {
+        "path": "/have-you-started-the-consultation-process-with-the-appropriate-representative",
+        "title": "Have you started the consultation process with the appropriate representative?",
+        "components": [
+          {
+            "name": "OePdHM",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Have you started the consultation process with the appropriate representative?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/what-date-did-the-consultation-start",
+            "condition": "QjnuLO"
+          },
+          {
+            "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees",
+            "condition": "tdCotY"
+          }
+        ]
+      },
+      {
+        "path": "/what-date-did-the-consultation-start",
+        "title": "What date did the consultation start?",
+        "components": [
+          {
+            "name": "RtjNMK",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "DatePartsField",
+            "title": "What date did the consultation start?",
+            "hint": "For example, 27 3 2007"
+          }
+        ],
+        "next": [
+          {
+            "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees"
+          }
+        ]
+      },
+      {
+        "path": "/have-you-given-individual-notices-of-dismissal-to-the-employees",
+        "title": "Have you given individual notices of dismissal to the employees?",
+        "components": [
+          {
+            "name": "XygRbs",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "YesNoField",
+            "title": "Have you given individual notices of dismissal to the employees?"
+          }
+        ],
+        "next": [
+          {
+            "path": "/part-8-declaration"
+          }
+        ]
+      },
+      {
+        "path": "/part-8-declaration",
+        "title": "Part 8: Declaration",
+        "components": [
+          {
+            "name": "SFZkat",
+            "options": {},
+            "type": "Html",
+            "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n>li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
+          },
+          {
+            "name": "DQxlvU",
+            "options": {},
+            "type": "TextField",
+            "title": "Responsible person's first name"
+          },
+          {
+            "name": "YCArCb",
+            "options": {},
+            "type": "TextField",
+            "title": "Responsible person's last name"
+          }
+        ],
+        "next": [
+          {
+            "path": "/email-address-of-person-completing-the-form"
+          }
+        ]
+      },
+      {
+        "path": "/email-address-of-person-completing-the-form",
+        "title": "Email address of person completing the form",
+        "components": [
+          {
+            "name": "MhfUeO",
+            "options": {
+              "hideTitle": true
+            },
+            "type": "EmailAddressField",
+            "title": "Email address of person completing the form"
+          }
+        ],
+        "next": [
+          {
+            "path": "/please-upload-any-attachments"
+          }
+        ]
+      },
+      {
+        "path": "/please-upload-any-attachments",
+        "title": "Please upload any attachments",
+        "components": [
+          {
+            "name": "nPGSLo",
+            "options": {
+              "hideTitle": true,
+              "multiple": true
+            },
+            "type": "FileUploadField",
+            "title": "Please upload any attachments",
+            "hint": "Only upload documents that explain what you have already entered in this form. For example, spreadsheets."
+          }
+        ],
+        "next": [
+          {
+            "path": "/summary"
+          }
+        ]
+      }
+    ]

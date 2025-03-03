@@ -2,10 +2,7 @@
 
 @{
     var searchPageType = Model.SearchIndexType.SearchIndexPage;
-    ViewData["Title"] = searchPageType.Title;
 }
-
-<h1 class="govuk-heading-xl">@searchPageType.Title</h1>
 
 <form asp-controller="Search" asp-action="Results" method="post" role="search" class="govuk-!-margin-bottom-6">
 
@@ -14,7 +11,7 @@
     @foreach (var searchField in searchPageType.IndexFields)
     {
         <govuk-input name="queries-@searchField.Name" spellcheck="false">
-            <govuk-input-label is-page-heading="false" class="govuk-label--l">@searchField.Label</govuk-input-label>            
+            <govuk-input-label is-page-heading="false" class="govuk-label--m">@searchField.Label</govuk-input-label>            
         </govuk-input>
     }
 

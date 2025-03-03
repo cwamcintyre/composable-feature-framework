@@ -1,0 +1,199 @@
+{
+    "formId": "redundancy_consultation_form",
+    "title": "Redundancy Consultation Form",
+    "description": "Form to gather information regarding redundancy consultation process.",
+    "currentPage": 1,
+    "totalPages": 10,
+    "pages": [
+        {
+            "pageId": "page_1",
+            "title": "How did you decide who would be made redundant?",
+            "components": [
+                {
+                    "questionId": "q1",
+                    "type": "multilinetext",
+                    "label": "How did you decide who would be made redundant?",
+                    "name": "how_did_you_decide_who_would_be_made_redundant",
+                    "hint": "Briefly explain the method you used",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_2",
+            "title": "Part 7: Consultation with appropriate representatives",
+            "components": [
+                {
+                    "questionId": "q2",
+                    "type": "html",
+                    "content": "<p>The next section asks for information about recognised unions and employees’ elected representatives.</p>\n\n<p>These will be different in every organisation.</p>"
+                },
+                {
+                    "questionId": "q3",
+                    "type": "yesno",
+                    "label": "Is a trade union representing any groups of employees?",
+                    "name": "is_a_trade_union_representing_any_groups_of_employees"
+                }
+            ]
+        },
+        {
+            "pageId": "page_3",
+            "title": "Please provide:",
+            "components": [
+                {
+                    "questionId": "q4",
+                    "type": "html",
+                    "content": "<ul>\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
+                },
+                {
+                    "questionId": "q5",
+                    "type": "multilinetext",
+                    "label": "Start a new line for each one",
+                    "name": "union_details"
+                }
+            ]
+        },
+        {
+            "pageId": "page_4",
+            "title": "Is an elected person representing any groups of employees?",
+            "components": [
+                {
+                    "questionId": "q6",
+                    "type": "yesno",
+                    "label": "Is an elected person representing any groups of employees?",
+                    "name": "is_an_elected_person_representing_any_groups_of_employees",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_5",
+            "title": "Please provide:",
+            "components": [
+                {
+                    "questionId": "q7",
+                    "type": "html",
+                    "content": "<ul>\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n<ul>"
+                },
+                {
+                    "questionId": "q8",
+                    "type": "multilinetext",
+                    "label": "Start a new line for each one",
+                    "name": "elected_person_details"
+                }
+            ]
+        },
+        {
+            "pageId": "page_6",
+            "title": "Have you started the consultation process with the appropriate representative?",
+            "components": [
+                {
+                    "questionId": "q9",
+                    "type": "yesno",
+                    "label": "Have you started the consultation process with the appropriate representative?",
+                    "name": "have_you_started_the_consultation_process_with_the_appropriate_representative",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_7",
+            "title": "What date did the consultation start?",
+            "components": [
+                {
+                    "questionId": "q10",
+                    "type": "dateparts",
+                    "label": "What date did the consultation start?",
+                    "name": "what_date_did_the_consultation_start",
+                    "hint": "For example, 27 3 2007",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_8",
+            "title": "Have you given individual notices of dismissal to the employees?",
+            "components": [
+                {
+                    "questionId": "q11",
+                    "type": "yesno",
+                    "label": "Have you given individual notices of dismissal to the employees?",
+                    "name": "have_you_given_individual_notices_of_dismissal_to_the_employees",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_9",
+            "title": "Part 8: Declaration",
+            "components": [
+                {
+                    "questionId": "q12",
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n>li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
+                },
+                {
+                    "questionId": "q13",
+                    "type": "text",
+                    "label": "Responsible person's first name",
+                    "name": "responsible_person_first_name"
+                },
+                {
+                    "questionId": "q14",
+                    "type": "text",
+                    "label": "Responsible person's last name",
+                    "name": "responsible_person_last_name"
+                }
+            ]
+        },
+        {
+            "pageId": "page_10",
+            "title": "Email address of person completing the form",
+            "components": [
+                {
+                    "questionId": "q15",
+                    "type": "email",
+                    "label": "Email address of person completing the form",
+                    "name": "email_address_of_person_completing_the_form",
+                    "options": {
+                        "hideTitle": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageId": "page_11",
+            "title": "Please upload any attachments",
+            "components": [
+                {
+                    "questionId": "q16",
+                    "type": "fileupload",
+                    "label": "Please upload any attachments",
+                    "name": "please_upload_any_attachments",
+                    "hint": "Only upload documents that explain what you have already entered in this form. For example, spreadsheets.",
+                    "options": {
+                        "hideTitle": true,
+                        "multiple": true
+                    }
+                }
+            ]
+        }
+    ],
+    "submission": {
+        "method": "POST",
+        "endpoint": "https://api.example.com/submit",
+        "headers": {
+            "Content-Type": "multipart/form-data"
+        }
+    }
+}

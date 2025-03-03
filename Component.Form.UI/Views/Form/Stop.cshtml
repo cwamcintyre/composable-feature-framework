@@ -1,0 +1,22 @@
+﻿@model Component.Form.Model.Page
+@{
+    ViewData["Title"] = Model.Title;
+    string formId = ViewBag.FormId;
+    string previousPageId = ViewBag.PreviousPageId;
+}
+
+@if (!String.IsNullOrEmpty(previousPageId)) 
+{
+    <govuk-back-link href="/form/@formId/@previousPageId">Back</govuk-back-link>
+}
+
+@if (!String.IsNullOrEmpty(@Model.Title)) 
+{
+    <h1 class="govuk-heading-l">@Model.Title</h1>
+}
+
+@foreach (var component in Model.Components)
+{
+    @Html.Raw(component.Content);
+}
+

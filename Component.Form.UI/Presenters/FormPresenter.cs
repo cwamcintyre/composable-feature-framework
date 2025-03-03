@@ -1,137 +1,127 @@
 using Component.Form.Model;
-using Microsoft.AspNetCore.SignalR;
+using Component.Form.UI.Services.Model;
 
 public interface IFormPresenter
 {
-    Task<IndexResult> HandleIndex(int page, FormModel formModel);
-    Task<SubmitResult> HandleSubmit(HttpRequest request, FormModel formModel);
+    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel);
+    Task<StopResult> HandleStop(string pageId, FormModel formModel);
+    Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
+    Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
 }
 
 public class FormPresenter : IFormPresenter
 {
-    public virtual string IndexViewName { get; set; } = "Index";
+    public virtual string IndexViewName { get; set; } = "ShowPage";
+    public virtual string StopViewName { get; set; } = "Stop";
 
-    public async Task<IndexResult> HandleIndex(int page, FormModel formModel)
+    public async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse)
     {
-        var currentPage = formModel.Pages.Find(p => p.PageId == $"page_{page}");
+        var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
+
+        if (dataResponse.FormData.Data != null) 
+        {
+            foreach (var formData in dataResponse.FormData.Data)
+            {
+                var component = currentPage.Components.Find(c => c.Name == formData.Key);
+                if (component != null)
+                {
+                    component.Answer = formData.Value;
+                }
+            }
+        }
+
+        var previousPage = "";
+        if (dataResponse.FormData.Route != null && dataResponse.FormData.Route.Count > 0) 
+        {
+            previousPage = dataResponse.FormData.Route.Peek();
+        }
 
         return new IndexResult
         {
             PageModel = currentPage,
             CurrentPage = page,
             TotalPages = formModel.TotalPages,
+            NextAction = IndexViewName,
+            PreviousPage = previousPage
+        };
+    }
+
+    public async Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response)
+    {
+        var currentPage = formModel.Pages.Find(p => p.PageId == response.NextPage);
+        if (currentPage == null) return null;
+
+        if (!String.IsNullOrEmpty(currentPage.PageType) && currentPage.PageType.Equals("summary"))
+        {
+            return new SubmitResult()
+            {
+                NextAction = "Summary",
+                NextPage = response.NextPage
+            };
+        }
+
+        if (!String.IsNullOrEmpty(currentPage.PageType) && currentPage.PageType.Equals("stop"))
+        {
+            return new SubmitResult()
+            {
+                NextAction = "Stop",
+                NextPage = response.NextPage
+            };
+        }
+
+        foreach (var formData in response.FormData)
+        {
+            var component = currentPage.Components.Find(c => c.Name == formData.Key);
+            if (component != null)
+            {
+                component.Answer = formData.Value;
+            }
+        }
+
+        var errors = response.Errors;
+        var nextPage = response.NextPage;
+
+        return new SubmitResult
+        {
+            Errors = errors,
+            NextPage = nextPage,
+            PageModel = currentPage,
             NextAction = IndexViewName
         };
     }
 
-    public async Task<SubmitResult> HandleSubmit(HttpRequest request, FormModel formModel)
+    public async Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response)
+    {        
+        var data = response.FormData.Data;
+
+        foreach (var page in formModel.Pages) 
+        {
+            foreach (var component in page.Components.Where(c => c.IsQuestionType))
+            {
+                if (data.ContainsKey(component.Name))
+                {
+                    component.Answer = data[component.Name];
+                }
+            }
+        }
+
+        return new SummaryResult
+        {
+            FormModel = formModel,
+            NextAction = "Summary"
+        };
+    }
+
+    public async Task<StopResult> HandleStop(string pageId, FormModel formModel)
     {
-        var currentPageFromForm = request.Form["PageId"];
-        var currentPage = formModel.Pages.Find(p => p.PageId == currentPageFromForm);
-        if (currentPage == null) return new SubmitResult { Errors = new List<string> { "Page not found" } };
+        var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
+        if (currentPage == null) return null;
 
-        var page = Convert.ToInt32(currentPageFromForm.First().Split('_')[1]);
-
-        var formData = new Dictionary<string, string>();
-        var errors = new List<string>();
-
-        // Loop through questions and validate them
-        foreach (var question in currentPage.Questions)
+        return new StopResult
         {
-            string inputName = question.QuestionId;
-
-            // Check if the required field is filled
-            if (question.Required && !request.Form.ContainsKey(inputName) && question.Type != "file")
-            {
-                errors.Add($"The field '{question.Label}' is required.");
-                continue;
-            }
-
-            // Handle file uploads
-            if (question.Type == "file" && request.Form.Files.Count > 0)
-            {
-                var file = request.Form.Files[0];
-                if (file.Length > 0)
-                {
-                    // Validate File Type
-                    if (question.FileOptions?.AcceptedFormats != null &&
-                        !question.FileOptions.AcceptedFormats.Contains(file.ContentType))
-                    {
-                        errors.Add($"Invalid file type for '{question.Label}'. Allowed formats: {string.Join(", ", question.FileOptions.AcceptedFormats)}");
-                        continue;
-                    }
-
-                    // Validate File Size
-                    if (question.FileOptions?.MaxSizeMB > 0 &&
-                        file.Length > question.FileOptions.MaxSizeMB * 1024 * 1024)
-                    {
-                        errors.Add($"The file '{question.Label}' exceeds the allowed size of {question.FileOptions.MaxSizeMB}MB.");
-                        continue;
-                    }
-
-                    // Save the file to the server
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-                    formData[inputName] = file.FileName; // Save file reference in formData
-                }
-            }
-            else if (request.Form.ContainsKey(inputName))
-            {
-                formData[inputName] = request.Form[inputName];
-            }
-        }
-
-        // If there are validation errors, return to the same page
-        if (errors.Any())
-        {
-            return new SubmitResult
-            {
-                Errors = errors,
-                CurrentPage = page,
-                PageModel = currentPage
-            };
-        }
-
-        // Branching logic based on answers
-        foreach (var question in currentPage.Questions)
-        {
-            if (question.Branching != null && formData.ContainsKey(question.QuestionId))
-            {
-                string answer = formData[question.QuestionId];
-                if (question.Branching.ContainsKey(answer))
-                {
-                    string nextPageId = question.Branching[answer];
-                    var nextPage = formModel.Pages.Find(p => p.PageId == nextPageId);
-                    if (nextPage != null)
-                    {
-                        int nextPageNumber = int.Parse(nextPageId.Split('_')[1]);
-                        return new SubmitResult
-                        {
-                            NextAction = IndexViewName,
-                            NextPage = nextPageNumber
-                        };
-                    }
-                }
-            }
-        }
-
-        // Move to the next page or submit the form if on the last page
-        if (page < formModel.TotalPages)
-        {
-            return new SubmitResult
-            {
-                NextAction = IndexViewName,
-                NextPage = page + 1
-            };
-        }
-
-        return new SubmitResult
-        {
-            NextAction = "ThankYou"
+            NextAction = StopViewName,
+            PageModel = currentPage
         };
     }
 }
@@ -139,16 +129,28 @@ public class FormPresenter : IFormPresenter
 public class IndexResult
 {
     public Page PageModel { get; set; }
-    public int CurrentPage { get; set; }
+    public string CurrentPage { get; set; }
     public int TotalPages { get; set; }
     public string NextAction { get; set; }
+    public string PreviousPage { get; set; }
 }
 
 public class SubmitResult
 {
-    public List<string> Errors { get; set; } = new List<string>();
-    public int CurrentPage { get; set; }
+    public Dictionary<string, string> Errors { get; set; } = new Dictionary<string, string>();
+    public string NextPage { get; set; }
+    public Page PageModel { get; set;}
+    public string NextAction { get; set; }
+}
+
+public class SummaryResult
+{
+    public FormModel FormModel { get; set; }
+    public string NextAction { get; set; }
+}
+
+public class StopResult
+{
     public Page PageModel { get; set; }
     public string NextAction { get; set; }
-    public int? NextPage { get; set; }
 }
