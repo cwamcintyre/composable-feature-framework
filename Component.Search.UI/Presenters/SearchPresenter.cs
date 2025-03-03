@@ -58,27 +58,42 @@ public class SearchPresenter : ISearchPresenter
                 viewModel.NextPage = currentPage + 1;
             }
 
+            var paginationItems = new List<int>();
+
             if (totalPages <= 5)
             {
-                viewModel.PaginationItems = Enumerable.Range(1, totalPages).ToList();
+                paginationItems = Enumerable.Range(1, totalPages).ToList();
             }
             else
             {
-                var paginationItems = new List<int> { 1 };
+                paginationItems.Add(1);
+
                 if (currentPage > 3)
                 {
                     paginationItems.Add(-1); // Ellipsis
                 }
-                var startPage = Math.Max(2, currentPage - 1);
-                var endPage = Math.Min(totalPages - 1, currentPage + 1);
-                paginationItems.AddRange(Enumerable.Range(startPage, endPage - startPage + 1));
-                if (endPage < totalPages - 1)
+
+                if (currentPage <= 3)
                 {
-                    paginationItems.Add(-1); // Ellipsis
+                    paginationItems.AddRange(Enumerable.Range(2, 3));
+                    paginationItems.Add(totalPages);
                 }
-                paginationItems.Add(totalPages);
-                viewModel.PaginationItems = paginationItems;
+                else if (currentPage >= totalPages - 2)
+                {
+                    paginationItems.AddRange(Enumerable.Range(totalPages - 3, 3));
+                    paginationItems.Add(totalPages);
+                }
+                else
+                {
+                    paginationItems.Add(currentPage - 1);
+                    paginationItems.Add(currentPage);
+                    paginationItems.Add(currentPage + 1);
+                    paginationItems.Add(-1); // Ellipsis
+                    paginationItems.Add(totalPages);
+                }
             }
+
+            viewModel.PaginationItems = paginationItems;
         }
 
         return viewModel;
