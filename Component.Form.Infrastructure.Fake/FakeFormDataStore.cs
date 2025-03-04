@@ -6,7 +6,7 @@ namespace Component.Form.Infrastructure.Fake;
 
 public class FakeFormDataStore : IFormDataStore
 {
-    private static Dictionary<string, Dictionary<string, string>> _formData = new Dictionary<string, Dictionary<string, string>>();
+    private static Dictionary<string, string> _formData = new Dictionary<string, string>();
     private static Dictionary<string, Stack<string>> _routeData = new Dictionary<string, Stack<string>>();
 
     public async Task<FormData> GetFormDataAsync(string applicantId)
@@ -15,7 +15,7 @@ public class FakeFormDataStore : IFormDataStore
         {
             return new FormData()
             {
-                Data = new Dictionary<string, string>(),
+                Data = "",
                 Route = new Stack<string>()
             };
         }
@@ -27,7 +27,7 @@ public class FakeFormDataStore : IFormDataStore
         };
     }
 
-    public async Task SaveFormDataAsync(string formId, string applicantId, Dictionary<string, string> formData, Stack<string> routeData)
+    public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> routeData)
     {
         _formData[applicantId] = formData;
         _routeData[applicantId] = routeData;

@@ -1,14 +1,15 @@
 ﻿@model Component.Form.Model.Component
 
+@{
+    var labelClass = Model.LabelIsPageTitle ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--m";
+}
+
 <govuk-radios name="@Model.Name">
     <govuk-radios-fieldset>
-        <govuk-radios-fieldset-legend is-page-heading="true">
+        <govuk-radios-fieldset-legend class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
             @Model.Label
         </govuk-radios-fieldset-legend>
-
-        <govuk-radios-item value="yes">Yes</govuk-radios-item>
-        <govuk-radios-item value="no">No</govuk-radios-item>
-
+        
         @if (Model.Hint != null)
         {
             <govuk-radios-hint>
@@ -18,8 +19,11 @@
         @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
         {
             <govuk-radios-error-message>
-                @ViewBag.Errors[Model.Name]
+                @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
             </govuk-radios-error-message>
         }
+
+        <govuk-radios-item value="yes">Yes</govuk-radios-item>
+        <govuk-radios-item value="no">No</govuk-radios-item>
     </govuk-radios-fieldset>
 </govuk-radios>

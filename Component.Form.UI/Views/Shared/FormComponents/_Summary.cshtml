@@ -1,4 +1,5 @@
-﻿@model Component.Form.Model.FormModel
+﻿@using Component.Form.Model.ComponentModel
+@model Component.Form.Model.FormModel
 
 <govuk-summary-list>
     @foreach (var page in @Model.Pages)
@@ -10,7 +11,23 @@
                     @component.Label
                 </govuk-summary-list-row-key>
                 <govuk-summary-list-row-value>
-                    @(String.IsNullOrEmpty(component.Answer) ? "Not provided" : component.Answer)
+                    @switch (component.Type)
+                    {                       
+                        case "ukaddress":
+                            var address = (UkAddressModel)component.Answer;
+                            @(address != null ? $"{address.AddressLine1}, {address.AddressLine2}, {address.Town}, {address.County}, {address.Postcode}" : "Not provided")
+                            break;
+                        case "dateparts":
+                            var datePartsModel = (DatePartsModel)component.Answer;
+                            @(datePartsModel != null && 
+                                (datePartsModel.Day != 0 &&
+                                 datePartsModel.Month != 0 &&
+                                 datePartsModel.Year != 0) ? $"{datePartsModel.Day}/{datePartsModel.Month}/{datePartsModel.Year}" : "Not provided")
+                            break;
+                        default:
+                            @(String.IsNullOrEmpty(component.Answer?.ToString()) ? "Not provided" : component.Answer)
+                            break;
+                    }
                 </govuk-summary-list-row-value>
                 <govuk-summary-list-row-actions>
                     <govuk-summary-list-row-action href="#" visually-hidden-text="name">Change</govuk-summary-list-row-action>

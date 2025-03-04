@@ -1,6 +1,6 @@
 ﻿@model Component.Form.Model.Component
 
-<govuk-input name="@Model.Name" input-class="govuk-input--width-10" value="@Model.Answer">
+<govuk-input name="@Model.Name" value="@Model.Answer">
     @if (@Model.LabelIsPageTitle)
     {
         <govuk-input-label is-page-heading="true" class="govuk-label--l">
@@ -22,7 +22,7 @@
     @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
     {
         <govuk-input-error-message>
-            @ViewBag.Errors[Model.Name]
+            @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
         </govuk-input-error-message>
     }
 </govuk-input>

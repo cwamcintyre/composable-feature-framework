@@ -2,7 +2,7 @@
   "searchPage": {
     "searchTypeId": "fip",
     "title": "Search results",
-    "description": "<p class=\"govuk-body\">You have found <span class=\"govuk-!-font-weight-bold\">{total}</span> records. Click on the Name link to see the details</p>",
+    "description": "<p class=\"govuk-body\">You have found <span class=\"govuk-!-font-weight-bold\">{total}</span> records. Click on the Name link to see the details.</p>",
     "columns": [
       {
         "label": "First Name",

@@ -13,12 +13,20 @@
                     "questionId": "0",
                     "type": "yesno",
                     "label": "Do you want to fill in this form?",
-                    "name": "do_you_want_to_fill_in_this_form"
+                    "name": "do_you_want_to_fill_in_this_form",
+                    "labelIsPageTitle": true,
+                    "hint": "If you say no, you'll see the stop page",
+                    "validationRules": [
+                        {
+                            "expression": "Data.do_you_want_to_fill_in_this_form != null && Data.do_you_want_to_fill_in_this_form.Trim() != \"\" ",
+                            "errorMessage": "Select yes or no"
+                        }
+                    ]
                 }
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"do_you_want_to_fill_in_this_form\"] == \"no\"",
+                    "expression": "Data.do_you_want_to_fill_in_this_form == \"no\"",
                     "nextPageId": "stop"
                 }
             ],
@@ -33,21 +41,93 @@
                     "type": "text",
                     "label": "What is your name?",
                     "name": "what_is_your_name",
+                    "labelIsPageTitle": true,
                     "validationRules": [
                         {
-                            "expression": "FormData[\"what_is_your_name\"] != null && FormData[\"what_is_your_name\"].Trim() != \"\" ",
-                            "errorMessage": "You must provide an answer to the question: What is your name?"
+                            "expression": "Data.what_is_your_name != null && Data.what_is_your_name.Trim() != \"\" ",
+                            "errorMessage": "Enter your name"
                         },
                         {
-                            "expression": "FormData[\"what_is_your_name\"] != \"BOB\"",
+                            "expression": "Data.what_is_your_name != \"BOB\"",
                             "errorMessage": "We all know that Bob is not your real name. Please provide your real name."
                         }
                     ]
                 }
             ],
-            "nextPageId": "what-is-your-quest"
+            "nextPageId": "what-is-your-address"
         },
         {
+            "pageId": "what-is-your-address",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "ukaddress",
+                    "label": "What is your address?",
+                    "name": "what_is_your_address",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "what-is-your-email"
+        },
+        {
+            "pageId": "what-is-your-email",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "email",
+                    "label": "What is your email address?",
+                    "name": "what_is_your_email",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "what-is-your-phone"
+        },
+        {
+            "pageId": "what-is-your-phone",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "phonenumber",
+                    "label": "What is your phone number?",
+                    "hint": "UK numbers are in the format 01234 567890",
+                    "name": "what_is_your_phone_number",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "give-me-a-date"
+        },
+        {
+            "pageId": "give-me-a-date",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "dateparts",
+                    "label": "Give me a date. Any date.",
+                    "name": "give_me_a_date",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "give-me-another-date"
+        },
+        {
+            "pageId": "give-me-another-date",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "dateparts",
+                    "label": "Give me another date (optional)",
+                    "name": "give_me_another_date",
+                    "labelIsPageTitle": true,
+                    "optional": true
+                }
+            ],
+            "nextPageId": "what-is-your-quest"
+        },        {
             "pageId": "what-is-your-quest",
             "title": "",
             "components": [
@@ -61,12 +141,13 @@
                         "To allow claimants to edit their redundancy claim" : "To allow claimants to edit their redundancy claim", 
                         "To do nothing": "To do nothing"
                     },
-                    "name": "what_is_your_quest"
+                    "name": "what_is_your_quest",
+                    "labelIsPageTitle": true
                 }
             ],
             "conditions": [
                 {
-                    "expression" : "FormData[\"what_is_your_quest\"] != null && FormData[\"what_is_your_quest\"] != \"To allow claimants to edit their redundancy claim\"",
+                    "expression" : "Data.what_is_your_quest != null && Data.what_is_your_quest != \"To allow claimants to edit their redundancy claim\"",
                     "nextPageId": "why-dont-you-want-to-help-claimants"
                 }
             ],   
@@ -81,12 +162,7 @@
                     "type": "multilineText",
                     "label": "Why don't you want to help claimants edit their redundancy claim?",
                     "name": "why_not_help_claimants",
-                    "validationRules": [
-                        {
-                            "expression": "FormData[\"why_not_help_claimants\"] != null && FormData[\"why_not_help_claimants\"].Trim() != \"\"",
-                            "errorMessage": "You must provide an answer to the question: What is your favourite colour?"
-                        }
-                    ]
+                    "labelIsPageTitle": true
                 }
             ],
             "nextPageId": "what-is-your-favourite-colour"
@@ -97,13 +173,28 @@
             "components": [
                 {
                     "questionId": "3",
-                    "type": "text",
-                    "label": "What is your favourite colour?",
+                    "type": "checkbox",
+                    "label": "Which of these colours do you like?",
                     "name": "what_is_your_favourite_colour",
+                    "labelIsPageTitle": true,
+                    "options": {
+                        "Red": "Red",
+                        "Blue": "Blue",
+                        "Green": "Green",
+                        "Yellow": "Yellow",
+                        "Pink": "Pink",
+                        "Black": "Black",
+                        "White": "White",
+                        "Purple": "Purple",
+                        "Orange": "Orange",
+                        "Brown": "Brown",
+                        "Grey": "Grey",
+                        "Other": "Other"
+                    },
                     "validationRules": [
                         {
-                            "expression": "FormData[\"what_is_your_favourite_colour\"] != null && FormData[\"what_is_your_favourite_colour\"].Trim() != \"\"",
-                            "errorMessage": "You must provide an answer to the question: What is your favourite colour?"
+                            "expression": "Data.what_is_your_favourite_colour != null && Data.what_is_your_favourite_colour.Trim() != \"\" ",
+                            "errorMessage": "Select at least one colour"
                         }
                     ]
                 }

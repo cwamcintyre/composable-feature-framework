@@ -9,6 +9,8 @@ using Component.Form.Application.UseCase.ProcessForm;
 using Component.Core.Application;
 using Component.Form.Application.UseCase.GetData.Model;
 using Component.Form.Application.UseCase.GetData;
+using Component.Form.Model.ComponentHandler;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace Component.Form.Application;
 public static class FormApplicationServiceBuilder
@@ -22,6 +24,12 @@ public static class FormApplicationServiceBuilder
         services.AddScoped<IFormDataStore, FakeFormDataStore>();
 
         services.AddScoped<IRequestResponseUseCase<GetDataRequestModel, GetDataResponseModel>, GetData>();
+
+        services.AddSingleton<ComponentHandlerFactory>();
+        services.AddSingleton<IComponentHandler, UkAddressHandler>();
+        services.AddSingleton<IComponentHandler, DatePartsHandler>();
+        services.AddSingleton<IComponentHandler, EmailHandler>();
+        services.AddSingleton<IComponentHandler, PhoneNumberHandler>();
 
         return services;
     }

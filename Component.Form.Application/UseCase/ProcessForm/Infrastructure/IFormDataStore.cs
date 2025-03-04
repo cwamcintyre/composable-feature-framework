@@ -9,6 +9,6 @@ public interface IFormDataStore
     Task SaveFormDataAsync(
         string formId, 
         string applicantId, 
-        Dictionary<string, string> formData,
+        string formData,
         Stack<string> formRoute);
 }

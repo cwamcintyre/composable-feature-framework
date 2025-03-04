@@ -1,8 +1,31 @@
 ﻿@model Component.Form.Model.Component
 
 <div class="govuk-form-group">
-  <label class="govuk-label" for="@Model.Name-phone-number">
-    @Model.Label
-  </label>
-  <input class="govuk-input govuk-input--width-20" id="@Model.Name-phone-number" name="@Model.Name-phoneNumber" type="tel" autocomplete="tel">
+  @if (Model.LabelIsPageTitle) 
+  {
+    <h1 class="govuk-label-wrapper">
+      <label for="@Model.Name" class="govuk-label govuk-label--l">
+            @Model.Label
+      </label>
+    </h1>
+  }
+  else 
+  {
+    <label class="govuk-label" for="@Model.Name">
+      @Model.Label
+    </label>
+  }
+  @if (Model.Hint != null)
+  {
+    <div id="@Model.Name-phone-hint" class="govuk-hint">
+      @Model.Hint
+    </div>
+  }  
+  @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+  {
+      <p id="@Model.Name-error" class="govuk-error-message">
+          @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
+      </p>
+  }  
+  <input class="govuk-input govuk-input--width-20" id="@Model.Name" name="@Model.Name" type="tel" aria-describedby="@Model.Name-phone-hint" autocomplete="tel" value="@Model.Answer">
 </div>

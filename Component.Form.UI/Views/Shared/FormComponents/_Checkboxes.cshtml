@@ -1,8 +1,12 @@
 ﻿@model Component.Form.Model.Component
 
+@{
+    var labelClass = Model.LabelIsPageTitle ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--m";
+}
+
 <govuk-checkboxes name="@Model.Name">
     <govuk-checkboxes-fieldset>
-        <govuk-checkboxes-fieldset-legend is-page-heading="true">
+        <govuk-checkboxes-fieldset-legend class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
             @Model.Label
         </govuk-checkboxes-fieldset-legend>
         @if (Model.Hint != null)
@@ -11,17 +15,17 @@
                 @Model.Hint
             </govuk-checkboxes-hint>
         }
+        @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+        {
+            <govuk-checkboxes-error-message>
+                @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
+            </govuk-checkboxes-error-message>
+        }
         @foreach (var option in Model.Options)
         {
             <govuk-checkboxes-item value="@option.Key">
                 @option.Value
             </govuk-checkboxes-item>
-        }
-        @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
-        {
-            <govuk-checkboxes-error-message>
-                @ViewBag.Errors[Model.Name]
-            </govuk-checkboxes-error-message>
         }
     </govuk-checkboxes-fieldset>
 </govuk-checkboxes>

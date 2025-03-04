@@ -1,22 +1,24 @@
-using System;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
 using Component.Core.Application;
 using Component.Form.Application.UseCase.GetForm.Infrastructure;
 using Component.Form.Application.UseCase.ProcessForm.Infrastructure;
 using Component.Form.Application.UseCase.ProcessForm.Model;
+using Component.Form.Model.ComponentHandler;
+using System.Dynamic;
+using Newtonsoft.Json;
+using Component.Form.Model;
 namespace Component.Form.Application.UseCase.ProcessForm;
 
 public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, ProcessFormResponseModel>
 {
     private readonly IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
-
-    public ProcessForm(IFormStore formStore, IFormDataStore formDataStore)
+    private readonly ComponentHandlerFactory _componentHandlerFactory;
+    
+    public ProcessForm(IFormStore formStore, IFormDataStore formDataStore, ComponentHandlerFactory componentHandlerFactory)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
+        _componentHandlerFactory = componentHandlerFactory;
     }
 
     public async Task<ProcessFormResponseModel> HandleAsync(ProcessFormRequestModel request)
@@ -27,6 +29,8 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         var formData = formDataModel.Data;
         var routeData = formDataModel.Route;
 
+        dynamic data = ParseData(formData);
+
         if (form == null)
         {
             throw new ArgumentException($"Form {request.FormId} not found");
@@ -36,39 +40,36 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
 
         if (currentPage == null) return new ProcessFormResponseModel 
         { 
-            Errors = new Dictionary<string, string> { { "Page", "Page not found" } }
+            Errors = new Dictionary<string, List<string>> { { "Page", new List<string>() { "Page not found" } } }
         };
 
-        var errors = new Dictionary<string, string>();
+        var errors = new Dictionary<string, List<string>>();
 
         // Loop through questions and validate them
-        var thisPageData = new Dictionary<string, string>();
         foreach (var question in currentPage.Components.Where(c => c.IsQuestionType))
         {
             string inputName = question.Name;
 
-            // Check if the required field is filled
-            if (question.Required && !request.Form.ContainsKey(inputName) && question.Type != "file")
-            {
-                errors.Add(inputName, $"The field '{question.Label}' is required.");
-                continue;
-            }
-
             if (request.Form.ContainsKey(inputName))
             {
-                formData[inputName] = request.Form[inputName];
-                thisPageData[inputName] = request.Form[inputName];
+                IComponentHandler handler = _componentHandlerFactory.GetFor(question.Type);
+
+                if (handler.GetDataType().Equals(ComponentHandlerFactory.GetDataType(typeof(string)))) 
+                {
+                    ((IDictionary<string, object>)data)[inputName] = request.Form[inputName];
+                }
+                else 
+                {
+                    ((IDictionary<string, object>)data)[inputName] = ParseData(request.Form[inputName]);
+                }
 
                 // Evaluate validation rules
-                if (question.ValidationRules != null) 
+                if (!question.Optional) 
                 {
-                    foreach (var rule in question.ValidationRules)
+                    var validationResult = await handler.Validate(inputName, data, question.ValidationRules);
+                    if (validationResult.Count > 0)
                     {
-                        var validationResult = await EvaluateCondition(rule.Expression, formData);
-                        if (!validationResult)
-                        {
-                            errors.Add(inputName, rule.ErrorMessage);
-                        }
+                        errors.Add(inputName, validationResult);
                     }
                 }
             }
@@ -81,7 +82,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
             {
                 Errors = errors,
                 NextPage = currentPage.PageId,
-                FormData = thisPageData
+                FormData = JsonConvert.SerializeObject(data)
             };
         }
 
@@ -89,7 +90,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         routeData.Push(currentPage.PageId);
 
         // store the current form data.
-        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, formData, routeData);
+        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, JsonConvert.SerializeObject(data), routeData);
 
         // If there is a condition to move to the next page, evaluate it.
         // else move to the next page or submit the form if on the last page
@@ -100,7 +101,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
 
             foreach (var condition in currentPage.Conditions)
             {
-                if (await EvaluateCondition(condition.Expression, formData))
+                if (await ExpressionHelper.EvaluateCondition(condition.Expression, data))
                 {
                     nextPageId = condition.NextPageId;
                     metCondition = true;
@@ -122,17 +123,25 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         };
     }
 
-    private async Task<bool> EvaluateCondition(string expression, Dictionary<string, string> formData)
+    public dynamic ParseData(string formData) 
     {
-        var options = ScriptOptions.Default.AddImports("System", "System.Collections.Generic");
+        var jsonSettings = GetJsonSerializerSettings();
+        var data = JsonConvert.DeserializeObject<ExpandoObject>(formData, jsonSettings);
+        
+        if (data == null) 
+        {
+            data = new ExpandoObject();
+        }
 
-        var script = CSharpScript.Create<bool>(expression, options, typeof(Globals));
-        var result = await script.RunAsync(new Globals { FormData = formData });
-        return result.ReturnValue;
+        return data;
     }
-}
 
-public class Globals
-{
-    public Dictionary<string, string> FormData { get; set; }
+    private JsonSerializerSettings GetJsonSerializerSettings()
+    {
+        return new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.None,
+            SerializationBinder = new SafeTypeResolver(_componentHandlerFactory.GetAllTypes())
+        };
+    }
 }

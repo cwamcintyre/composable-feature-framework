@@ -1,16 +1,19 @@
 using Component.Form.UI.Helpers;
 using Component.Form.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class FormController : Controller
 {
     private readonly FormAPIService _formAPIService;
+    private readonly FormHelper _formHelper;
     private readonly IFormPresenter _formPresenter;
 
-    public FormController(IFormPresenter formPresenter, FormAPIService formAPIService)
+    public FormController(IFormPresenter formPresenter, FormAPIService formAPIService, FormHelper formHelper)
     {
         _formAPIService = formAPIService;
         _formPresenter = formPresenter;        
+        _formHelper = formHelper;
     }
 
     [HttpGet("form/{formId}/start")]
@@ -48,11 +51,19 @@ public class FormController : Controller
     public async Task<IActionResult> Submit()
     {
         var formModel = await _formAPIService.GetFormAsync(Request.Form["FormId"]);
+        var currentPage = formModel.Pages.Find(p => p.PageId == Request.Form["PageId"]);
+        if (currentPage == null) 
+        {
+            throw new ArgumentException($"Page {Request.Form["PageId"]} not found in form {Request.Form["FormId"]}");    
+        }
+
+        var formData = _formHelper.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
+        
         var processResult = await _formAPIService.ProcessFormAsync(
             Request.Form["FormId"],
             FormSessionHelper.GetApplicantId(HttpContext.Session),
             Request.Form["PageId"],
-            Request.Form.ToDictionary(f => f.Key, f => f.Value.ToString()));
+            formData);
 
         var result = await _formPresenter.HandleSubmit(formModel, processResult);
 

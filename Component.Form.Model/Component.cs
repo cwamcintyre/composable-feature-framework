@@ -15,10 +15,11 @@ namespace Component.Form.Model
         public string? Hint { get; set; }
         public required bool Required { get; set; }
         public bool LabelIsPageTitle { get; set; }
-        public string? Answer { get; set; }
+        public object? Answer { get; set; }
         public Dictionary<string, string> Options { get; set; }
         public FileOptions FileOptions { get; set; }
         public string? Content { get; set; }
+        public bool Optional { get; set; }
         public List<ValidationRule> ValidationRules { get; set; }
         public bool IsQuestionType { get { return Type != "html" && Type != "summary"; } }
     }

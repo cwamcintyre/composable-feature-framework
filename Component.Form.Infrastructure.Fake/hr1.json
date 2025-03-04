@@ -122,14 +122,8 @@
                 {
                     "questionId": "q11",
                     "type": "text",
-                    "label": "Contact first name",
-                    "name": "contact_first_name"
-                },
-                {
-                    "questionId": "q12",
-                    "type": "text",
-                    "label": "Contact last name",
-                    "name": "contact_last_name"
+                    "label": "Contact full name",
+                    "name": "contact_name"
                 }
             ],
             "nextPageId": "what-is-their-work-contact-number"
@@ -215,7 +209,7 @@
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"total_number_of_employees\"] != null && Convert.ToInt32(FormData[\"total_number_of_employees\"]) < 20",
+                    "expression": "Data.total_number_of_employees != null && Convert.ToInt32(Data.total_number_of_employees) < 20",
                     "nextPageId": "you-do-not-need-to-notify-us"
                 }
             ],
@@ -236,7 +230,7 @@
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"total_number_of_redundancies\"] != null && Convert.ToInt32(FormData[\"total_number_of_redundancies\"]) < 20",
+                    "expression": "Data.total_number_of_redundancies != null && Convert.ToInt32(Data.total_number_of_redundancies) < 20",
                     "nextPageId": "you-do-not-need-to-notify-us"
                 }
             ],
@@ -261,7 +255,7 @@
                 {
                     "questionId": "q21",
                     "type": "html",
-                    "content": "<p class=\"govuk-body\">You should give:</p>\n\n<ul>\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p class=\"govuk-body\">For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
+                    "content": "<p class=\"govuk-body\">You should give:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>30 days notice if you're dismissing 20 to 99 employees</li>\n<li>45 days notice if you're dismissing 100 employees or more</li>\n</ul>\n\n<p class=\"govuk-body\">For more information read our <a href=\"https://www.gov.uk/government/publications/redundancy-payments-form-hr1-advance-notification-of-redundancies/advanced-notification-of-redundancies-guidance-for-employers\" target=\"_blank\">Advance notification of redundancies employer guide (opens in new tab)</a>"
                 },
                 {
                     "questionId": "q22",
@@ -320,9 +314,12 @@
                     "hint": "Select all that apply",
                     "labelIsPageTitle": false,
                     "options": {
-                        "Feature A": "Feature A",
-                        "Feature B": "Feature B",
-                        "Feature C": "Feature C"
+                        "lower demand for products or services": "lower demand for products or services",                    
+                        "all or part of a contract has been completed": "all or part of a contract has been completed",
+                        "work has been transferred to another site or employer": "work has been transferred to another site or employer",
+                        "we’ve introduced new technology/plant/machinery": "we’ve introduced new technology/plant/machinery",
+                        "changes in work methods": "changes in work methods",
+                        "organisation/company insolvency": "organisation/company insolvency"                           
                     }
                 }
             ],
@@ -362,11 +359,11 @@
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"is_a_trade_union_representing_any_groups_of_employees\"] != null && FormData[\"is_a_trade_union_representing_any_groups_of_employees\"] == \"yes\"",
+                    "expression": "Data.is_a_trade_union_representing_any_groups_of_employees != null && Data.is_a_trade_union_representing_any_groups_of_employees == \"yes\"",
                     "nextPageId": "union-details"
                 },
                 {
-                    "expression": "FormData[\"is_a_trade_union_representing_any_groups_of_employees\"] != null && FormData[\"is_a_trade_union_representing_any_groups_of_employees\"] == \"no\"",
+                    "expression": "Data.is_a_trade_union_representing_any_groups_of_employees != null && Data.is_a_trade_union_representing_any_groups_of_employees == \"no\"",
                     "nextPageId": "is-an-elected-person-representing-any-groups-of-employees"
                 }
             ],
@@ -379,7 +376,7 @@
                 {
                     "questionId": "q30",
                     "type": "html",
-                    "content": "<ul>\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
+                    "content": "<ul class=\"govuk-list govuk-list--bullet\">\n<li>names of recognised unions.</li>\n<li>names of union representatives.</li>\n<li>description of employees they represent.</li>\n</ul>"
                 },
                 {
                     "questionId": "q31",
@@ -405,11 +402,11 @@
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"is_an_elected_person_representing_any_groups_of_employees\"] != null && FormData[\"is_an_elected_person_representing_any_groups_of_employees\"] == \"yes\"",
+                    "expression": "Data.is_an_elected_person_representing_any_groups_of_employees != null && Data.is_an_elected_person_representing_any_groups_of_employees == \"yes\"",
                     "nextPageId": "elected-representative-details"
                 },
                 {
-                    "expression": "FormData[\"is_an_elected_person_representing_any_groups_of_employees\"] != null && FormData[\"is_an_elected_person_representing_any_groups_of_employees\"] == \"no\"",
+                    "expression": "Data.is_an_elected_person_representing_any_groups_of_employees != null && Data.is_an_elected_person_representing_any_groups_of_employees == \"no\"",
                     "nextPageId": "have-you-started-the-consultation-process-with-the-appropriate-representative"
                 }
             ],
@@ -422,7 +419,7 @@
                 {
                     "questionId": "q7",
                     "type": "html",
-                    "content": "<ul>\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n<ul>"
+                    "content": "<ul class=\"govuk-list govuk-list--bullet\">\n<li>names of the employees’ elected representatives</li>\n<li>description of employees they represent</li>\n</ul>"
                 },
                 {
                     "questionId": "q8",
@@ -448,11 +445,11 @@
             ],
             "conditions": [
                 {
-                    "expression": "FormData[\"have_you_started_the_consultation_process_with_the_appropriate_representative\"] != null && FormData[\"have_you_started_the_consultation_process_with_the_appropriate_representative\"] == \"yes\"",
+                    "expression": "Data.have_you_started_the_consultation_process_with_the_appropriate_representative != null && Data.have_you_started_the_consultation_process_with_the_appropriate_representative == \"yes\"",
                     "nextPageId": "elected-representative-details"
                 },
                 {
-                    "expression": "FormData[\"have_you_started_the_consultation_process_with_the_appropriate_representative\"] != null && FormData[\"have_you_started_the_consultation_process_with_the_appropriate_representative\"] == \"no\"",
+                    "expression": "Data.have_you_started_the_consultation_process_with_the_appropriate_representative != null && Data.have_you_started_the_consultation_process_with_the_appropriate_representative == \"no\"",
                     "nextPageId": "have-you-given-individual-notices-of-dismissal-to-the-employees"
                 }
             ],
@@ -494,20 +491,13 @@
                 {
                     "questionId": "q12",
                     "type": "html",
-                    "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n>li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
+                    "content": "<p class=\"govuk-body\">To sign this form, you must enter:</p>\n\n<ul class=\"govuk-list govuk-list--bullet\">\n<li>the name of the person responsible for the redundancies</li>\n<li>the email address of the person completing this form</li>\n</ul>\n\n<p class=\"govuk-body\">Responsible person's name</p>\n<p class=\"govuk-body\">For example: Company director, Head of HR, etc.</p>"
                 },
                 {
                     "questionId": "q13",
                     "type": "text",
-                    "label": "Responsible person's first name",
-                    "name": "responsible_person_first_name",
-                    "labelIsPageTitle": false
-                },
-                {
-                    "questionId": "q14",
-                    "type": "text",
-                    "label": "Responsible person's last name",
-                    "name": "responsible_person_last_name",
+                    "label": "Responsible person's full name",
+                    "name": "responsible_person_name",
                     "labelIsPageTitle": false
                 }
             ],

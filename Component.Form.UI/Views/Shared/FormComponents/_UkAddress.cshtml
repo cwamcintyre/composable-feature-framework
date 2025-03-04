@@ -1,39 +1,105 @@
 ﻿@model Component.Form.Model.Component
+@using Component.Form.Model.ComponentModel;
+@using Component.Form.Model.ComponentHandler;
+@{
+   var answer = (UkAddressModel)Model.Answer;
+   if (answer == null) {
+      answer = new UkAddressModel();
+   }
 
-<fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-    <h1 class="govuk-fieldset__heading">
-      @Model.Label
-    </h1>
-  </legend>
+   var labelClass = Model.LabelIsPageTitle ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--m";
+}
+
+<govuk-fieldset>
+  <govuk-fieldset-legend is-page-heading="@Model.LabelIsPageTitle" class="@labelClass">
+    @Model.Label
+  </govuk-fieldset-legend>
+  <govuk-input name="@Model.Name-addressLine1" autocomplete="address-line1" value="@answer.AddressLine1">
+        <govuk-input-label class="govuk-label--s">
+            Address line 1
+        </govuk-input-label>
+        @if (ViewBag.Errors != null 
+          && ViewBag.Errors.ContainsKey(Model.Name) 
+          && ViewBag.Errors[Model.Name].Contains(UkAddressHandler.ERR_LINE_1_REQUIRED))
+        {
+            <govuk-input-error-message>
+                @UkAddressHandler.ERR_LINE_1_REQUIRED
+            </govuk-input-error-message>
+        }
+   </govuk-input>
+   <govuk-input name="@Model.Name-addressLine2" autocomplete="address-line2" value="@answer.AddressLine2">
+        <govuk-input-label class="govuk-label--s">
+            Address line 2 (optional)
+        </govuk-input-label>
+   </govuk-input>
+   <govuk-input name="@Model.Name-addressTown" autocomplete="address-level2" value="@answer.Town">
+        <govuk-input-label class="govuk-label--s">
+            Town or city (optional)
+        </govuk-input-label>
+   </govuk-input>
+   <govuk-input name="@Model.Name-addressCounty" value="@answer.County">
+        <govuk-input-label class="govuk-label--s">
+            County (optional)
+        </govuk-input-label>
+   </govuk-input>
+   <govuk-input name="@Model.Name-addressPostcode" input-class="govuk-input--width-10" value="@answer.Postcode">
+        <govuk-input-label class="govuk-label--s">
+            Postcode
+        </govuk-input-label>
+        @if (ViewBag.Errors != null 
+          && ViewBag.Errors.ContainsKey(Model.Name) 
+          && ViewBag.Errors[Model.Name].Contains(UkAddressHandler.ERR_POSTCODE_REQUIRED))
+        {
+            <govuk-input-error-message>
+                @UkAddressHandler.ERR_POSTCODE_REQUIRED
+            </govuk-input-error-message>
+        }
+   </govuk-input>
+</govuk-fieldset>
+
+@* <fieldset class="govuk-fieldset">
+    @if (Model.LabelIsPageTitle) 
+    {
+      <legend class="govuk-fieldset__legend">
+        <h1 class="govuk-label-wrapper">
+          @Model.Label
+        </h1>
+      </legend>
+    }
+    else 
+    {
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          @Model.Label
+      </legend>
+    }
   <div class="govuk-form-group">
     <label class="govuk-label" for="@Model.Name-address-line-1">
       Address line 1
     </label>
-    <input class="govuk-input" id="@Model.Name-address-line-1" name="@Model.Name-addressLine1" type="text" autocomplete="address-line1">
+    <input class="govuk-input" id="@Model.Name-address-line-1" name="@Model.Name-addressLine1" type="text" autocomplete="address-line1" value="@answer.AddressLine1">
   </div>
   <div class="govuk-form-group">
     <label class="govuk-label" for="@Model.Name-address-line-2">
       Address line 2 (optional)
     </label>
-    <input class="govuk-input" id="@Model.Name-address-line-2" name="@Model.Name-addressLine2" type="text" autocomplete="address-line2">
+    <input class="govuk-input" id="@Model.Name-address-line-2" name="@Model.Name-addressLine2" type="text" autocomplete="address-line2" value="@answer.AddressLine2">
   </div>
   <div class="govuk-form-group">
     <label class="govuk-label" for="@Model.Name-address-town">
       Town or city
     </label>
-    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-town" name="@Model.Name-addressTown" type="text" autocomplete="address-level2">
+    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-town" name="@Model.Name-addressTown" type="text" autocomplete="address-level2" value="@answer.Town">
   </div>
   <div class="govuk-form-group">
     <label class="govuk-label" for="@Model.Name-address-county">
       County (optional)
     </label>
-    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-county" name="@Model.Name-addressCounty" type="text">
+    <input class="govuk-input govuk-!-width-two-thirds" id="@Model.Name-address-county" name="@Model.Name-addressCounty" type="text" value="@answer.County">
   </div>
   <div class="govuk-form-group">
     <label class="govuk-label" for="@Model.Name-address-postcode">
       Postcode
     </label>
-    <input class="govuk-input govuk-input--width-10" id="@Model.Name-address-postcode" name="@Model.Name-addressPostcode" type="text" autocomplete="postal-code">
+    <input class="govuk-input govuk-input--width-10" id="@Model.Name-address-postcode" name="@Model.Name-addressPostcode" type="text" autocomplete="postal-code" value="@answer.Postcode">
   </div>
-</fieldset>
+</fieldset> *@

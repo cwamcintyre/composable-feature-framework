@@ -1,4 +1,7 @@
 using System;
+using System.ComponentModel;
+using Component.Form.Model.ComponentHandler;
+using Component.Form.UI.Helpers;
 using Component.Form.UI.Services;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -19,6 +22,14 @@ public static class FormFeatureExtensions
         services.AddScoped<IFormPresenter, FormPresenter>();
         services.AddGovUkFrontend();
         services.AddHttpClient();
+
+        services.AddSingleton<ComponentHandlerFactory>();
+        services.AddSingleton<IComponentHandler, UkAddressHandler>();
+        services.AddSingleton<IComponentHandler, EmailHandler>();
+        services.AddSingleton<IComponentHandler, DatePartsHandler>();
+        services.AddSingleton<IComponentHandler, PhoneNumberHandler>();
+
+        services.AddSingleton<FormHelper>();
 
         services.AddStackExchangeRedisCache(options =>
         {

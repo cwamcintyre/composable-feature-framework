@@ -1,5 +1,8 @@
 using Component.Form.Model;
+using Component.Form.Model.ComponentHandler;
 using Component.Form.UI.Services.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public interface IFormPresenter
 {
@@ -14,19 +17,34 @@ public class FormPresenter : IFormPresenter
     public virtual string IndexViewName { get; set; } = "ShowPage";
     public virtual string StopViewName { get; set; } = "Stop";
 
+    private readonly ComponentHandlerFactory _componentHandlerFactory;
+
+    public FormPresenter(ComponentHandlerFactory componentHandlerFactory)
+    {
+        _componentHandlerFactory = componentHandlerFactory;
+    }
+
     public async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
 
+        var formData = new Dictionary<string, object>();
+        
+        if (!String.IsNullOrEmpty(dataResponse.FormData.Data))
+        {
+            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataResponse.FormData.Data, GetJsonSerializerSettings());
+        }
+        
         if (dataResponse.FormData.Data != null) 
         {
-            foreach (var formData in dataResponse.FormData.Data)
+            foreach (var data in formData)
             {
-                var component = currentPage.Components.Find(c => c.Name == formData.Key);
+                var component = currentPage.Components.Find(c => c.Name == data.Key);
                 if (component != null)
                 {
-                    component.Answer = formData.Value;
+                    var handler = _componentHandlerFactory.GetFor(component.Type);
+                    component.Answer = handler.GetFromObject(data.Value);
                 }
             }
         }
@@ -52,6 +70,13 @@ public class FormPresenter : IFormPresenter
         var currentPage = formModel.Pages.Find(p => p.PageId == response.NextPage);
         if (currentPage == null) return null;
 
+        var formData = new Dictionary<string, object>();
+        
+        if (!String.IsNullOrEmpty(response.FormData))
+        {
+            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData, GetJsonSerializerSettings());
+        }
+
         if (!String.IsNullOrEmpty(currentPage.PageType) && currentPage.PageType.Equals("summary"))
         {
             return new SubmitResult()
@@ -70,12 +95,13 @@ public class FormPresenter : IFormPresenter
             };
         }
 
-        foreach (var formData in response.FormData)
+        foreach (var data in formData)
         {
-            var component = currentPage.Components.Find(c => c.Name == formData.Key);
+            var component = currentPage.Components.Find(c => c.Name == data.Key);
             if (component != null)
             {
-                component.Answer = formData.Value;
+                var handler = _componentHandlerFactory.GetFor(component.Type);
+                component.Answer = handler.GetFromObject(data.Value);
             }
         }
 
@@ -92,16 +118,22 @@ public class FormPresenter : IFormPresenter
     }
 
     public async Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response)
-    {        
-        var data = response.FormData.Data;
+    {
+        var formData = new Dictionary<string, object>();
+        
+        if (!String.IsNullOrEmpty(response.FormData.Data))
+        {
+            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData.Data, GetJsonSerializerSettings());
+        }
 
         foreach (var page in formModel.Pages) 
         {
             foreach (var component in page.Components.Where(c => c.IsQuestionType))
             {
-                if (data.ContainsKey(component.Name))
+                if (formData.TryGetValue(component.Name, out object? value))
                 {
-                    component.Answer = data[component.Name];
+                    var handler = _componentHandlerFactory.GetFor(component.Type);
+                    component.Answer = handler.GetFromObject(value);
                 }
             }
         }
@@ -124,6 +156,14 @@ public class FormPresenter : IFormPresenter
             PageModel = currentPage
         };
     }
+
+    private JsonSerializerSettings GetJsonSerializerSettings()
+    {
+        return new JsonSerializerSettings
+        {
+            SerializationBinder = new SafeTypeResolver(_componentHandlerFactory.GetAllTypes())
+        };
+    }
 }
 
 public class IndexResult
@@ -137,7 +177,7 @@ public class IndexResult
 
 public class SubmitResult
 {
-    public Dictionary<string, string> Errors { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
     public string NextPage { get; set; }
     public Page PageModel { get; set;}
     public string NextAction { get; set; }

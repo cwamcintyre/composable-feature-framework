@@ -2,8 +2,8 @@
   "searchIndexPage": {
     "searchTypeId": "fip",
     "title": "Search",
-    "description": "<p class=\"govuk-body\">You can search for an insolvency practitioner by name, company, town, city or postcode.</p>",
     "searchType": "simpleWithRelatedContent",
+    "description": "<p class=\"govuk-body\">You can search for an insolvency practitioner by name, company, town, city or postcode.</p>",
     "indexFields": [
       {
         "name": "firstName",
@@ -24,10 +24,10 @@
         "placeholder": "Enter company name"
       },
       {
-        "name": "postcode",
+        "name": "postCode",
         "type": "text",
-        "label": "Postcode",
-        "placeholder": "Enter postcode"
+        "label": "Post Code",
+        "placeholder": "Enter post code"
       }
     ],
     "relatedContent": {

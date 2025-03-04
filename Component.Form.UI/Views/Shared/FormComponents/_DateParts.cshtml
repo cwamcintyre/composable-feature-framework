@@ -1,38 +1,63 @@
-﻿@model Component.Form.Model.Component
+﻿@using Component.Form.Model.ComponentModel
+@model Component.Form.Model.Component
+
+@{
+   var answer = (DatePartsModel)Model.Answer;
+   if (answer == null) {
+      answer = new DatePartsModel();
+   }
+
+   var labelClass = Model.LabelIsPageTitle ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--m";
+}
 
 <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h1 class="govuk-fieldset__heading">
-        @Model.Label
-      </h1>
-    </legend>
-    <div id="passport-issued-hint" class="govuk-hint">
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="@Model.Name-hint">
+    @if (Model.LabelIsPageTitle) 
+    {
+      <legend class="govuk-fieldset__legend">
+        <h1 class="govuk-label-wrapper">
+          @Model.Label
+        </h1>
+      </legend>
+    }
+    else 
+    {
+      <legend class="govuk-fieldset__legend">
+          @Model.Label
+      </legend>
+    }
+    <div id="@Model.Name-hint" class="govuk-hint">
       @Model.Hint
     </div>
-    <div class="govuk-date-input" id="passport-issued">
+    @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+    {
+        <p id="@Model.Name-error" class="govuk-error-message">
+            @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
+        </p>
+    }
+    <div class="govuk-date-input" id="@Model.Name">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+          <label class="govuk-label govuk-date-input__label" for="@Model.Name-day">
             Day
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="@Model.Name-day" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="@Model.Name-day" name="@Model.Name-day" type="text" inputmode="numeric" value="@(answer?.Day == 0 ? "" : answer?.Day)"> 
         </div>
       </div>
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+          <label class="govuk-label govuk-date-input__label" for="@Model.Name-month">
             Month
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="@Model.Name-month" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="@Model.Name-month" name="@Model.Name-month" type="text" inputmode="numeric" value="@(answer?.Month == 0 ? "" : answer?.Month)">
         </div>
       </div>
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+          <label class="govuk-label govuk-date-input__label" for="@Model.Name-year">
             Year
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="@Model.Name-year" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="@Model.Name-year" name="@Model.Name-year" type="text" inputmode="numeric" value="@(answer?.Year == 0 ? "" : answer?.Year)">
         </div>
       </div>
     </div>
