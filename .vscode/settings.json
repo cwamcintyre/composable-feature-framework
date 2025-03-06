@@ -4,5 +4,19 @@
     "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "publish (functions)",
-    "azureFunctions.projectSubpath": "Component.Search.API"
+    "azureFunctions.projectSubpath": "Component.Search.API",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {  // shows *.feature.cs files as nested items
+      "*.feature": "${capture}.feature.cs"
+    },
+    "files.exclude": { // excludes compilation result
+      "**/obj/": true,
+      "**/bin/": true,
+    },
+    "cucumber.glue": [ // sets the location of the step definition classes
+      "Component.Form.UI.Tests/**/*.cs",
+    ],
+    "cucumber.features": [ // sets the location of the feature files
+      "Component.Form.UI.Tests/**/*.feature",
+    ]
 }

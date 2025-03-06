@@ -3,13 +3,13 @@
 <govuk-input name="@Model.Name" value="@Model.Answer">
     @if (@Model.LabelIsPageTitle)
     {
-        <govuk-input-label is-page-heading="true" class="govuk-label--l">
+        <govuk-input-label id="@Model.Name-label" is-page-heading="true" class="govuk-label--l">
             @Model.Label
         </govuk-input-label>
     }
     else
     {
-        <govuk-input-label class="govuk-label--m">
+        <govuk-input-label id="@Model.Name-label" class="govuk-label--m">
             @Model.Label
         </govuk-input-label>
     }

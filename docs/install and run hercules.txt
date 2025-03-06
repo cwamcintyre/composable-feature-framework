@@ -1,0 +1,23 @@
+testzeus install instructions
+-----------------------------
+
+open powershell (run as admin)
+
+(make a development/test directory if you don't already have one...)
+git clone https://github.com/test-zeus-ai/testzeus-hercules.git
+
+cd testzeus-hercules/helper_scripts
+.\hercules_windows_setup.ps1
+
+(wait a bit)
+
+open terminal in VS code
+
+.\run_tests.ps1
+
+sit in your dressing gown and eat biscuits while the AI does your job :)
+
+once you're bored - CAREFULLY READ https://github.com/test-zeus-ai/testzeus-hercules/blob/main/docs/run_guide.md
+
+(run on 8 components - simple tests - took 40! mins!! $2.78 for the run, 1.5mil tokens in, 47k tokens out)
+(any test runner I've ever used gives you a report at the end telling you what tests passed/failed - Hercules gives nothing! you have to dig into a million XML files...)

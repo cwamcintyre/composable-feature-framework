@@ -11,7 +11,7 @@
 }
 
 <govuk-fieldset>
-  <govuk-fieldset-legend is-page-heading="@Model.LabelIsPageTitle" class="@labelClass">
+  <govuk-fieldset-legend id="@Model.Name-label" is-page-heading="@Model.LabelIsPageTitle" class="@labelClass">
     @Model.Label
   </govuk-fieldset-legend>
   <govuk-input name="@Model.Name-addressLine1" autocomplete="address-line1" value="@answer.AddressLine1">

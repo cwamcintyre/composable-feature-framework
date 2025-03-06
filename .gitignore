@@ -4,6 +4,17 @@
 # Azure Functions localsettings file
 local.settings.json
 
+# hercules output
+Hercules/log_files/
+Hercules/output/
+Hercules/proofs/
+Hercules/Gherkin_Files/
+Hercules/*/Gherkin_Files/
+Hercules/*/log_files/
+Hercules/*/output/
+Hercules/*/proofs/
+cache.db
+
 # User-specific files
 *.suo
 *.user

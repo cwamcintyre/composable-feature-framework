@@ -40,3 +40,42 @@ using exampleDetailType.json as an example, create a new configuration in fipDet
 The first section is titled "Insolvency practitioner details" and has the fields: first name, last name, company, address, postCode, telephone, fax, email, ip number. 
 The second section is titled "Authorising body" and has the fields: IP name, website, address, telephone number, fax number
 The title should say "Case details:" with the first name and last name
+
+Hercules tests have a folder structure like: {test name}/input , {test name}/output , {test name}/proofs , {test name}/test_data
+When creating a Hercules test, make this folder structure under Hercules\tests\{test name}
+using textInputComponent.json and textInput.feature, create a json configuration and feature file for every component type found in test.json
+
+create a c# playwright page object for the summary page in Compoment.Form.UI.Tests. It has the following HTML
+<main class="govuk-main-wrapper" id="main-content" role="main">
+            
+
+
+    <h1 class="govuk-heading-l">Check your answers before sending your application</h1>
+
+
+<dl class="govuk-summary-list"><div class="govuk-summary-list__row"><dt class="govuk-summary-list__key" id="what_is_your_name-key">
+                    What is your name?
+                </dt><dd class="govuk-summary-list__value" id="what_is_your_name-value">
+Carl                </dd><dd class="govuk-summary-list__actions"><a class="govuk-link" id="what_is_your_name-change-link" href="#">Change <span class="govuk-visually-hidden">name</span></a></dd></div></dl>
+<h2 class="govuk-heading-m">Now send your application</h2><p class="govuk-body">By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+<a class="govuk-button" data-module="govuk-button" draggable="false" href="/form/textComponent/confirmation" role="button" data-govuk-button-init="">Accept and send</a>
+
+
+
+        </main>
+There can be multiple govuk-summary-list items, ensure there is a method that can take a variable to find the key, value, and change link 
+
+Using text.feature, using c#, create reqnroll step definitions and a playwright page object in Forms\Compoment.Form.UI.Tests for the following HTML
+<form method="POST" enctype="multipart/form-data" action="/Form/Submit" novalidate="">
+    
+    <input type="hidden" name="pageId" value="what-is-your-name">
+    <input type="hidden" name="formId" value="textComponent">
+    
+
+<div class="govuk-form-group "><h1 class="govuk-label-wrapper"><label for="what_is_your_name" class="govuk-label govuk-label--l">
+            What is your name?
+        </label></h1><input class="govuk-input " id="what_is_your_name" name="what_is_your_name" type="text"></div>    
+    <button class="govuk-button btn btn-primary" data-module="govuk-button" type="submit" data-govuk-button-init="">Continue</button>
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8HAbon_EdJVGqLiEVPXvnfAfit0ZPHLwlXYtLVxvu42sb5K1VKqv9gF2StXj8IXJRLzQf986xqBSEjxX1pPQJ7IKyRZTFyYUW4WmU2z0Ji9aMJcxARD34-boA7Ewipdzn3mtRQkviNEjl7mkuTXKap8"></form>
+
+using text.feature as an example and ComponentStepDefinitions.cs, create feature files for all components in test.json . add new step definitions to ComponentStepDefinitions if necessary. 

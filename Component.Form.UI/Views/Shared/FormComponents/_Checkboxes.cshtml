@@ -6,7 +6,7 @@
 
 <govuk-checkboxes name="@Model.Name">
     <govuk-checkboxes-fieldset>
-        <govuk-checkboxes-fieldset-legend class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
+        <govuk-checkboxes-fieldset-legend id="@Model.Name-label" class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
             @Model.Label
         </govuk-checkboxes-fieldset-legend>
         @if (Model.Hint != null)

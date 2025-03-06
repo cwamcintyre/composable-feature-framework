@@ -1,0 +1,64 @@
+{
+    "formId": "checkboxComponent",
+    "title": "Component Test - Checkbox",
+    "description": "Please fill out this form.",
+    "currentPage": 1,
+    "totalPages": 1,
+    "startPage": "what-is-your-favourite-colour",
+    "pages": [
+        {
+            "pageId": "what-is-your-favourite-colour",
+            "components": [
+                {
+                    "questionId": "3",
+                    "type": "checkbox",
+                    "label": "Which of these colours do you like?",
+                    "name": "what_is_your_favourite_colour",
+                    "labelIsPageTitle": true,
+                    "options": {
+                        "Red": "Red",
+                        "Blue": "Blue",
+                        "Green": "Green",
+                        "Yellow": "Yellow",
+                        "Pink": "Pink",
+                        "Black": "Black",
+                        "White": "White",
+                        "Purple": "Purple",
+                        "Orange": "Orange",
+                        "Brown": "Brown",
+                        "Grey": "Grey",
+                        "Other": "Other"
+                    },
+                    "validationRules": [
+                        {
+                            "expression": "Data.what_is_your_favourite_colour != null && Data.what_is_your_favourite_colour.Trim() != \"\" ",
+                            "errorMessage": "Select at least one colour"
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "summary"
+        },
+        {
+            "pageId": "summary",
+            "title": "Check your answers before sending your application",
+            "pageType": "summary",
+            "components": [
+                {
+                    "type": "summary"
+                },
+                {
+                    "type": "html",
+                    "content": "<h2 class=\"govuk-heading-m\">Now send your application</h2><p class=\"govuk-body\">By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>"
+                }
+            ]
+        }
+    ],
+    "submission": {
+        "method": "POST",
+        "endpoint": "https://api.example.com/submit",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

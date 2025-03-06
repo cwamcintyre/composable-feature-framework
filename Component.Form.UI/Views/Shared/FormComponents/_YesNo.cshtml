@@ -6,7 +6,7 @@
 
 <govuk-radios name="@Model.Name">
     <govuk-radios-fieldset>
-        <govuk-radios-fieldset-legend class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
+        <govuk-radios-fieldset-legend id="@Model.Name-label" class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
             @Model.Label
         </govuk-radios-fieldset-legend>
         
@@ -23,7 +23,7 @@
             </govuk-radios-error-message>
         }
 
-        <govuk-radios-item value="yes">Yes</govuk-radios-item>
-        <govuk-radios-item value="no">No</govuk-radios-item>
+        <govuk-radios-item id="@Model.Name-yes" value="yes">Yes</govuk-radios-item>
+        <govuk-radios-item id="@Model.Name-no" value="no">No</govuk-radios-item>
     </govuk-radios-fieldset>
 </govuk-radios>

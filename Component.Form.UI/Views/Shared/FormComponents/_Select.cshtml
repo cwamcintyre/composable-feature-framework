@@ -1,7 +1,7 @@
 ﻿@model Component.Form.Model.Component
 
 <govuk-select name="@Model.Name">
-    <govuk-select-label is-page-heading="true" class="govuk-label--l">
+    <govuk-select-label id="@Model.Name-label" is-page-heading="true" class="govuk-label--l">
         @Model.Label
     </govuk-select-label>
     @if (Model.Hint != null)

@@ -5,7 +5,7 @@
 }
 
 <govuk-textarea name="@Model.Name">
-    <govuk-textarea-label class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
+    <govuk-textarea-label id="@Model.Name-label" class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
         @Model.Label
     </govuk-textarea-label>
     @if (Model.Hint != null)

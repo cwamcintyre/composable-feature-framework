@@ -1,12 +1,12 @@
 ﻿@model Component.Form.Model.Component
 
 @{
-    var labelClass = Model.LabelIsPageTitle ? "govuk-label govuk-label--l" : "govuk-label govuk-label--m";
+    var labelClass = Model.LabelIsPageTitle ? "govuk-fieldset__legend--l" : "govuk-fieldset__legend--m";
 }
 
 <govuk-radios name="@Model.Name">
     <govuk-radios-fieldset>
-        <govuk-radios-fieldset-legend class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
+        <govuk-radios-fieldset-legend id="@Model.Name-label" class="@labelClass" is-page-heading="@Model.LabelIsPageTitle">
             @Model.Label
         </govuk-radios-fieldset-legend>
         @if (Model.Hint != null)

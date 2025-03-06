@@ -7,10 +7,10 @@
         @foreach (var component in page.Components.Where(c => c.IsQuestionType))
         {
             <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
+                <govuk-summary-list-row-key id="@component.Name-key">
                     @component.Label
                 </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value>
+                <govuk-summary-list-row-value id="@component.Name-value">
                     @switch (component.Type)
                     {                       
                         case "ukaddress":
@@ -30,7 +30,7 @@
                     }
                 </govuk-summary-list-row-value>
                 <govuk-summary-list-row-actions>
-                    <govuk-summary-list-row-action href="#" visually-hidden-text="name">Change</govuk-summary-list-row-action>
+                    <govuk-summary-list-row-action href="#" id="@component.Name-change-link" visually-hidden-text="name">Change</govuk-summary-list-row-action>
                 </govuk-summary-list-row-actions>
             </govuk-summary-list-row>
         }
