@@ -18,6 +18,7 @@
                     "hint": "If you say no, you'll see the stop page",
                     "validationRules": [
                         {
+                            "id": "vr1",
                             "expression": "Data.do_you_want_to_fill_in_this_form != null && Data.do_you_want_to_fill_in_this_form.Trim() != \"\" ",
                             "errorMessage": "Select yes or no"
                         }
@@ -26,6 +27,7 @@
             ],
             "conditions": [
                 {
+                    "id": "c1",
                     "expression": "Data.do_you_want_to_fill_in_this_form == \"no\"",
                     "nextPageId": "stop"
                 }

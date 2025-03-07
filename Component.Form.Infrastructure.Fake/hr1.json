@@ -209,6 +209,7 @@
             ],
             "conditions": [
                 {
+                    "id": "c1",
                     "expression": "Data.total_number_of_employees != null && Convert.ToInt32(Data.total_number_of_employees) < 20",
                     "nextPageId": "you-do-not-need-to-notify-us"
                 }
@@ -230,6 +231,7 @@
             ],
             "conditions": [
                 {
+                    "id": "c2",
                     "expression": "Data.total_number_of_redundancies != null && Convert.ToInt32(Data.total_number_of_redundancies) < 20",
                     "nextPageId": "you-do-not-need-to-notify-us"
                 }
@@ -359,10 +361,12 @@
             ],
             "conditions": [
                 {
+                    "id": "c3",
                     "expression": "Data.is_a_trade_union_representing_any_groups_of_employees != null && Data.is_a_trade_union_representing_any_groups_of_employees == \"yes\"",
                     "nextPageId": "union-details"
                 },
                 {
+                    "id": "c4",
                     "expression": "Data.is_a_trade_union_representing_any_groups_of_employees != null && Data.is_a_trade_union_representing_any_groups_of_employees == \"no\"",
                     "nextPageId": "is-an-elected-person-representing-any-groups-of-employees"
                 }
@@ -402,10 +406,12 @@
             ],
             "conditions": [
                 {
+                    "id": "c5",
                     "expression": "Data.is_an_elected_person_representing_any_groups_of_employees != null && Data.is_an_elected_person_representing_any_groups_of_employees == \"yes\"",
                     "nextPageId": "elected-representative-details"
                 },
                 {
+                    "id": "c6",
                     "expression": "Data.is_an_elected_person_representing_any_groups_of_employees != null && Data.is_an_elected_person_representing_any_groups_of_employees == \"no\"",
                     "nextPageId": "have-you-started-the-consultation-process-with-the-appropriate-representative"
                 }
@@ -445,10 +451,12 @@
             ],
             "conditions": [
                 {
+                    "id": "c7",
                     "expression": "Data.have_you_started_the_consultation_process_with_the_appropriate_representative != null && Data.have_you_started_the_consultation_process_with_the_appropriate_representative == \"yes\"",
                     "nextPageId": "elected-representative-details"
                 },
                 {
+                    "id": "c8",
                     "expression": "Data.have_you_started_the_consultation_process_with_the_appropriate_representative != null && Data.have_you_started_the_consultation_process_with_the_appropriate_representative == \"no\"",
                     "nextPageId": "have-you-given-individual-notices-of-dismissal-to-the-employees"
                 }

@@ -35,30 +35,71 @@
     </div>
 </form>
 
-<h3 class="govuk-heading-m">Components</h3>
-<table class="govuk-table" id="components-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header">Component ID</th>
-            <th class="govuk-table__header">Label</th>
-            <th class="govuk-table__header">Type</th>
-            <th class="govuk-table__header">Actions</th>
-        </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-        @foreach (var component in Model.Components)
-        {
+@if (Model.Components != null && Model.Components.Count == 0)
+{
+    <p class="govuk-body">No components have been added to this page.</p>
+}
+else 
+{
+    <h3 class="govuk-heading-m">Components</h3>
+    <table class="govuk-table" id="components-table">
+        <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@component.QuestionId</td>
-                <td class="govuk-table__cell">@component.Label</td>
-                <td class="govuk-table__cell">@component.Type</td>
-                <td class="govuk-table__cell">
-                    <a href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@component.Name" class="govuk-link" id="edit-component-@component.Name">Edit</a> |
-                    <a href="/component/@ViewBag.FormId/@ViewBag.PageId/delete/@component.Name" class="govuk-link" id="delete-component-@component.Name">Delete</a>
-                </td>
+                <th class="govuk-table__header">Component ID</th>
+                <th class="govuk-table__header">Label</th>
+                <th class="govuk-table__header">Type</th>
+                <th class="govuk-table__header">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var component in Model.Components)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@component.QuestionId</td>
+                    <td class="govuk-table__cell">@component.Label</td>
+                    <td class="govuk-table__cell">@component.Type</td>
+                    <td class="govuk-table__cell">
+                        <a href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@component.Name" class="govuk-link" id="edit-component-@component.Name">Edit</a> |
+                        <a href="/component/@ViewBag.FormId/@ViewBag.PageId/delete/@component.Name" class="govuk-link" id="delete-component-@component.Name">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 <a href="/component/@ViewBag.FormId/@ViewBag.PageId/add" class="govuk-button" id="add-new-component">Add New Component</a>
+
+<h3 class="govuk-heading-m">Conditions</h3>
+@if (Model.Conditions != null && Model.Conditions.Count > 0) 
+{
+    <table class="govuk-table" id="conditions-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header">Condition ID</th>
+                <th class="govuk-table__header">Expression</th>
+                <th class="govuk-table__header">Next Page ID</th>
+                <th class="govuk-table__header">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var condition in Model.Conditions)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@condition.Id</td>
+                    <td class="govuk-table__cell">@condition.Expression</td>
+                    <td class="govuk-table__cell">@condition.NextPageId</td>
+                    <td class="govuk-table__cell">
+                        <a href="/condition/@ViewBag.FormId/@ViewBag.PageId/edit/@condition.Id" class="govuk-link" id="edit-condition-@condition.Id">Edit</a> |
+                        <a href="/condition/@ViewBag.FormId/@ViewBag.PageId/delete/@condition.Id" class="govuk-link" id="delete-condition-@condition.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="govuk-body">No conditions have been added to this page.</p>
+}
+<a href="/condition/@ViewBag.FormId/@ViewBag.PageId/add" class="govuk-button" id="add-new-condition">Add New Condition</a>

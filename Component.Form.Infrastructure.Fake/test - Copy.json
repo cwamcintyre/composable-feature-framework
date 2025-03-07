@@ -18,6 +18,7 @@
                     "hint": "If you say no, you'll see the stop page",
                     "validationRules": [
                         {
+                            "id": "vr1",
                             "expression": "Data.do_you_want_to_fill_in_this_form != null && Data.do_you_want_to_fill_in_this_form.Trim() != \"\" ",
                             "errorMessage": "Select yes or no"
                         }
@@ -26,6 +27,7 @@
             ],
             "conditions": [
                 {
+                    "id": "c1",
                     "expression": "Data.do_you_want_to_fill_in_this_form == \"no\"",
                     "nextPageId": "stop"
                 }
@@ -44,10 +46,12 @@
                     "labelIsPageTitle": true,
                     "validationRules": [
                         {
+                            "id": "vr2",
                             "expression": "Data.what_is_your_name != null && Data.what_is_your_name.Trim() != \"\" ",
                             "errorMessage": "Enter your name"
                         },
                         {
+                            "id": "vr3",
                             "expression": "Data.what_is_your_name != \"BOB\"",
                             "errorMessage": "We all know that Bob is not your real name. Please provide your real name."
                         }
@@ -148,6 +152,7 @@
             ],
             "conditions": [
                 {
+                    "id": "c2",
                     "expression" : "Data.what_is_your_quest != null && Data.what_is_your_quest != \"To allow claimants to edit their redundancy claim\"",
                     "nextPageId": "why-dont-you-want-to-help-claimants"
                 }
@@ -214,6 +219,7 @@
                     },
                     "validationRules": [
                         {
+                            "id": "vr4",
                             "expression": "Data.what_is_your_favourite_colour != null && Data.what_is_your_favourite_colour.Trim() != \"\" ",
                             "errorMessage": "Select at least one colour"
                         }

@@ -9,7 +9,8 @@ namespace Component.Form.Model
 
     public class Condition
     {
-        public string Expression { get; set; }
-        public string NextPageId { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Expression { get; set; } = string.Empty;
+        public string NextPageId { get; set; } = string.Empty;
     }
 }

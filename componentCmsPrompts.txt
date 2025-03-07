@@ -72,3 +72,5 @@ add playwright page object models for AddComponent, EditComponent, ListComponent
 views in Component.Form.UI.ReqnrollTests Pages . include locators for all ids
 
 add feature files for the add, edit, delete endpoints in FormController, ComponentController and OptionController . include validation tests. Put these in Component.Form.UI.ReqnrollTests
+
+update all json files in Component.Form.Infrastructure.Fake so that any validationRule or condition entry has an id. generate the ids

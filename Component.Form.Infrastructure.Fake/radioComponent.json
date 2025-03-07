@@ -23,6 +23,7 @@
                     "labelIsPageTitle": true,
                     "validationRules": [
                         {
+                            "id": "vr1",
                             "expression": "Data.which_superpower != null && Data.which_superpower.Trim() != \"\" ",
                             "errorMessage": "Select an option"
                         }

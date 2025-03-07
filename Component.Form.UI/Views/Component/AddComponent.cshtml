@@ -43,32 +43,6 @@
         <input class="govuk-input" asp-for="Name" id="name-input" />
         <span asp-validation-for="Name" class="text-danger" id="name-validation"></span>
     </div>
-    @if (Model.Type != "html" && Model.Type != "summary")
-    {
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="LabelIsPageTitle" id="label-is-page-title-label"></label>
-            <input class="govuk-input" asp-for="LabelIsPageTitle" id="label-is-page-title-input" />
-        </div>
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="Hint" id="hint-label"></label>
-            <input class="govuk-input" asp-for="Hint" id="hint-input" />
-        </div>        
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="ValidationRules" id="validation-rules-label"></label>
-            <input class="govuk-input" asp-for="ValidationRules" id="validation-rules-input" />
-        </div>
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="Optional" id="optional-label"></label>
-            <input class="govuk-input" asp-for="Optional" id="optional-input" />
-        </div>
-    }
-    @if (Model.Type == "html")
-    {
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="Content" id="content-label"></label>
-            <input class="govuk-input" asp-for="Content" id="content-input" />
-        </div>
-    }
     <div class="govuk-form-group">
         <button type="submit" class="govuk-button" id="add-component-submit">Add</button>
     </div>

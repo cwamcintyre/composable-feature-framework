@@ -44,8 +44,24 @@
     @if (Model.Type != "html" && Model.Type != "summary")
     {
         <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="LabelIsPageTitle" id="label-is-page-title-label"></label>
-            <input class="govuk-input" asp-for="LabelIsPageTitle" id="label-is-page-title-input" />
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="labelIsPageTitle-input" name="LabelIsPageTitle" type="checkbox" value="@Model.LabelIsPageTitle">
+                    <label class="govuk-label govuk-checkboxes__label" asp-for="LabelIsPageTitle" id="labelIsPageTitle-label">
+                        Label is page title
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="govuk-form-group">
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="optional-input" name="Optional" type="checkbox" value="@Model.Optional">
+                    <label class="govuk-label govuk-checkboxes__label" asp-for="Optional" id="optional-label">
+                        Optional
+                    </label>
+                </div>
+            </div>
         </div>
         <div class="govuk-form-group">
             <label class="govuk-label" asp-for="Hint" id="hint-label"></label>
@@ -55,16 +71,53 @@
         {
             <div class="govuk-form-group">
                 <label class="govuk-label">Options</label>
-                <a href="/option/@ViewBag.FormId/@ViewBag.PageId/@Model.Name" class="govuk-link" id="manage-options-link">Manage Options</a>
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header">Key</th>
+                            <th class="govuk-table__header">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var option in Model.Options)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@option.Key</td>
+                                <td class="govuk-table__cell">@option.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <a href="/option/@ViewBag.FormId/@ViewBag.PageId/@Model.Name" class="govuk-link" id="manage-options-link">Manage options</a>
             </div>
         }
         <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="ValidationRules" id="validation-rules-label"></label>
-            <input class="govuk-input" asp-for="ValidationRules" id="validation-rules-input" />
-        </div>
-        <div class="govuk-form-group">
-            <label class="govuk-label" asp-for="Optional" id="optional-label"></label>
-            <input class="govuk-input" asp-for="Optional" id="optional-input" />
+            <label class="govuk-label" id="validation-rules-label">Validation rules</label>
+            @if (Model.ValidationRules == null || Model.ValidationRules.Count == 0)
+            {
+                <p class="govuk-body">No validation rules</p>
+            }
+            else 
+            {
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header">Expression</th>
+                            <th class="govuk-table__header">Error Message</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var rule in Model.ValidationRules)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@rule.Expression</td>
+                                <td class="govuk-table__cell">@rule.ErrorMessage</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            <a href="/validationRule/@ViewBag.FormId/@ViewBag.PageId/@Model.Name" class="govuk-link" id="manage-validation-rules-link">Manage validation rules</a>
         </div>
     }
     @if (Model.Type == "html")
@@ -73,7 +126,7 @@
             <label class="govuk-label" asp-for="Content" id="content-label"></label>
             <input class="govuk-input" asp-for="Content" id="content-input" />
         </div>
-    }
+    }    
     <div class="govuk-form-group">
         <button type="submit" class="govuk-button" id="edit-component-submit">Save</button>
     </div>

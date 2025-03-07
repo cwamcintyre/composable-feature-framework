@@ -1,0 +1,25 @@
+@model Component.Form.Model.ValidationRule
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/edit">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/editPage/@ViewBag.PageId">Page @ViewBag.PageId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@ViewBag.ComponentName">Component @ViewBag.ComponentName</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>New Validation Rule</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Add New Validation Rule</h2>
+
+<form asp-action="Add" method="post" class="govuk-form-group" id="add-validation-rule-form">
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="Expression" id="expression-label"></label>
+        <input class="govuk-input" asp-for="Expression" id="expression-input" />
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="ErrorMessage" id="errorMessage-label"></label>
+        <input class="govuk-input" asp-for="ErrorMessage" id="errorMessage-input" />
+    </div>
+    <div class="govuk-form-group">
+        <button type="submit" class="govuk-button" id="add-validation-rule-submit">Save</button>
+    </div>
+</form>

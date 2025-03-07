@@ -1,0 +1,44 @@
+@model IEnumerable<Component.Form.Model.Condition>
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/edit">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/editPage/@ViewBag.PageId">Page @ViewBag.PageId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Conditions</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Conditions</h2>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <p class="govuk-body">No conditions have been added to this page.</p>
+}
+else
+{
+    <table class="govuk-table" id="conditions-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header">Condition ID</th>
+                <th class="govuk-table__header">Expression</th>
+                <th class="govuk-table__header">Next Page ID</th>
+                <th class="govuk-table__header">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var condition in Model)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" id="@condition.Id-id">@condition.Id</td>
+                    <td class="govuk-table__cell" id="@condition.Expression-expression">@condition.Expression</td>
+                    <td class="govuk-table__cell" id="@condition.NextPageId-nextPageId">@condition.NextPageId</td>
+                    <td class="govuk-table__cell">
+                        <a href="/condition/@ViewBag.FormId/@ViewBag.PageId/edit/@condition.Id" class="govuk-link">Edit</a> |
+                        <a href="/condition/@ViewBag.FormId/@ViewBag.PageId/delete/@condition.Id" class="govuk-link">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="/condition/@ViewBag.FormId/@ViewBag.PageId/add" class="govuk-button" id="add-new-condition">Add New Condition</a>

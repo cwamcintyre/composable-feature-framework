@@ -1,0 +1,36 @@
+@model IEnumerable<Component.Form.Model.ValidationRule>
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/edit">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/editPage/@ViewBag.PageId">Page @ViewBag.PageId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@ViewBag.ComponentName">Component @ViewBag.ComponentName</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Validation Rules</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Validation Rules</h2>
+
+<table class="govuk-table" id="validation-rules-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Expression</th>
+            <th class="govuk-table__header">ErrorMessage</th>
+            <th class="govuk-table__header">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var validationRule in Model)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" id="@validationRule.Expression-expression">@validationRule.Expression</td>
+                <td class="govuk-table__cell" id="@validationRule.ErrorMessage-errorMessage">@validationRule.ErrorMessage</td>
+                <td class="govuk-table__cell">
+                    <a href="/validationRule/@ViewBag.FormId/@ViewBag.PageId/@ViewBag.ComponentName/edit/@validationRule.Id" class="govuk-link">Edit</a> |
+                    <a href="/validationRule/@ViewBag.FormId/@ViewBag.PageId/@ViewBag.ComponentName/delete/@validationRule.Id" class="govuk-link">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/validationRule/@ViewBag.FormId/@ViewBag.PageId/@ViewBag.ComponentName/add" class="govuk-button" id="add-new-validation-rule">Add New Validation Rule</a>

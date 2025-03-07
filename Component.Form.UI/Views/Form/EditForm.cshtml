@@ -40,37 +40,44 @@
     </div>
 </form>
 
-<h3 class="govuk-heading-m">Pages</h3>
-<table class="govuk-table" id="pages-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header">Page ID</th>
-            <th class="govuk-table__header">Title</th>
-            <th class="govuk-table__header">Components</th>
-            <th class="govuk-table__header">Actions</th>
-        </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-        @foreach (var cmsPage in Model.Pages)
-        {
+@if (Model.Pages == null || Model.Pages.Count == 0)
+{
+    <p class="govuk-body">No pages have been added to this form.</p>
+}
+else
+{
+    <h3 class="govuk-heading-m">Pages</h3>
+    <table class="govuk-table" id="pages-table">
+        <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@cmsPage.PageId</td>
-                <td class="govuk-table__cell">@cmsPage.Title</td>
-                <td class="govuk-table__cell">
-                    <ul class="govuk-list govuk-list--bullet">
-                        @foreach (var component in cmsPage.Components)
-                        {
-                            <li>@component.Label (@component.Type) <a href="/component/@ViewBag.FormId/@cmsPage.PageId/edit/@component.Name" id="edit-component-@component.Name">Edit</a></li>
-                        }
-                    </ul>
-                </td>
-                <td class="govuk-table__cell">
-                    <a href="/form/@ViewBag.FormId/editPage/@cmsPage.PageId" id="edit-page-@cmsPage.PageId">Edit Page</a>
-                    <a href="/form/@ViewBag.FormId/removePage/@cmsPage.PageId" id="remove-page-@cmsPage.PageId">Remove Page</a>
-                </td>
+                <th class="govuk-table__header">Page ID</th>
+                <th class="govuk-table__header">Title</th>
+                <th class="govuk-table__header">Components</th>
+                <th class="govuk-table__header">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var cmsPage in Model.Pages)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@cmsPage.PageId</td>
+                    <td class="govuk-table__cell">@cmsPage.Title</td>
+                    <td class="govuk-table__cell">
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var component in cmsPage.Components)
+                            {
+                                <li>@component.Label (@component.Type) <a href="/component/@ViewBag.FormId/@cmsPage.PageId/edit/@component.Name" id="edit-component-@component.Name">Edit</a></li>
+                            }
+                        </ul>
+                    </td>
+                    <td class="govuk-table__cell">
+                        <a href="/form/@ViewBag.FormId/editPage/@cmsPage.PageId" id="edit-page-@cmsPage.PageId">Edit Page</a>
+                        <a href="/form/@ViewBag.FormId/removePage/@cmsPage.PageId" id="remove-page-@cmsPage.PageId">Remove Page</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 <a href="/form/@ViewBag.FormId/addPage" class="govuk-button" id="add-new-page">Add Page</a>
