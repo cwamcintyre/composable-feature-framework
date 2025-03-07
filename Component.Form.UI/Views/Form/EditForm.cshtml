@@ -23,16 +23,6 @@
         <span asp-validation-for="Description" class="text-danger" id="description-validation"></span>
     </div>
     <div class="govuk-form-group">
-        <label class="govuk-label" asp-for="CurrentPage" id="current-page-label"></label>
-        <input class="govuk-input" asp-for="CurrentPage" id="current-page-input" />
-        <span asp-validation-for="CurrentPage" class="text-danger" id="current-page-validation"></span>
-    </div>
-    <div class="govuk-form-group">
-        <label class="govuk-label" asp-for="TotalPages" id="total-pages-label"></label>
-        <input class="govuk-input" asp-for="TotalPages" id="total-pages-input" />
-        <span asp-validation-for="TotalPages" class="text-danger" id="total-pages-validation"></span>
-    </div>
-    <div class="govuk-form-group">
         <label class="govuk-label" asp-for="StartPage" id="start-page-label"></label>
         <input class="govuk-input" asp-for="StartPage" id="start-page-input" />
         <span asp-validation-for="StartPage" class="text-danger" id="start-page-validation"></span>
@@ -45,7 +35,9 @@
         <label class="govuk-label" asp-for="Submission.Endpoint"></label>
         <input class="govuk-input" asp-for="Submission.Endpoint" />
     </div>
-    <button type="submit" class="govuk-button" id="edit-form-submit">Save</button>
+    <div class="govuk-form-group">
+        <button type="submit" class="govuk-button" id="edit-form-submit">Save</button>
+    </div>
 </form>
 
 <h3 class="govuk-heading-m">Pages</h3>

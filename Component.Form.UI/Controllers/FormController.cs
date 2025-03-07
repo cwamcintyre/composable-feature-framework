@@ -46,8 +46,13 @@ namespace Component.Form.UI.Controllers
         [HttpPost("form/{formId}/edit")]
         public async Task<IActionResult> Edit(FormModel updatedForm)
         {
-            await _formAPIService.UpdateFormAsync(updatedForm);
-            return RedirectToAction("Index");
+            var form = await _formAPIService.GetFormAsync(updatedForm.FormId);
+            form.StartPage = updatedForm.StartPage;
+            form.Title = updatedForm.Title;
+            form.Description = updatedForm.Description;
+            form.Submission = updatedForm.Submission;
+            await _formAPIService.UpdateFormAsync(form);
+            return RedirectToAction("Index", new { formId = updatedForm.FormId });
         }
 
         [HttpGet("form/{formId}/addPage")]
@@ -78,7 +83,7 @@ namespace Component.Form.UI.Controllers
             form.Pages.Add(newPage);
             form.TotalPages = form.Pages.Count;
             await _formAPIService.UpdateFormAsync(form);
-            return RedirectToAction("Edit");
+            return RedirectToAction("Edit", new { formId });
         }
 
         [HttpGet("form/{formId}/removePage/{pageId}")]
@@ -96,7 +101,7 @@ namespace Component.Form.UI.Controllers
                 form.TotalPages = form.Pages.Count;
                 await _formAPIService.UpdateFormAsync(form);
             }
-            return RedirectToAction("Edit");
+            return RedirectToAction("Edit", new { formId });
         }
 
         [HttpGet("form/{formId}/editPage/{pageId}")]

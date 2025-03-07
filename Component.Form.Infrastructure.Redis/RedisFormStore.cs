@@ -39,4 +39,10 @@ public class RedisFormStore : IFormStore
 
         return form;
     }
+
+    public async Task SaveFormAsync(string formId, FormModel form)
+    {
+        var jsonString = JsonConvert.SerializeObject(form);
+        await _database.StringSetAsync(formId, jsonString);
+    }
 }

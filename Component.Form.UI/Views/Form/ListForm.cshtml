@@ -16,16 +16,16 @@
         <td class="govuk-table__cell">@Model.Description</td>
     </tr>
     <tr class="govuk-table__row">
-        <th class="govuk-table__header">Current Page</th>
-        <td class="govuk-table__cell">@Model.CurrentPage</td>
-    </tr>
-    <tr class="govuk-table__row">
-        <th class="govuk-table__header">Total Pages</th>
-        <td class="govuk-table__cell">@Model.TotalPages</td>
-    </tr>
-    <tr class="govuk-table__row">
         <th class="govuk-table__header">Start Page</th>
         <td class="govuk-table__cell">@Model.StartPage</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Submission Method</th>
+        <td class="govuk-table__cell">@Model.Submission.Method</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Submission Endpoint</th>
+        <td class="govuk-table__cell">@Model.Submission.Endpoint</td>
     </tr>
 </table>
 

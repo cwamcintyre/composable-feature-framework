@@ -20,33 +20,6 @@ public class FormAPIService
         _configuration = configuration;
     }
 
-    private async Task<T> GetApiResponseAsync<T>(string apiUrl)
-    {
-        var client = _httpClientFactory.CreateClient();
-        var baseAddress = _configuration["FormAPI:BaseAddress"];
-        if (string.IsNullOrWhiteSpace(baseAddress))
-        {
-            throw new ApplicationException("The base address is not configured.");
-        }
-        client.BaseAddress = new Uri(baseAddress);
-        var response = await client.GetAsync(apiUrl);
-        response.EnsureSuccessStatusCode();
-        var responseString = await response.Content.ReadAsStringAsync();
-
-        if (string.IsNullOrWhiteSpace(responseString))
-        {
-            throw new ApplicationException("The response content is empty.");
-        }
-
-        var responseObject = JsonConvert.DeserializeObject<T>(responseString);
-        if (responseObject == null)
-        {
-            throw new ApplicationException("Failed to deserialize the response data.");
-        }
-
-        return responseObject;
-    }
-
     public async Task<FormModel> GetFormAsync(string formId)
     {
         try
@@ -89,49 +62,20 @@ public class FormAPIService
                 Form = formData
             };
 
-            var client = _httpClientFactory.CreateClient();
-            var baseAddress = _configuration["FormAPI:BaseAddress"];
-            if (string.IsNullOrWhiteSpace(baseAddress))
-            {
-                throw new ApplicationException("The base address is not configured.");
-            }
-            client.BaseAddress = new Uri(baseAddress);
-            var response = await client.PostAsJsonAsync($"{ProcessFormApiUrl}", postModel);
-            response.EnsureSuccessStatusCode();
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            if (string.IsNullOrWhiteSpace(responseString))
-            {
-                throw new ApplicationException("The response content is empty.");
-            }
-
-            var responseObject = JsonConvert.DeserializeObject<ProcessFormResponseModel>(responseString);
-            if (responseObject == null)
-            {
-                throw new ApplicationException("Failed to deserialize the form data.");
-            }
-
-            return responseObject;
+            return await PostApiResponseAsync<ProcessFormResponseModel>(ProcessFormApiUrl, postModel);
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("An error occurred while getting form data.", ex);
+            throw new ApplicationException("An error occurred while processing form data.", ex);
         }
     }
 
-    public async Task UpdateFormAsync(FormModel form)
+    public async Task<UpdateFormResponseModel> UpdateFormAsync(FormModel formModel)
     {
         try
         {
-            var client = _httpClientFactory.CreateClient();
-            var baseAddress = _configuration["FormAPI:BaseAddress"];
-            if (string.IsNullOrWhiteSpace(baseAddress))
-            {
-                throw new ApplicationException("The base address is not configured.");
-            }
-            client.BaseAddress = new Uri(baseAddress);
-            var response = await client.PostAsJsonAsync($"{UpdateFormApiUrl}", form);
-            response.EnsureSuccessStatusCode();
+            var updateFormRequest = new UpdateFormRequestModel { Form = formModel };
+            return await PostApiResponseAsync<UpdateFormResponseModel>(UpdateFormApiUrl, updateFormRequest);
         }
         catch (Exception ex)
         {
@@ -156,5 +100,59 @@ public class FormAPIService
         {
             throw new ApplicationException("An error occurred while submitting form data.", ex);
         }
+    }
+
+        private async Task<T> GetApiResponseAsync<T>(string apiUrl)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var baseAddress = _configuration["FormAPI:BaseAddress"];
+        if (string.IsNullOrWhiteSpace(baseAddress))
+        {
+            throw new ApplicationException("The base address is not configured.");
+        }
+        client.BaseAddress = new Uri(baseAddress);
+        var response = await client.GetAsync(apiUrl);
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrWhiteSpace(responseString))
+        {
+            throw new ApplicationException("The response content is empty.");
+        }
+
+        var responseObject = JsonConvert.DeserializeObject<T>(responseString);
+        if (responseObject == null)
+        {
+            throw new ApplicationException("Failed to deserialize the response data.");
+        }
+
+        return responseObject;
+    }
+
+    private async Task<T> PostApiResponseAsync<T>(string apiUrl, object requestModel)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var baseAddress = _configuration["FormAPI:BaseAddress"];
+        if (string.IsNullOrWhiteSpace(baseAddress))
+        {
+            throw new ApplicationException("The base address is not configured.");
+        }
+        client.BaseAddress = new Uri(baseAddress);
+        var response = await client.PostAsJsonAsync(apiUrl, requestModel);
+        response.EnsureSuccessStatusCode();
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        if (string.IsNullOrWhiteSpace(responseString))
+        {
+            throw new ApplicationException("The response content is empty.");
+        }
+
+        var responseObject = JsonConvert.DeserializeObject<T>(responseString);
+        if (responseObject == null)
+        {
+            throw new ApplicationException("Failed to deserialize the response data.");
+        }
+
+        return responseObject;
     }
 }
