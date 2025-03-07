@@ -10,7 +10,8 @@ using Component.Core.Application;
 using Component.Form.Application.UseCase.GetData.Model;
 using Component.Form.Application.UseCase.GetData;
 using Component.Form.Model.ComponentHandler;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Component.Form.Application.UseCase.UpdateForm.Model;
+using Component.Form.Application.UseCase.UpdateForm;
 
 namespace Component.Form.Application;
 public static class FormApplicationServiceBuilder
@@ -24,6 +25,8 @@ public static class FormApplicationServiceBuilder
         services.AddScoped<IFormDataStore, FakeFormDataStore>();
 
         services.AddScoped<IRequestResponseUseCase<GetDataRequestModel, GetDataResponseModel>, GetData>();
+
+        services.AddScoped<IRequestResponseUseCase<UpdateFormRequestModel, UpdateFormResponseModel>, UpdateForm>();
 
         services.AddSingleton<ComponentHandlerFactory>();
         services.AddSingleton<IComponentHandler, UkAddressHandler>();
