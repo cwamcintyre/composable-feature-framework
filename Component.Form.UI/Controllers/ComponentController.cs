@@ -52,6 +52,10 @@ namespace Component.Form.UI.Controllers
             {
                 return NotFound();
             }
+            if (page.Components == null)
+            {
+                page.Components = new List<Component.Form.Model.Component>();
+            }
             page.Components.Add(component);
             await _formAPIService.UpdateFormAsync(form);
             return RedirectToAction("Index", new { formId, pageId });

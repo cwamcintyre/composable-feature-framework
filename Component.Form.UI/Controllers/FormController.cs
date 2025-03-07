@@ -80,6 +80,10 @@ namespace Component.Form.UI.Controllers
                 return View("AddPage", newPage);
             }
             var form = await _formAPIService.GetFormAsync(formId);
+            if (form.Pages == null)
+            {
+                form.Pages = new List<Page>();
+            }
             form.Pages.Add(newPage);
             form.TotalPages = form.Pages.Count;
             await _formAPIService.UpdateFormAsync(form);

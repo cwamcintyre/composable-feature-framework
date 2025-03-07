@@ -68,6 +68,10 @@ namespace Component.Form.UI.Controllers
             {
                 return NotFound();
             }
+            if (component.Options == null)
+            {
+                component.Options = new Dictionary<string, string>();
+            }
             component.Options.Add(option.Key, option.Value);
             await _formAPIService.UpdateFormAsync(form);
             return RedirectToAction("Index", new { formId, pageId, componentName });

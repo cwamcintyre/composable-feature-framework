@@ -56,6 +56,10 @@ namespace Component.Form.UI.Controllers
                 return NotFound();
             }
             condition.Id = Guid.NewGuid().ToString();
+            if (page.Conditions == null)
+            {
+                page.Conditions = new List<Condition>();
+            }   
             page.Conditions.Add(condition);
             await _formAPIService.UpdateFormAsync(form);
             return RedirectToAction("Index", new { formId, pageId });

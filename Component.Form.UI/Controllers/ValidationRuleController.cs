@@ -67,6 +67,10 @@ namespace Component.Form.UI.Controllers
                 return NotFound();
             }
             validationRule.Id = Guid.NewGuid().ToString();
+            if (component.ValidationRules == null)
+            {
+                component.ValidationRules = new List<ValidationRule>();
+            }
             component.ValidationRules.Add(validationRule);
             await _formAPIService.UpdateFormAsync(form);
             return RedirectToAction("Index", new { formId, pageId, componentName });
