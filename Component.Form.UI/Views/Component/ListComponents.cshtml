@@ -1,0 +1,39 @@
+@model IEnumerable<Component.Form.Model.Component>
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/edit">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/editPage/@ViewBag.PageId">Page @ViewBag.PageId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Components</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Components</h2>
+
+<table class="govuk-table" id="components-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Question ID</th>
+            <th class="govuk-table__header">Type</th>
+            <th class="govuk-table__header">Label</th>
+            <th class="govuk-table__header">Name</th>
+            <th class="govuk-table__header">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var component in Model)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" id="@component.Name-question-id">@component.QuestionId</td>
+                <td class="govuk-table__cell" id="@component.Name-type">@component.Type</td>
+                <td class="govuk-table__cell" id="@component.Name-label">@component.Label</td>
+                <td class="govuk-table__cell" id="@component.Name-name">@component.Name</td>
+                <td class="govuk-table__cell">
+                    <a href="/Component/Edit/@component.Name" class="govuk-link" id="edit-component-@component.Name">Edit</a> |
+                    <a href="/Component/Delete/@component.Name" class="govuk-link" id="delete-component-@component.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Component/Add" class="govuk-button" id="add-new-component">Add New Component</a>

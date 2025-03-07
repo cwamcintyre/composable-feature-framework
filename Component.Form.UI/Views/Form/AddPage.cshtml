@@ -1,0 +1,33 @@
+@model Component.Form.Model.Page
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item asp-controller="Form" asp-action="Edit" asp-route-formId="@ViewBag.FormId">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Add Page</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Add Page</h2>
+
+<form asp-action="AddPage" method="post" class="govuk-form-group" id="add-page-form">
+    <div class="govuk-form-group">
+        <label class="govuk-label" for="PageId" id="page-id-label">Page ID</label>
+        <input class="govuk-input" type="text" name="PageId" required id="page-id-input" />
+        <span asp-validation-for="PageId" class="text-danger" id="page-id-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" for="Title" id="title-label">Title</label>
+        <input class="govuk-input" type="text" name="Title" required id="title-input" />
+        <span asp-validation-for="Title" class="text-danger" id="title-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" for="PageType" id="page-type-label">Page Type</label>
+        <input class="govuk-input" type="text" name="PageType" required id="page-type-input" />
+        <span asp-validation-for="PageType" class="text-danger" id="page-type-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" for="NextPageId" id="next-page-id-label">Next Page ID</label>
+        <input class="govuk-input" type="text" name="NextPageId" required id="next-page-id-input" />
+        <span asp-validation-for="NextPageId" class="text-danger" id="next-page-id-validation"></span>
+    </div>
+    <button type="submit" class="govuk-button" id="add-page-submit">Add Page</button>
+</form>

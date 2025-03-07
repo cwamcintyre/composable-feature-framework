@@ -1,0 +1,60 @@
+@model Component.Form.Model.FormModel
+
+<h2 class="govuk-heading-l">Form Details</h2>
+
+<table class="govuk-table" id="form-details-table">
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Form ID</th>
+        <td class="govuk-table__cell">@Model.FormId</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Title</th>
+        <td class="govuk-table__cell">@Model.Title</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Description</th>
+        <td class="govuk-table__cell">@Model.Description</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Current Page</th>
+        <td class="govuk-table__cell">@Model.CurrentPage</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Total Pages</th>
+        <td class="govuk-table__cell">@Model.TotalPages</td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header">Start Page</th>
+        <td class="govuk-table__cell">@Model.StartPage</td>
+    </tr>
+</table>
+
+<h3 class="govuk-heading-m">Pages</h3>
+<table class="govuk-table" id="pages-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Page ID</th>
+            <th class="govuk-table__header">Title</th>
+            <th class="govuk-table__header">Components</th>
+                    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var cmsPage in Model.Pages)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell" id="@cmsPage.PageId-page-id">@cmsPage.PageId</td>
+                <td class="govuk-table__cell" id="@cmsPage.PageId-title">@cmsPage.Title</td>
+                <td class="govuk-table__cell">
+                    <ul class="govuk-list govuk-list--bullet">
+                        @foreach (var component in cmsPage.Components)
+                        {
+                            <li id="@component.Name">@component.Label (@component.Type)</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/form/@ViewBag.FormId/edit" class="govuk-button">Edit Form</a>

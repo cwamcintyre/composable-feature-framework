@@ -1,0 +1,74 @@
+list the component types in test.json . using this list, create views, models and controller endpoints that allow the user to list, add, edit and remove components from the configuration. 
+do not use javascript, write purely in c#
+
+now add models, controllers and views to edit test.json, using the Component controller and views just made. Only use c#
+
+update FormController and views to use ComponentController and views to edit components in the test.json configuration. only use c#
+
+refactor to remove the redundant ComponentController endpoints in FormController. update the edit form view to use ComponentController. only use c#
+
+update the AddComponent and EditComponent views so that they check the type of component and only use fields that exist for that type. only use c#
+
+update the AddComponent and EditComponent views so that they only allow editing options for the select, radios and checkbox types. 
+add controllers, models and views to allow list, add, edit and remove of options. only use c#
+
+add ability to add and remove pages to FormController and EditForm, ListForm views. only use c#
+
+refactor add and remove page functionality in FormController so that the add page has its own view that is linked to from EditForm and ListForm. only use c#
+
+using the views under Shared as an example, refactor the AddPage, EditForm, ListForm, to use the GovUk.Frontend.AspNetCore tag helper
+
+using the views under Shared as an example, refactor the AddComponent, EditComponent, ListComponent, to use the GovUk.Frontend.AspNetCore tag helper 
+
+using the views under Shared as an example, refactor the AddOption, EditOption, ListOption, to use the GovUk.Frontend.AspNetCore tag helper
+
+refactor FormController, ComponentController and OptionController to use FormAPIService GetFormAsync
+
+implement FormAPIService UpdateFormAsync
+
+update ComponentController endpoints so that they take the form id, page id and component name . the routes should start with component/{formId}/{pageId} and the component is in form.Pages
+
+add hidden inputs for form id and page id to AddComponent.cshtml
+
+update OptionController endpoints so that they take the form id, page id, component name . the routes should start with option/{formId}/{pageId}/{componentName} and the option is in form.Pages.Components
+
+add ability to edit pages in FormController . Add the view necessary. The view will list components and contain links to edit components that use ComponentController
+
+breadcrumbs look like
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="#" link-target="_blank">Passports, travel and living abroad</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Travel abroad</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+update AddComponent, EditComponent and ListComponents views with breadcrumbs showing form id, page id and component id where appropriate
+
+breadcrumbs look like
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="#" link-target="_blank">Passports, travel and living abroad</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Travel abroad</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+update AddOption, EditOption and ListOptionss views with breadcrumbs showing form id, page id and component id where appropriate
+
+breadcrumbs look like
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="#" link-target="_blank">Passports, travel and living abroad</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>Travel abroad</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+update EditForm, AddPage, EditPage views with breadcrumbs showing form id, page id where appropriate
+
+refactor Component views and ComponentController so that Type is a select box. The list of values is the list of component types in infrastructure fake test.json
+
+add validation to Component views and ComponentController . The Type, Name and Label fields are mandatory
+
+add validation to Option views and OptionController. The key and value fields are mandatory
+
+add validation to AddPage views and corresponding actions in FormController. All fields are mandatory
+
+add ids to all useful testable tags in the following views, AddComponent, EditComponent, ListComponents, AddPage, EditForm, EditPage, ListForm, AddOption, EditOption and ListOption 
+
+add playwright page object models for AddComponent, EditComponent, ListComponents, AddPage, EditForm, EditPage, ListForm, AddOption, EditOption and ListOption 
+views in Component.Form.UI.ReqnrollTests Pages . include locators for all ids
+
+add feature files for the add, edit, delete endpoints in FormController, ComponentController and OptionController . include validation tests. Put these in Component.Form.UI.ReqnrollTests

@@ -127,7 +127,8 @@
                 }
             ],
             "nextPageId": "what-is-your-quest"
-        },        {
+        },
+        {
             "pageId": "what-is-your-quest",
             "title": "",
             "components": [

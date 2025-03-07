@@ -79,3 +79,5 @@ Using text.feature, using c#, create reqnroll step definitions and a playwright 
 <input name="__RequestVerificationToken" type="hidden" value="CfDJ8HAbon_EdJVGqLiEVPXvnfAfit0ZPHLwlXYtLVxvu42sb5K1VKqv9gF2StXj8IXJRLzQf986xqBSEjxX1pPQJ7IKyRZTFyYUW4WmU2z0Ji9aMJcxARD34-boA7Ewipdzn3mtRQkviNEjl7mkuTXKap8"></form>
 
 using text.feature as an example and ComponentStepDefinitions.cs, create feature files for all components in test.json . add new step definitions to ComponentStepDefinitions if necessary. 
+
+refactor FakeFormStore so that it loads all available form json in the constructor and puts the loaded files in a dictionary. GetFormAsync will then return FormModel from the dictionary

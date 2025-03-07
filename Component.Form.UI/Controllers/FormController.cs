@@ -1,109 +1,309 @@
 using Component.Form.UI.Helpers;
 using Component.Form.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Component.Form.Model;
+using System.Net.Http.Headers;
 
-public class FormController : Controller
+namespace Component.Form.UI.Controllers
 {
-    private readonly FormAPIService _formAPIService;
-    private readonly FormHelper _formHelper;
-    private readonly IFormPresenter _formPresenter;
-
-    public FormController(IFormPresenter formPresenter, FormAPIService formAPIService, FormHelper formHelper)
+    public class FormController : Controller
     {
-        _formAPIService = formAPIService;
-        _formPresenter = formPresenter;        
-        _formHelper = formHelper;
-    }
+        private readonly FormAPIService _formAPIService;
+        private readonly FormHelper _formHelper;
+        private readonly IFormPresenter _formPresenter;
 
-    [HttpGet("form/{formId}/start")]
-    public async Task<IActionResult> Start(string formId)
-    {
-        var formModel = await _formAPIService.GetFormAsync(formId);
-        if (formModel == null) return NotFound();
-
-        // ensure a clean session and generate a new applicant ID.
-        FormSessionHelper.ClearApplicantId(HttpContext.Session);
-        FormSessionHelper.SetApplicantId(HttpContext.Session, FormSessionHelper.GenerateApplicantId());
-
-        return RedirectToAction("ShowPage", new { formId = formModel.FormId, page = formModel.StartPage });
-    }
-
-    [HttpGet("form/{formId}/{page}")]
-    public async Task<IActionResult> ShowPage(string formId, string page)
-    {
-        var formModel = await _formAPIService.GetFormAsync(formId);
-        if (formModel == null) return NotFound();
-
-        var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
-
-        var result = await _formPresenter.HandlePage(page, formModel, data);
-        if (result == null) return NotFound();
-
-        ViewBag.CurrentPage = result.CurrentPage;
-        ViewBag.TotalPages = result.TotalPages;
-        ViewBag.FormId = formId;
-        ViewBag.PreviousPageId = result.PreviousPage;
-        return View(result.NextAction, result.PageModel);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Submit()
-    {
-        var formModel = await _formAPIService.GetFormAsync(Request.Form["FormId"]);
-        var currentPage = formModel.Pages.Find(p => p.PageId == Request.Form["PageId"]);
-        if (currentPage == null) 
+        public FormController(IFormPresenter formPresenter, FormAPIService formAPIService, FormHelper formHelper)
         {
-            throw new ArgumentException($"Page {Request.Form["PageId"]} not found in form {Request.Form["FormId"]}");    
+            _formAPIService = formAPIService;
+            _formPresenter = formPresenter;
+            _formHelper = formHelper;
         }
 
-        var formData = _formHelper.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
-        
-        var processResult = await _formAPIService.ProcessFormAsync(
-            Request.Form["FormId"],
-            FormSessionHelper.GetApplicantId(HttpContext.Session),
-            Request.Form["PageId"],
-            formData);
-
-        var result = await _formPresenter.HandleSubmit(formModel, processResult);
-
-        if (result.Errors != null && result.Errors.Any())
+        [HttpGet("form/{formId}/list")]
+        public async Task<IActionResult> Index(string formId)
         {
-            ViewBag.Errors = result.Errors;
-            ViewBag.FormId = formModel.FormId;
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            ViewBag.FormId = formId;
+            return View("ListForm", form);
+        }
+
+        [HttpGet("form/{formId}/edit")]
+        public async Task<IActionResult> Edit(string formId)
+        {
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            ViewBag.FormId = formId;
+            return View("EditForm", form);
+        }
+
+        [HttpPost("form/{formId}/edit")]
+        public async Task<IActionResult> Edit(FormModel updatedForm)
+        {
+            await _formAPIService.UpdateFormAsync(updatedForm);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("form/{formId}/addPage")]
+        public IActionResult AddPage(string formId)
+        {
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            ViewBag.FormId = formId;
+            return View("AddPage");
+        }
+
+        [HttpPost("form/{formId}/addPage")]
+        public async Task<IActionResult> AddPage(string formId, Page newPage)
+        {
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            if (string.IsNullOrEmpty(newPage.PageId) || string.IsNullOrEmpty(newPage.Title) || string.IsNullOrEmpty(newPage.PageType) || string.IsNullOrEmpty(newPage.NextPageId))
+            {
+                ModelState.AddModelError(string.Empty, "All fields are required.");
+                ViewBag.FormId = formId;
+                return View("AddPage", newPage);
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            form.Pages.Add(newPage);
+            form.TotalPages = form.Pages.Count;
+            await _formAPIService.UpdateFormAsync(form);
+            return RedirectToAction("Edit");
+        }
+
+        [HttpGet("form/{formId}/removePage/{pageId}")]
+        public async Task<IActionResult> RemovePage(string formId, string pageId)
+        {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
+            {
+                return BadRequest("FormId and PageId are required.");
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
+            if (page != null)
+            {
+                form.Pages.Remove(page);
+                form.TotalPages = form.Pages.Count;
+                await _formAPIService.UpdateFormAsync(form);
+            }
+            return RedirectToAction("Edit");
+        }
+
+        [HttpGet("form/{formId}/editPage/{pageId}")]
+        public async Task<IActionResult> EditPage(string formId, string pageId)
+        {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
+            {
+                return BadRequest("FormId and PageId are required.");
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
+            if (page == null)
+            {
+                return NotFound();
+            }
+            ViewBag.FormId = formId;
+            ViewBag.PageId = pageId;
+            return View("EditPage", page);
+        }
+
+        [HttpPost("form/{formId}/editPage/{pageId}")]
+        public async Task<IActionResult> EditPage(string formId, string pageId, Page updatedPage)
+        {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
+            {
+                return BadRequest("FormId and PageId are required.");
+            }
+            var form = await _formAPIService.GetFormAsync(formId);
+            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
+            if (page == null)
+            {
+                return NotFound();
+            }
+            page.Title = updatedPage.Title;
+            page.PageType = updatedPage.PageType;
+            page.NextPageId = updatedPage.NextPageId;
+            await _formAPIService.UpdateFormAsync(form);
+            return RedirectToAction("Edit", new { formId });
+        }
+
+        [HttpGet("form/{formId}/start")]
+        public async Task<IActionResult> Start(string formId)
+        {
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            if (formModel == null) return NotFound();
+
+            // ensure a clean session and generate a new applicant ID.
+            FormSessionHelper.ClearApplicantId(HttpContext.Session);
+            FormSessionHelper.SetApplicantId(HttpContext.Session, FormSessionHelper.GenerateApplicantId());
+
+            return RedirectToAction("ShowPage", new { formId = formModel.FormId, page = formModel.StartPage });
+        }
+
+        [HttpGet("form/{formId}/{page}")]
+        public async Task<IActionResult> ShowPage(string formId, string page)
+        {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
+            {
+                return BadRequest("FormId and Page are required.");
+            }
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            if (formModel == null) return NotFound();
+
+            var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
+
+            var result = await _formPresenter.HandlePage(page, formModel, data);
+            if (result == null) return NotFound();
+
+            ViewBag.CurrentPage = result.CurrentPage;
+            ViewBag.TotalPages = result.TotalPages;
+            ViewBag.FormId = formId;
+            ViewBag.PreviousPageId = result.PreviousPage;
             return View(result.NextAction, result.PageModel);
         }
 
-        return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage });
-    }
+        [HttpPost]
+        public async Task<IActionResult> Submit()
+        {
+            var formId = Request.Form["FormId"];
+            var pageId = Request.Form["PageId"];
+            if (String.IsNullOrEmpty(formId) || String.IsNullOrEmpty(pageId))
+            {
+                throw new ArgumentException("FormId or PageId is null");
+            }
 
-    [HttpGet("form/{formId}/summary")]
-    public async Task<IActionResult> Summary(string formId)
-    {
-        var formModel = await _formAPIService.GetFormAsync(formId);
-        if (formModel == null) return NotFound();
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
+            if (currentPage == null) 
+            {
+                throw new ArgumentException($"Page {pageId} not found in form {formId}");    
+            }
 
-        var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
+            var formData = _formHelper.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
+            
+            // Check if there are any submitted files
+            if (Request.Form.Files.Count > 0)
+            {
+                var fileComponent = currentPage.Components.FirstOrDefault(c => c.Type == "fileupload");
+                if (fileComponent == null)
+                {
+                    ModelState.AddModelError(string.Empty, "File upload component not found but files in the request.");
+                    ViewBag.FormId = formId;
+                    return View("Error");
+                }
 
-        var result = await _formPresenter.HandleSummary(formModel, data);
+                foreach (var file in Request.Form.Files)
+                {
+                    // Find the file upload component and post the file to the UploadEndpoint
+                    using (var stream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(stream);
+                        stream.Position = 0;
+                        var fileContent = new ByteArrayContent(stream.ToArray());
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
 
-        ViewBag.FormId = formId;
-        return View(result.NextAction, formModel);
-    }
+                        using (var client = new HttpClient())
+                        {
+                            var fileFormData = new MultipartFormDataContent
+                            {
+                                { fileContent, "files", file.FileName }
+                            };
 
-    [HttpGet("form/{formId}/{page}/stop")]
-    public async Task<IActionResult> Stop(string formId, string page)
-    {
-        var formModel = await _formAPIService.GetFormAsync(formId);
-        if (formModel == null) return NotFound();
+                            var response = await client.PostAsync(fileComponent.FileOptions.UploadEndpoint, fileFormData);
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                ModelState.AddModelError(string.Empty, "File upload failed.");
+                                ViewBag.FormId = formId;
+                                return View("Error");
+                            }
 
-        var result = await _formPresenter.HandleStop(page, formModel);
-        return View(result.NextAction, result.PageModel);
-    }
+                            // TODO: add a property to the component to store multiple file names.
+                            // BUG: the file name is not stored in the data...
+                            fileComponent.Answer = file.FileName;
+                        }
+                    }
+                }
+            }
 
-    [HttpGet("form/{formId}/confirmation")]
-    public async Task<IActionResult> Confirmation()
-    {
-        return View();
+            var processResult = await _formAPIService.ProcessFormAsync(
+                formId,
+                FormSessionHelper.GetApplicantId(HttpContext.Session),
+                pageId,
+                formData);
+
+            var result = await _formPresenter.HandleSubmit(formModel, processResult);
+
+            if (result.Errors != null && result.Errors.Any())
+            {
+                ViewBag.Errors = result.Errors;
+                ViewBag.FormId = formModel.FormId;
+                return View(result.NextAction, result.PageModel);
+            }
+
+            return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage });
+        }
+
+        [HttpGet("form/{formId}/summary")]
+        public async Task<IActionResult> Summary(string formId)
+        {
+            if (string.IsNullOrEmpty(formId))
+            {
+                return BadRequest("FormId is required.");
+            }
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            if (formModel == null) return NotFound();
+
+            var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
+
+            var result = await _formPresenter.HandleSummary(formModel, data);
+
+            ViewBag.FormId = formId;
+            return View(result.NextAction, formModel);
+        }
+
+        [HttpGet("form/{formId}/{page}/stop")]
+        public async Task<IActionResult> Stop(string formId, string page)
+        {
+            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
+            {
+                return BadRequest("FormId and Page are required.");
+            }
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            if (formModel == null) return NotFound();
+
+            var result = await _formPresenter.HandleStop(page, formModel);
+            return View(result.NextAction, result.PageModel);
+        }
+
+        [HttpGet("form/{formId}/confirmation")]
+        public async Task<IActionResult> Confirmation(string formId)
+        {
+            var formModel = await _formAPIService.GetFormAsync(formId);
+            if (formModel == null) return NotFound();
+
+            var applicationId = FormSessionHelper.GetApplicantId(HttpContext.Session);
+            var data = await _formAPIService.GetFormDataAsync(applicationId);
+
+            // TODO: mark the application as submitted if this resolves ok?
+            await _formAPIService.SubmitFormDataAsync(formModel, data.FormData);
+
+            var result = await _formPresenter.HandleConfirmation(applicationId);
+
+            return View(result.NextAction, result.ApplicationId);
+        }
     }
 }

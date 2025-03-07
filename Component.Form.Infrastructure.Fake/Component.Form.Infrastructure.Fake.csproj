@@ -50,6 +50,9 @@
     </None>
     <None Update="phonenumberComponent.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None> 
+    <None Update="fileUploadComponent.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>    
   </ItemGroup>
 

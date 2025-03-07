@@ -67,6 +67,9 @@
             case "phonenumber":
                 @await Html.PartialAsync("FormComponents/_PhoneNumber", component)
                 break;
+            case "fileupload":
+                @await Html.PartialAsync("FormComponents/_FileUpload", component)
+                break;
             case "dateparts":
                 @await Html.PartialAsync("FormComponents/_DateParts", component)
                 break;

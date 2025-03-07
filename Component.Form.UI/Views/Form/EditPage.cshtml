@@ -1,0 +1,62 @@
+@model Component.Form.Model.Page
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item asp-controller="Form" asp-action="Edit" asp-route-formId="@ViewBag.FormId">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+        <govuk-breadcrumbs-item>Edit Page</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Edit Page</h2>
+
+<form asp-action="EditPage" method="post" class="govuk-form-group" id="edit-page-form">
+    <input type="hidden" name="FormId" value="@ViewBag.FormId" />
+    <input type="hidden" name="PageId" value="@ViewBag.PageId" />
+    <div class="govuk-form-group">
+        <label class="govuk-label" for="PageId">Page ID</label>
+        <input class="govuk-input" type="text" name="PageId" value="@Model.PageId" readonly />
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="Title" id="title-label"></label>
+        <input class="govuk-input" asp-for="Title" id="title-input" />
+        <span asp-validation-for="Title" class="text-danger" id="title-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="PageType" id="page-type-label"></label>
+        <input class="govuk-input" asp-for="PageType" id="page-type-input" />
+        <span asp-validation-for="PageType" class="text-danger" id="page-type-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="NextPageId" id="next-page-id-label"></label>
+        <input class="govuk-input" asp-for="NextPageId" id="next-page-id-input" />
+        <span asp-validation-for="NextPageId" class="text-danger" id="next-page-id-validation"></span>
+    </div>
+    <button type="submit" class="govuk-button" id="edit-page-submit">Save</button>
+</form>
+
+<h3 class="govuk-heading-m">Components</h3>
+<table class="govuk-table" id="components-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Component ID</th>
+            <th class="govuk-table__header">Label</th>
+            <th class="govuk-table__header">Type</th>
+            <th class="govuk-table__header">Actions</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @foreach (var component in Model.Components)
+        {
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@component.QuestionId</td>
+                <td class="govuk-table__cell">@component.Label</td>
+                <td class="govuk-table__cell">@component.Type</td>
+                <td class="govuk-table__cell">
+                    <a href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@component.Name" class="govuk-link" id="edit-component-@component.Name">Edit</a> |
+                    <a href="/component/@ViewBag.FormId/@ViewBag.PageId/delete/@component.Name" class="govuk-link" id="delete-component-@component.Name">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/component/@ViewBag.FormId/@ViewBag.PageId/add" class="govuk-button" id="add-new-component">Add New Component</a>

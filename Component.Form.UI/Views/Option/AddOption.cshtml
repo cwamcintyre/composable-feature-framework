@@ -1,0 +1,25 @@
+@model Component.Form.Model.Option
+
+<govuk-breadcrumbs collapse-on-mobile="true">
+    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/edit">Form @ViewBag.FormId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/form/@ViewBag.FormId/editPage/@ViewBag.PageId">Page @ViewBag.PageId</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item href="/component/@ViewBag.FormId/@ViewBag.PageId/edit/@ViewBag.ComponentName">Component @ViewBag.ComponentName</govuk-breadcrumbs-item>
+    <govuk-breadcrumbs-item>New Option</govuk-breadcrumbs-item>
+</govuk-breadcrumbs>
+
+<h2 class="govuk-heading-l">Add New Option</h2>
+
+<form asp-action="Add" method="post" class="govuk-form-group" id="add-option-form">
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="Key" id="key-label"></label>
+        <input class="govuk-input" asp-for="Key" id="key-input" />
+        <span asp-validation-for="Key" class="text-danger" id="key-validation"></span>
+    </div>
+    <div class="govuk-form-group">
+        <label class="govuk-label" asp-for="Value" id="value-label"></label>
+        <input class="govuk-input" asp-for="Value" id="value-input" />
+        <span asp-validation-for="Value" class="text-danger" id="value-validation"></span>
+    </div>
+    <button type="submit" class="govuk-button" id="add-option-submit">Add</button>
+</form>

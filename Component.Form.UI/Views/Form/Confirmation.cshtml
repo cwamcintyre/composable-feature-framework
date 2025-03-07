@@ -1,4 +1,4 @@
-﻿@model Component.Form.Model.Page
+﻿@model string
 @{
     ViewData["Title"] = "Confirmation";
 }
@@ -12,7 +12,7 @@
             Application complete
           </h1>
           <div class="govuk-panel__body">
-            Your reference number<br><strong>HDJ2123F</strong>
+            Your reference number<br><strong>@Model</strong>
           </div>
         </div>
         <p class="govuk-body">We have sent you a confirmation email.</p>

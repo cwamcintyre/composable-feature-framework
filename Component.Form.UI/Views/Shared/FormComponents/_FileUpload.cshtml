@@ -1,5 +1,35 @@
 ﻿@model Component.Form.Model.Component
 
-<input type="file" name="@Model.Name" class="form-control"
-        accept="@string.Join(",", Model.FileOptions?.AcceptedFormats ?? new List<string>())" />
-
+<div class="govuk-form-group">
+  @if (Model.LabelIsPageTitle) 
+  {
+    <h1 id="@Model.Name-label" class="govuk-label-wrapper">
+      <label for="@Model.Name" class="govuk-label govuk-label--l">
+            @Model.Label
+      </label>
+    </h1>
+  }
+  else 
+  {
+    <label id="@Model.Name-label" class="govuk-label" for="@Model.Name">
+      @Model.Label
+    </label>
+  }
+  @if (Model.Hint != null)
+  {
+    <div id="@Model.Name-phone-hint" class="govuk-hint">
+      @Model.Hint
+    </div>
+  }  
+  @if (ViewBag.Errors != null && ViewBag.Errors.ContainsKey(Model.Name))
+  {
+      <p id="@Model.Name-error" class="govuk-error-message">
+          @Html.Raw(String.Join("<br>", ViewBag.Errors[Model.Name]))
+      </p>
+  } 
+  <div
+    class="govuk-drop-zone"
+    data-module="govuk-file-upload">
+    <input class="govuk-file-upload" id="@Model.Name-upload" name="@Model.Name" type="file" accept="@string.Join(",", Model.FileOptions?.AcceptedFormats ?? new List<string>())">
+  </div>
+</div>

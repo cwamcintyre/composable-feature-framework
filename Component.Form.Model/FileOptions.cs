@@ -10,5 +10,6 @@ namespace Component.Form.Model
     {
         public required int MaxSizeMB { get; set; }
         public required List<string> AcceptedFormats { get; set; }
+        public required string UploadEndpoint { get; set; }
     }
 }

@@ -1,14 +1,16 @@
-﻿namespace Component.Form.Model
+﻿using System.Collections.Generic;
+
+namespace Component.Form.Model
 {
     public class FormModel
     {
-        public required string FormId { get; set; }
-        public required string StartPage { get; set; }
-        public required string Title { get; set; }
-        public required string Description { get; set; }
-        public required int CurrentPage { get; set; }
-        public required int TotalPages { get; set; }
-        public required List<Page> Pages { get; set; }
-        public required Submission Submission { get; set; }
-    } 
+        public string FormId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public string StartPage { get; set; }
+        public List<Page> Pages { get; set; }
+        public Submission Submission { get; set; }
+    }
 }

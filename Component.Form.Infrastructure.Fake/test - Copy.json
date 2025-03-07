@@ -1,107 +1,258 @@
 {
-    "formId": "survey_001",
-    "title": "Customer Feedback Form",
-    "description": "Help us improve by answering these questions.",
+    "formId": "test",
+    "title": "Monty Pythons Flying Form",
+    "description": "Please fill out this form.",
     "currentPage": 1,
-    "totalPages": 3,
+    "totalPages": 7,
+    "startPage": "do-you-want-to-fill-in-this-form",
     "pages": [
         {
-        "pageId": "page_1",
-        "title": "Personal Information",
-        "questions": [
-            {
-            "questionId": "q1",
-            "type": "text",
-            "label": "What is your full name?",
-            "required": true,
-            "validation": {
-                "pattern": "^[a-zA-Z\\s]+$",
-                "errorMessage": "Only letters and spaces are allowed."
-            }
-            },
-            {
-            "questionId": "q2",
-            "type": "select",
-            "label": "How did you hear about us?",
-            "options": {
-
-                "Google" : "Google",
-                "Social Media": "Social Media",
-                "Friend" : "Friend",
-                "Other" : "Other"
-            },
-            "required": true
-            },
-            {
-            "questionId": "q3",
-            "type": "radio",
-            "label": "Are you satisfied with our service?",
-            "options": {
-                "yes" : "Yes",
-                "no" : "No"
-            },
-            "required": true,
-            "branching": {
-                "no": "page_3",
-                "yes": "page_2"
-            }
-            }
-        ]
+            "pageId": "do-you-want-to-fill-in-this-form",
+            "components": [
+                {
+                    "questionId": "0",
+                    "type": "yesno",
+                    "label": "Do you want to fill in this form?",
+                    "name": "do_you_want_to_fill_in_this_form",
+                    "labelIsPageTitle": true,
+                    "hint": "If you say no, you'll see the stop page",
+                    "validationRules": [
+                        {
+                            "expression": "Data.do_you_want_to_fill_in_this_form != null && Data.do_you_want_to_fill_in_this_form.Trim() != \"\" ",
+                            "errorMessage": "Select yes or no"
+                        }
+                    ]
+                }
+            ],
+            "conditions": [
+                {
+                    "expression": "Data.do_you_want_to_fill_in_this_form == \"no\"",
+                    "nextPageId": "stop"
+                }
+            ],
+            "nextPageId": "what-is-your-name"
         },
         {
-        "pageId": "page_2",
-        "title": "Improvement Suggestions",
-        "conditions": {
-            "previousQuestionId": "q3",
-            "expectedAnswer": "no"
-        },
-        "questions": [
-            {
-            "questionId": "q4",
-            "type": "textarea",
-            "label": "What can we improve?",
-            "required": true
-            }
-        ]
+            "pageId": "what-is-your-name",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "text",
+                    "label": "What is your name?",
+                    "name": "what_is_your_name",
+                    "labelIsPageTitle": true,
+                    "validationRules": [
+                        {
+                            "expression": "Data.what_is_your_name != null && Data.what_is_your_name.Trim() != \"\" ",
+                            "errorMessage": "Enter your name"
+                        },
+                        {
+                            "expression": "Data.what_is_your_name != \"BOB\"",
+                            "errorMessage": "We all know that Bob is not your real name. Please provide your real name."
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "what-is-your-address"
         },
         {
-        "pageId": "page_3",
-        "title": "Final Thoughts",
-        "questions": [
-            {
-            "questionId": "q5",
-            "type": "checkbox",
-            "label": "Which features do you use the most?",
-            "options": {
-                "Feature A": "Feature A",
-                "Feature B": "Feature B",
-                "Feature C": "Feature C"
-            }
-            },
-            {
-            "questionId": "q6",
-            "type": "text",
-            "label": "Any additional comments?",
-            "required": false
-            },
-            {
-            "questionId": "q7",
-            "type": "file",
-            "label": "Upload a screenshot or document (optional)",
-            "required": false,
-            "fileOptions": {
-                "maxSizeMB": 5,
-                "acceptedFormats": [ "image/png", "image/jpeg", "application/pdf" ]
-            }
-            }
-        ]
+            "pageId": "what-is-your-address",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "ukaddress",
+                    "label": "What is your address?",
+                    "name": "what_is_your_address",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "what-is-your-email"
+        },
+        {
+            "pageId": "what-is-your-email",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "email",
+                    "label": "What is your email address?",
+                    "name": "what_is_your_email",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "what-is-your-phone"
+        },
+        {
+            "pageId": "what-is-your-phone",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "phonenumber",
+                    "label": "What is your phone number?",
+                    "hint": "UK numbers are in the format 01234 567890",
+                    "name": "what_is_your_phone_number",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "give-me-a-date"
+        },
+        {
+            "pageId": "give-me-a-date",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "dateparts",
+                    "label": "Give me a date. Any date.",
+                    "name": "give_me_a_date",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "give-me-another-date"
+        },
+        {
+            "pageId": "give-me-another-date",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "dateparts",
+                    "label": "Give me another date (optional)",
+                    "name": "give_me_another_date",
+                    "labelIsPageTitle": true,
+                    "optional": true
+                }
+            ],
+            "nextPageId": "what-is-your-quest"
+        },
+        {
+            "pageId": "what-is-your-quest",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "2",
+                    "type": "select",
+                    "label": "What is your quest?",
+                    "options": {
+                        "To find the holy grail": "To find the holy grail",
+                        "To become a knight": "To become a knight",
+                        "To allow claimants to edit their redundancy claim" : "To allow claimants to edit their redundancy claim", 
+                        "To do nothing": "To do nothing"
+                    },
+                    "name": "what_is_your_quest",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "conditions": [
+                {
+                    "expression" : "Data.what_is_your_quest != null && Data.what_is_your_quest != \"To allow claimants to edit their redundancy claim\"",
+                    "nextPageId": "why-dont-you-want-to-help-claimants"
+                }
+            ],   
+            "nextPageId": "chatgpt-made-me"
+        },
+        {
+            "pageId": "why-dont-you-want-to-help-claimants",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "7",
+                    "type": "multilineText",
+                    "label": "Why don't you want to help claimants edit their redundancy claim?",
+                    "name": "why_not_help_claimants",
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "chatgpt-made-me"
+        },
+        {
+            "pageId": "chatgpt-made-me",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "7",
+                    "type": "radio",
+                    "label": "You wake up and realize you’ve been transported into a video game world! You can only choose ONE special ability. Which one do you pick?",
+                    "name": "which_superpower",
+                    "options": {
+                        "Infinite Sprint": "Infinite Sprint – You never get tired, and you can run forever at top speed!",
+                        "Inventory Magic": "Inventory Magic – You can store anything in a limitless, weightless backpack!",
+                        "Save & Load" : "Save & Load – You can save your progress in life and reload if things go wrong!", 
+                        "Charisma Maxed": "Charisma Maxed – Everyone likes you instantly, and you always win arguments!"
+                    },
+                    "labelIsPageTitle": true
+                }
+            ],
+            "nextPageId": "what-is-your-favourite-colour"
+        },
+        {
+            "pageId": "what-is-your-favourite-colour",
+            "title": "",
+            "components": [
+                {
+                    "questionId": "3",
+                    "type": "checkbox",
+                    "label": "Which of these colours do you like?",
+                    "name": "what_is_your_favourite_colour",
+                    "labelIsPageTitle": true,
+                    "options": {
+                        "Red": "Red",
+                        "Blue": "Blue",
+                        "Green": "Green",
+                        "Yellow": "Yellow",
+                        "Pink": "Pink",
+                        "Black": "Black",
+                        "White": "White",
+                        "Purple": "Purple",
+                        "Orange": "Orange",
+                        "Brown": "Brown",
+                        "Grey": "Grey",
+                        "Other": "Other"
+                    },
+                    "validationRules": [
+                        {
+                            "expression": "Data.what_is_your_favourite_colour != null && Data.what_is_your_favourite_colour.Trim() != \"\" ",
+                            "errorMessage": "Select at least one colour"
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "summary"
+        },
+        {
+            "pageId": "summary",
+            "title": "Check your answers before sending your application",
+            "pageType": "summary",
+            "components": [                
+                {
+                    "type": "summary"
+                },
+                {
+                    "type": "html",
+                    "content": "<h2 class=\"govuk-heading-m\">Now send your application</h2><p class=\"govuk-body\">By submitting this application you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>"
+                }
+            ]
+        },
+        {
+            "pageId": "stop",
+            "pageType": "stop",
+            "title": "Then you dont have to :)",
+            "components": [
+                {                    
+                    "type": "html",
+                    "content": "<p class=\"govuk-body\">Ok no worries. Hope you have a nice day!</p>"
+                }
+            ]
         }
     ],
     "submission": {
         "method": "POST",
         "endpoint": "https://api.example.com/submit",
         "headers": {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "application/json"
         }
     }
 }

@@ -12,6 +12,7 @@ public class FormAPIService
     private const string GetFormApiUrl = "api/getForm/";
     private const string GetFormDataApiUrl = "api/getData/";
     private const string ProcessFormApiUrl = "api/processForm/";
+    private const string UpdateFormApiUrl = "api/updateForm/";
 
     public FormAPIService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
@@ -115,6 +116,45 @@ public class FormAPIService
         catch (Exception ex)
         {
             throw new ApplicationException("An error occurred while getting form data.", ex);
+        }
+    }
+
+    public async Task UpdateFormAsync(FormModel form)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient();
+            var baseAddress = _configuration["FormAPI:BaseAddress"];
+            if (string.IsNullOrWhiteSpace(baseAddress))
+            {
+                throw new ApplicationException("The base address is not configured.");
+            }
+            client.BaseAddress = new Uri(baseAddress);
+            var response = await client.PostAsJsonAsync($"{UpdateFormApiUrl}", form);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("An error occurred while updating form data.", ex);
+        }
+    }
+
+    public async Task SubmitFormDataAsync(FormModel formModel, FormData data)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient();            
+            var submissionEndpoint = formModel.Submission.Endpoint;
+            if (string.IsNullOrWhiteSpace(submissionEndpoint))
+            {
+                throw new ApplicationException("The submission endpoint is not configured.");
+            }
+            var response = await client.PostAsJsonAsync(submissionEndpoint, data.Data);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("An error occurred while submitting form data.", ex);
         }
     }
 }

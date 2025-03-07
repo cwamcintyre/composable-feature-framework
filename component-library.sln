@@ -34,6 +34,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{5CE8E52D-A8AF-340A-4033-B85429601BE7}"
 	ProjectSection(SolutionItems) = preProject
 		copilot prompts.txt = copilot prompts.txt
+		componentCmsPrompts.txt = componentCmsPrompts.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Forms", "Forms", "{5D4ABE75-A633-7578-A6F0-BB88D48E78A4}"

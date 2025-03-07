@@ -10,12 +10,17 @@ public interface IFormPresenter
     Task<StopResult> HandleStop(string pageId, FormModel formModel);
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
+    Task<ConfirmationResult> HandleConfirmation(string applicationId);
 }
 
 public class FormPresenter : IFormPresenter
 {
     public virtual string IndexViewName { get; set; } = "ShowPage";
     public virtual string StopViewName { get; set; } = "Stop";
+
+    public virtual string SummaryViewName { get; set; } = "Summary";
+
+    public virtual string ConfirmationViewName { get; set; } = "Confirmation";
 
     private readonly ComponentHandlerFactory _componentHandlerFactory;
 
@@ -24,7 +29,7 @@ public class FormPresenter : IFormPresenter
         _componentHandlerFactory = componentHandlerFactory;
     }
 
-    public async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse)
+    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
@@ -65,7 +70,7 @@ public class FormPresenter : IFormPresenter
         };
     }
 
-    public async Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response)
+    public virtual async Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == response.NextPage);
         if (currentPage == null) return null;
@@ -81,7 +86,7 @@ public class FormPresenter : IFormPresenter
         {
             return new SubmitResult()
             {
-                NextAction = "Summary",
+                NextAction = SummaryViewName,
                 NextPage = response.NextPage
             };
         }
@@ -90,7 +95,7 @@ public class FormPresenter : IFormPresenter
         {
             return new SubmitResult()
             {
-                NextAction = "Stop",
+                NextAction = StopViewName,
                 NextPage = response.NextPage
             };
         }
@@ -117,7 +122,7 @@ public class FormPresenter : IFormPresenter
         };
     }
 
-    public async Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response)
+    public virtual async Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response)
     {
         var formData = new Dictionary<string, object>();
         
@@ -141,11 +146,11 @@ public class FormPresenter : IFormPresenter
         return new SummaryResult
         {
             FormModel = formModel,
-            NextAction = "Summary"
+            NextAction = SummaryViewName
         };
     }
 
-    public async Task<StopResult> HandleStop(string pageId, FormModel formModel)
+    public virtual async Task<StopResult> HandleStop(string pageId, FormModel formModel)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
         if (currentPage == null) return null;
@@ -154,6 +159,15 @@ public class FormPresenter : IFormPresenter
         {
             NextAction = StopViewName,
             PageModel = currentPage
+        };
+    }
+
+    public virtual async Task<ConfirmationResult> HandleConfirmation(string applicationId)
+    {
+        return new ConfirmationResult
+        {
+            ApplicationId = applicationId,
+            NextAction = ConfirmationViewName
         };
     }
 
@@ -192,5 +206,11 @@ public class SummaryResult
 public class StopResult
 {
     public Page PageModel { get; set; }
+    public string NextAction { get; set; }
+}
+
+public class ConfirmationResult
+{
+    public string ApplicationId { get; set; }
     public string NextAction { get; set; }
 }
