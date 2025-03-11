@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 public interface IFormPresenter
 {
-    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel);
+    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel, int repeatIndex);
     Task<StopResult> HandleStop(string pageId, FormModel formModel);
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
@@ -29,7 +29,7 @@ public class FormPresenter : IFormPresenter
         _componentHandlerFactory = componentHandlerFactory;
     }
 
-    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse)
+    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse, int repeatIndex = 0)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
@@ -58,6 +58,11 @@ public class FormPresenter : IFormPresenter
         if (dataResponse.FormData.Route != null && dataResponse.FormData.Route.Count > 0) 
         {
             previousPage = dataResponse.FormData.Route.Peek();
+        }
+
+        if (currentPage.Repeating)
+        {
+            currentPage.RepeatIndex = repeatIndex > 0 ? repeatIndex : 0;
         }
 
         return new IndexResult
@@ -100,6 +105,12 @@ public class FormPresenter : IFormPresenter
             };
         }
 
+        if (currentPage.Repeating && formData.ContainsKey(currentPage.RepeatKey))
+        {
+            var innerFormData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(formData[currentPage.RepeatKey].ToString(), GetJsonSerializerSettings());
+            formData = innerFormData[response.RepeatIndex];
+        }
+
         foreach (var data in formData)
         {
             var component = currentPage.Components.Find(c => c.Name == data.Key);
@@ -118,7 +129,9 @@ public class FormPresenter : IFormPresenter
             Errors = errors,
             NextPage = nextPage,
             PageModel = currentPage,
-            NextAction = IndexViewName
+            NextAction = IndexViewName,
+            RepeatIndex = response.RepeatIndex,
+            Repeating = currentPage.Repeating
         };
     }
 
@@ -195,6 +208,8 @@ public class SubmitResult
     public string NextPage { get; set; }
     public Page PageModel { get; set;}
     public string NextAction { get; set; }
+    public bool Repeating { get; set; }
+    public int RepeatIndex { get; set; }
 }
 
 public class SummaryResult

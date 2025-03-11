@@ -6,7 +6,7 @@ namespace Component.Form.Model.ComponentHandler;
 
 public class EmailHandler : IComponentHandler
 {
-    public object Get(string name, Dictionary<string, string> data)
+    public virtual object Get(string name, Dictionary<string, string> data)
     {
         if (data.ContainsKey(name))
         {
@@ -36,7 +36,7 @@ public class EmailHandler : IComponentHandler
         return type.Equals("email", StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions)
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
     {
         var errors = new List<string>();
 

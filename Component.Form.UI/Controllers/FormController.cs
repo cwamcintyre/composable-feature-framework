@@ -3,6 +3,7 @@ using Component.Form.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Component.Form.Model;
 using System.Net.Http.Headers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Component.Form.UI.Controllers
 {
@@ -163,9 +164,9 @@ namespace Component.Form.UI.Controllers
             return RedirectToAction("ShowPage", new { formId = formModel.FormId, page = formModel.StartPage });
         }
 
-        [HttpGet("form/{formId}/{page}")]
-        public async Task<IActionResult> ShowPage(string formId, string page)
-        {
+        [HttpGet("form/{formId}/{page}/{repeatIndex?}")]
+        public async Task<IActionResult> ShowPage(string formId, string page, int repeatIndex = -1)
+        {   
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
                 return BadRequest("FormId and Page are required.");
@@ -175,13 +176,14 @@ namespace Component.Form.UI.Controllers
 
             var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
 
-            var result = await _formPresenter.HandlePage(page, formModel, data);
+            var result = await _formPresenter.HandlePage(page, formModel, data, repeatIndex);
             if (result == null) return NotFound();
 
             ViewBag.CurrentPage = result.CurrentPage;
             ViewBag.TotalPages = result.TotalPages;
             ViewBag.FormId = formId;
             ViewBag.PreviousPageId = result.PreviousPage;
+
             return View(result.NextAction, result.PageModel);
         }
 
@@ -260,10 +262,29 @@ namespace Component.Form.UI.Controllers
             {
                 ViewBag.Errors = result.Errors;
                 ViewBag.FormId = formModel.FormId;
+
+                if (currentPage.Repeating)
+                {
+                    result.PageModel.RepeatIndex = processResult.RepeatIndex;
+                }
+
                 return View(result.NextAction, result.PageModel);
             }
 
-            return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage });
+            var nextPage = formModel.Pages.Find(p => p.PageId == result.NextPage);
+            if (nextPage == null) 
+            {
+                throw new ArgumentException($"Page {pageId} not found in form {formId}");    
+            }
+
+            if (nextPage.Repeating)
+            {
+                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, repeatIndex = processResult.RepeatIndex });
+            }
+            else 
+            {
+                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage });
+            }
         }
 
         [HttpGet("form/{formId}/summary")]

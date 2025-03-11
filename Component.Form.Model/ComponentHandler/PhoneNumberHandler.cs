@@ -5,7 +5,7 @@ namespace Component.Form.Model.ComponentHandler;
 
 public class PhoneNumberHandler: IComponentHandler
 {
-    public object Get(string name, Dictionary<string, string> data)
+    public virtual object Get(string name, Dictionary<string, string> data)
     {
         if (data.ContainsKey(name))
         {
@@ -35,7 +35,7 @@ public class PhoneNumberHandler: IComponentHandler
         return type.Equals("phonenumber", StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions)
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
     {
         var errors = new List<string>();
 

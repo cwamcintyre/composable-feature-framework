@@ -14,7 +14,7 @@ public class DatePartsHandler : IComponentHandler
     public const string ERR_MONTH_OUT_OF_BOUNDS = "Month is between 1 and 12";
     public const string ERR_YEAR_OUT_OF_BOUNDS = "Year is between 1900 and 2100";
 
-    public object Get(string name, Dictionary<string, string> data)
+    public virtual object Get(string name, Dictionary<string, string> data)
     {
         var model = new DatePartsModel();
 
@@ -56,28 +56,30 @@ public class DatePartsHandler : IComponentHandler
         return type.Equals("dateparts", StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions)
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
     {
+        var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
+
         var validationRules = new List<ValidationRule>
         {
             new ValidationRule
             {
-                Expression = $"Data.{name} != null",
+                Expression = $"{prefix}.{name} != null",
                 ErrorMessage = "Date is required"
             },
             new ValidationRule
             {
-                Expression = $"Data.{name}.Day != null && Data.{name}.Day > 0 && Data.{name}.Day < 32",
+                Expression = $"{prefix}.{name}.Day != null && {prefix}.{name}.Day > 0 && {prefix}.{name}.Day < 32",
                 ErrorMessage = ERR_DAY_OUT_OF_BOUNDS
             },
             new ValidationRule
             {
-                Expression = $"Data.{name}.Month != null && Data.{name}.Month > 0 && Data.{name}.Month < 13",
+                Expression = $"{prefix}.{name}.Month != null && {prefix}.{name}.Month > 0 && {prefix}.{name}.Month < 13",
                 ErrorMessage = ERR_MONTH_OUT_OF_BOUNDS
             },
             new ValidationRule
             {
-                Expression = $"Data.{name}.Year != null && Data.{name}.Year > 1899 && Data.{name}.Year < 2101",
+                Expression = $"{prefix}.{name}.Year != null && {prefix}.{name}.Year > 1899 && {prefix}.{name}.Year < 2101",
                 ErrorMessage = ERR_YEAR_OUT_OF_BOUNDS
             }
         };

@@ -30,7 +30,7 @@ public static class ExpressionHelper
     {
         var options = ScriptOptions.Default.AddReferences(typeof(object).Assembly)  // System
             .AddReferences("Microsoft.CSharp")
-            .AddImports("System", "System.Collections.Generic", "Microsoft.CSharp.RuntimeBinder");
+            .AddImports("System", "System.Collections.Generic", "System.Linq", "Microsoft.CSharp.RuntimeBinder");
 
         var script = CSharpScript.Create<bool>(expression, options, typeof(Globals));
         var result = await script.RunAsync(new Globals { Data = data });

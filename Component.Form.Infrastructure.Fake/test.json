@@ -58,6 +58,95 @@
                     ]
                 }
             ],
+            "nextPageId": "what-are-you-going-to-do-today"
+        },
+        {
+            "pageId": "what-are-you-going-to-do-today",
+            "title": "",
+            "repeating": true,
+            "repeatStart": true,
+            "repeatKey": "tasks",
+            "summaryLabel": "Tasks",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "text",
+                    "label": "What are you going to do today?",
+                    "name": "what_are_you_going_to_do_today",
+                    "labelIsPageTitle": true,
+                    "validationRules": [
+                        {
+                            "id": "vr2",
+                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().what_are_you_going_to_do_today != null && ((IEnumerable<dynamic>)Data.tasks).Last().what_are_you_going_to_do_today.Trim() != \"\" ",
+                            "errorMessage": "Enter what you are going to do today"
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "how-long-will-it-take"
+        },
+        {
+            "pageId": "how-long-will-it-take",
+            "title": "",
+            "repeating": true,
+            "repeatKey": "tasks",
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "text",
+                    "label": "How long will it take?",
+                    "name": "how_long_will_it_take",
+                    "labelIsPageTitle": true,
+                    "validationRules": [
+                        {
+                            "id": "vr2",
+                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"\" ",
+                            "errorMessage": "Enter your name"
+                        },
+                        {
+                            "id": "vr2",
+                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"TOO LONG\" ",
+                            "errorMessage": "It can't take too long, try again.."
+                        },
+                        {
+                            "id": "vr2",
+                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"FOREVER\" ",
+                            "errorMessage": "If it'll never happen then leave it.."
+                        }
+                    ]
+                }
+            ],
+            "nextPageId": "do-you-want-to-add-another-task"
+        },
+        {
+            "pageId": "do-you-want-to-add-another-task",
+            "title": "",
+            "repeating": true,
+            "repeatKey": "tasks",
+            "repeatEnd": true,        
+            "components": [
+                {
+                    "questionId": "1",
+                    "type": "yesno",
+                    "label": "Do you want to add another task?",
+                    "name": "do_you_want_to_add_another_task",
+                    "labelIsPageTitle": true,
+                    "validationRules": [
+                        {
+                            "id": "vr2",
+                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task != null && ((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task.Trim() != \"\" ",
+                            "errorMessage": "Select yes or no"
+                        }
+                    ]
+                }
+            ],
+            "conditions": [
+                {
+                    "id": "c1",
+                    "expression": "((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task == \"yes\"",
+                    "nextPageId": "what-are-you-going-to-do-today"
+                }
+            ],
             "nextPageId": "what-is-your-address"
         },
         {

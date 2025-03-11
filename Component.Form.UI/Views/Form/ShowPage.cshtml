@@ -30,6 +30,12 @@
     <input type="hidden" name="pageId" value="@Model.PageId" />
     <input type="hidden" name="formId" value="@formId" />
     
+    @if (Model.Repeating)
+    {
+        <input type="hidden" name="repeating" value="true" />
+        <input type="hidden" name="repeatIndex" value="@Model.RepeatIndex" />
+    }
+
     @foreach (var component in Model.Components)
     {
         switch (component.Type)

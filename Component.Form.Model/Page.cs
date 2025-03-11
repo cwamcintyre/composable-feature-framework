@@ -15,5 +15,12 @@ namespace Component.Form.Model
         public List<Condition> Conditions { get; set; }
         public Dictionary<string, string> Data { get; set; }
         public required string NextPageId { get; set; }
+
+        public bool Repeating { get; set; }
+        public bool RepeatStart { get; set; }
+        public bool RepeatEnd { get; set; }
+        public string RepeatKey { get; set; }
+        public int RepeatIndex { get; set; }
+        public string SummaryKey { get; set; }  
     }
 }

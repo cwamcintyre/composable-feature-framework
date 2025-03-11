@@ -10,7 +10,7 @@ public class UkAddressHandler : IComponentHandler
     public const string ERR_LINE_1_REQUIRED = "Address Line 1 is required";
     public const string ERR_POSTCODE_REQUIRED = "Postcode is required";
 
-    public object Get(string name, Dictionary<string, string> data)
+    public virtual object Get(string name, Dictionary<string, string> data)
     {
         var model = new UkAddressModel();
         
@@ -45,18 +45,20 @@ public class UkAddressHandler : IComponentHandler
         return type.Equals("ukaddress", StringComparison.CurrentCultureIgnoreCase);        
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions)
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
     {
+        var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
+
         var validationRules = new List<ValidationRule>
         {
             new ValidationRule
             {
-                Expression = $"Data.{name}.AddressLine1 != null && Data.{name}.AddressLine1.Length > 0",
+                Expression = $"{prefix}.{name}.AddressLine1 != null && {prefix}.{name}.AddressLine1.Length > 0",
                 ErrorMessage = ERR_LINE_1_REQUIRED
             },
             new ValidationRule
             {
-                Expression = $"Data.{name}.Postcode != null && Data.{name}.Postcode.Length > 0",
+                Expression = $"{prefix}.{name}.Postcode != null && {prefix}.{name}.Postcode.Length > 0",
                 ErrorMessage = ERR_POSTCODE_REQUIRED
             }
         };

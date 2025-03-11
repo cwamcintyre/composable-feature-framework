@@ -48,7 +48,7 @@ public class SimpleHandler : IComponentHandler
         throw new NotImplementedException();       
     }
 
-    public async Task<List<string>> Validate(string name, dynamic data, List<ValidationRule> validationRules)
+    public async Task<List<string>> Validate(string name, dynamic data, List<ValidationRule> validationRules, bool repeating = false, string repeatKey = "")
     {
         if (validationRules == null || validationRules.Count == 0)
         {

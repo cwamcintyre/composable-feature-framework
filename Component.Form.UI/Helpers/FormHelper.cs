@@ -17,6 +17,7 @@ public class FormHelper
     public Dictionary<string, string> GetSubmittedPageData(Page page, Dictionary<string, string> data)
     {
         var formData = new Dictionary<string, string>();
+        
         foreach (var component in page.Components.Where(c => c.IsQuestionType))
         {
             var handler = _componentHandlerFactory.GetFor(component.Type);
@@ -32,6 +33,20 @@ public class FormHelper
             }
         }
 
-        return formData;
+        if (page.Repeating)
+        {
+            var repeatingFormData = new Dictionary<string, string>();
+            var repeatModel = new RepeatingModel
+            {
+                FormData = formData,
+                RepeatIndex = Convert.ToInt32(data["repeatIndex"])
+            };
+            repeatingFormData.Add(page.RepeatKey, JsonConvert.SerializeObject(repeatModel));
+            return repeatingFormData;
+        }
+        else 
+        {
+            return formData;
+        }
     }
 }

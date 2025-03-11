@@ -10,5 +10,5 @@ public interface IComponentHandler
     object Get(string name, Dictionary<string,string> data);
     object GetFromObject(object data);
     string GetDataType();
-    Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions);
+    Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating, string repeatKey);
 }
