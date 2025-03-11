@@ -107,8 +107,6 @@ namespace Component.Form.UI.Controllers
             component.Name = updatedComponent.Name;
             component.LabelIsPageTitle = updatedComponent.LabelIsPageTitle;
             component.Hint = updatedComponent.Hint;
-            component.Options = updatedComponent.Options;
-            component.ValidationRules = updatedComponent.ValidationRules;
             component.Optional = updatedComponent.Optional;
             component.Content = updatedComponent.Content;
             await _formAPIService.UpdateFormAsync(form);

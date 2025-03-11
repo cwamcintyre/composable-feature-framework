@@ -11,6 +11,9 @@
 <h2 class="govuk-heading-l">Edit Validation Rule</h2>
 
 <form asp-action="Edit" method="post" class="govuk-form-group" id="edit-validation-rule-form">
+    <div id="validation-rule-hint" class="govuk-hint">
+      Your expression must be valid C# script that returns false if the validation fails.
+    </div>
     <div class="govuk-form-group">
         <label class="govuk-label" asp-for="Expression" id="expression-label"></label>
         <input class="govuk-input" asp-for="Expression" id="expression-input" />
