@@ -22,11 +22,19 @@ public static class SearchFeatureExtensions
         services.AddGovUkFrontend();
         services.AddHttpClient();
         
-        services.AddStackExchangeRedisCache(options =>
+        if (Convert.ToBoolean(configuration["UseRedisCache"]) == true)
         {
-            options.Configuration = configuration["RedisCache:ConnectionString"];
-            options.InstanceName = "SessionInstance";
-        });
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["RedisCache:ConnectionString"];
+                options.InstanceName = "SessionInstance";
+            });
+
+        }
+        else 
+        {
+            services.AddDistributedMemoryCache();
+        }
 
         services.AddSession(options =>
         {

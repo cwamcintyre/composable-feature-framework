@@ -31,6 +31,20 @@ public static class FormFeatureExtensions
 
         services.AddSingleton<FormHelper>();
 
+        if (Convert.ToBoolean(configuration["UseRedisCache"]) == true)
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["RedisCache:ConnectionString"];
+                options.InstanceName = "SessionInstance";
+            });
+
+        }
+        else 
+        {
+            services.AddDistributedMemoryCache();
+        }
+
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration["RedisCache:ConnectionString"];
