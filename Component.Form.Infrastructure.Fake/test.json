@@ -345,7 +345,7 @@
     ],
     "submission": {
         "method": "POST",
-        "endpoint": "https://api.example.com/submit",
+        "endpoint": "http://localhost:7163/api/v1/submit",
         "headers": {
             "Content-Type": "application/json"
         }

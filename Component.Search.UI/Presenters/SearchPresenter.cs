@@ -76,11 +76,12 @@ public class SearchPresenter : ISearchPresenter
                 if (currentPage <= 3)
                 {
                     paginationItems.AddRange(Enumerable.Range(2, 3));
+                    paginationItems.Add(-1); // Ellipsis
                     paginationItems.Add(totalPages);
                 }
                 else if (currentPage >= totalPages - 2)
                 {
-                    paginationItems.AddRange(Enumerable.Range(totalPages - 3, 3));
+                    paginationItems.AddRange(Enumerable.Range(totalPages - 3, 3));                    
                     paginationItems.Add(totalPages);
                 }
                 else

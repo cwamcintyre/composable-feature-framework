@@ -24,19 +24,19 @@ The form data will be in a dictionary, the answer will have a key using the name
 
 placeholders in the title start with { and end with }. Find any placeholders in the title and replace them with the data found in responseModel
 
-using exampleSearchIndexType.json as an example, create a new configuration in fipSearchIndexType.json which allows you to search by the following text fields: 
+using exampleSearchIndexType.json as an example, create a new configuration in demofipSearchIndexType.json which allows you to search by the following text fields: 
 first name, last name, company, postCode. 
 related content will have links "Get help from the Insolvency Service" and "find out more about bankruptcy and insolvency"
-the search index type id is "fip"
+the search index type id is "demofip"
 The title is "Search"
-The description will say "You can search for an insolvency practitioner by name, company, town, city or postcode."
+The description will say "You can search for an insolvency practitioner by name, company, city or postcode."
 
-using exampleSearchResultsType.json as an example, create a new configuration in fipSearchResultsType.json which will show the following columns: 
+using exampleSearchResultsType.json as an example, create a new configuration in demofipSearchResultsType.json which will show the following columns: 
 first name, last name, company, postCode. 
 The description will say "You have found {total} records. Click on the Name link to see the details"
-the search index type id is "fip"
+the search index type id is "demofip"
 
-using exampleDetailType.json as an example, create a new configuration in fipDetailDype.json which will show two sections. 
+using exampleDetailType.json as an example, create a new configuration in demofipDetailDype.json which will show two sections. 
 The first section is titled "Insolvency practitioner details" and has the fields: first name, last name, company, address, postCode, telephone, fax, email, ip number. 
 The second section is titled "Authorising body" and has the fields: IP name, website, address, telephone number, fax number
 The title should say "Case details:" with the first name and last name

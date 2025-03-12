@@ -35,6 +35,15 @@
     <None Update="fipSearchIndexType.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="demofipDetailType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="demofipSearchResultsType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="demofipSearchIndexType.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>    
   </ItemGroup>
 
 </Project>

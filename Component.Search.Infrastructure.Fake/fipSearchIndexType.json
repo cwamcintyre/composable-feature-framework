@@ -3,7 +3,7 @@
     "searchTypeId": "fip",
     "title": "Search",
     "searchType": "simpleWithRelatedContent",
-    "description": "<p class=\"govuk-body\">You can search for an insolvency practitioner by name, company, town, city or postcode.</p>",
+    "description": "<p class=\"govuk-body\">You can search for an insolvency practitioner by name, company, city or postcode.</p>",
     "indexFields": [
       {
         "name": "firstName",
