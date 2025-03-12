@@ -1,5 +1,5 @@
 using Component.Core.Application;
-using Component.Form.Application.UseCase.GetForm.Infrastructure;
+using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.GetForm.Model;
 
 namespace Component.Form.Application.UseCase.GetForm;

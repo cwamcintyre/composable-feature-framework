@@ -1,4 +1,4 @@
-﻿using Component.Form.Application.UseCase.GetForm.Infrastructure;
+﻿using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;

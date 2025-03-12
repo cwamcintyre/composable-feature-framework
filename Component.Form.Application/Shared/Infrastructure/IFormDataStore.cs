@@ -1,7 +1,7 @@
 using System;
 using Component.Form.Model;
 
-namespace Component.Form.Application.UseCase.ProcessForm.Infrastructure;
+namespace Component.Form.Application.Shared.Infrastructure;
 
 public interface IFormDataStore
 {

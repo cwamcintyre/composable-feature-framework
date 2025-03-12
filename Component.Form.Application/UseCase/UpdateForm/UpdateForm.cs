@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Component.Form.Application.UseCase.GetForm.Infrastructure;
+using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.UpdateForm.Model;
 using Component.Core.Application;
 using Component.Form.Model;

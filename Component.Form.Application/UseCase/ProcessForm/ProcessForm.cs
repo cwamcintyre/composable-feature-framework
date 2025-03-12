@@ -1,6 +1,5 @@
 using Component.Core.Application;
-using Component.Form.Application.UseCase.GetForm.Infrastructure;
-using Component.Form.Application.UseCase.ProcessForm.Infrastructure;
+using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.ProcessForm.Model;
 using Component.Form.Model.ComponentHandler;
 using System.Dynamic;

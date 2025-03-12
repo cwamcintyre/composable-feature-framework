@@ -1,7 +1,7 @@
 using System;
 using Component.Core.Application;
 using Component.Form.Application.UseCase.GetData.Model;
-using Component.Form.Application.UseCase.ProcessForm.Infrastructure;
+using Component.Form.Application.Shared.Infrastructure;
 
 namespace Component.Form.Application.UseCase.GetData;
 

@@ -1,6 +1,6 @@
 using Component.Form.Model;
 
-namespace Component.Form.Application.UseCase.GetForm.Infrastructure;
+namespace Component.Form.Application.Shared.Infrastructure;
 
 public interface IFormStore
 {

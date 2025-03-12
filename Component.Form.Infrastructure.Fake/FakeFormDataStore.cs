@@ -1,35 +1,28 @@
 using System;
-using Component.Form.Application.UseCase.ProcessForm.Infrastructure;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
 
-namespace Component.Form.Infrastructure.Fake;
-
-public class FakeFormDataStore : IFormDataStore
+namespace Component.Form.Infrastructure.Fake
 {
-    private static Dictionary<string, string> _formData = new Dictionary<string, string>();
-    private static Dictionary<string, Stack<string>> _routeData = new Dictionary<string, Stack<string>>();
-
-    public async Task<FormData> GetFormDataAsync(string applicantId)
+    public class FakeFormDataStore : IFormDataStore
     {
-        if (!_formData.ContainsKey(applicantId))
+        private readonly Dictionary<string, FormData> _store = new();
+
+        public async Task<FormData> GetFormDataAsync(string applicantId)
         {
-            return new FormData()
-            {
-                Data = "",
-                Route = new Stack<string>()
-            };
+            _store.TryGetValue(applicantId, out var formData);
+            return formData;
         }
 
-        return new FormData() 
+        public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> formRoute)
         {
-            Data = _formData[applicantId],
-            Route = _routeData[applicantId]
-        };
-    }
-
-    public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> routeData)
-    {
-        _formData[applicantId] = formData;
-        _routeData[applicantId] = routeData;
+            _store[applicantId] = new FormData
+            {
+                Data = formData,
+                Route = formRoute
+            };
+        }
     }
 }
