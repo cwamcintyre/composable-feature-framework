@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 public interface IFormPresenter
 {
-    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel, int repeatIndex);
+    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel, Dictionary<string, List<string>> Errors, int repeatIndex);
     Task<StopResult> HandleStop(string pageId, FormModel formModel);
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
@@ -29,7 +29,7 @@ public class FormPresenter : IFormPresenter
         _componentHandlerFactory = componentHandlerFactory;
     }
 
-    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse, int repeatIndex = 0)
+    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse, Dictionary<string, List<string>> errors, int repeatIndex = 0)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
@@ -67,6 +67,7 @@ public class FormPresenter : IFormPresenter
 
         return new IndexResult
         {
+            Errors = errors,
             PageModel = currentPage,
             CurrentPage = page,
             TotalPages = formModel.TotalPages,
@@ -200,6 +201,7 @@ public class IndexResult
     public int TotalPages { get; set; }
     public string NextAction { get; set; }
     public string PreviousPage { get; set; }
+    public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
 }
 
 public class SubmitResult
@@ -210,6 +212,9 @@ public class SubmitResult
     public string NextAction { get; set; }
     public bool Repeating { get; set; }
     public int RepeatIndex { get; set; }
+
+    public string BackLinkPage { get; set; }
+    public string BackLinkRepeatIndex { get; set; }
 }
 
 public class SummaryResult

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Component.Form.Model;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace Component.Form.UI.Controllers
 {
@@ -176,13 +177,20 @@ namespace Component.Form.UI.Controllers
 
             var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
 
-            var result = await _formPresenter.HandlePage(page, formModel, data, repeatIndex);
+            var errors = new Dictionary<string, List<string>>();
+            if (Convert.ToBoolean(TempData["ReturnWIthErrors"]) == true)
+            {
+                errors = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(TempData["Errors"].ToString());
+            }
+
+            var result = await _formPresenter.HandlePage(page, formModel, data, errors, repeatIndex);
             if (result == null) return NotFound();
 
             ViewBag.CurrentPage = result.CurrentPage;
             ViewBag.TotalPages = result.TotalPages;
             ViewBag.FormId = formId;
             ViewBag.PreviousPageId = result.PreviousPage;
+            ViewBag.Errors = result.Errors;
 
             return View(result.NextAction, result.PageModel);
         }
@@ -260,15 +268,10 @@ namespace Component.Form.UI.Controllers
 
             if (result.Errors != null && result.Errors.Any())
             {
-                ViewBag.Errors = result.Errors;
-                ViewBag.FormId = formModel.FormId;
+                TempData["ReturnWIthErrors"] = true;
+                TempData["Errors"] = JsonConvert.SerializeObject(result.Errors);
 
-                if (currentPage.Repeating)
-                {
-                    result.PageModel.RepeatIndex = processResult.RepeatIndex;
-                }
-
-                return View(result.NextAction, result.PageModel);
+                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, repeatIndex = processResult.RepeatIndex });
             }
 
             var nextPage = formModel.Pages.Find(p => p.PageId == result.NextPage);
