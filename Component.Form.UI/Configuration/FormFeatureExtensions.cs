@@ -45,12 +45,6 @@ public static class FormFeatureExtensions
             services.AddDistributedMemoryCache();
         }
 
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration["RedisCache:ConnectionString"];
-            options.InstanceName = "SessionInstance";
-        });
-
         services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
