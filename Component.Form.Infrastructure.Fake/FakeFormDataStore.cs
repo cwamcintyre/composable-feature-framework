@@ -8,21 +8,31 @@ namespace Component.Form.Infrastructure.Fake
 {
     public class FakeFormDataStore : IFormDataStore
     {
-        private readonly Dictionary<string, FormData> _store = new();
+        private static Dictionary<string, string> _formData = new Dictionary<string, string>();
+        private static Dictionary<string, Stack<string>> _routeData = new Dictionary<string, Stack<string>>();
 
         public async Task<FormData> GetFormDataAsync(string applicantId)
         {
-            _store.TryGetValue(applicantId, out var formData);
-            return formData;
+            if (!_formData.ContainsKey(applicantId))
+            {
+                return new FormData()
+                {
+                    Data = "",
+                    Route = new Stack<string>()
+                };
+            }
+
+            return new FormData() 
+            {
+                Data = _formData[applicantId],
+                Route = _routeData[applicantId]
+            };
         }
 
-        public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> formRoute)
+        public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> routeData)
         {
-            _store[applicantId] = new FormData
-            {
-                Data = formData,
-                Route = formRoute
-            };
+            _formData[applicantId] = formData;
+            _routeData[applicantId] = routeData;
         }
     }
 }

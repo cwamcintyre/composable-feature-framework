@@ -2,12 +2,21 @@
 @{
     ViewData["Title"] = Model.Title;
     string formId = ViewBag.FormId;
-    string previousPageId = ViewBag.PreviousPageId;
+
+    var backLink = String.Empty;
+    if (ViewBag.PreviousWasRepeating)
+    {
+        backLink = $"{formId}/{ViewBag.PreviousPageId}/{ViewBag.PreviousRepeatIndex}";
+    }
+    else if (!String.IsNullOrEmpty(ViewBag.PreviousPageId))
+    {
+        backLink = $"{formId}/{ViewBag.PreviousPageId}";
+    }
 }
 
-@if (!String.IsNullOrEmpty(previousPageId)) 
+@if (!String.IsNullOrEmpty(backLink)) 
 {
-    <govuk-back-link href="/form/@formId/@previousPageId">Back</govuk-back-link>
+    <govuk-back-link href="/form/@backLink">Back</govuk-back-link>
 }
 
 @if (!String.IsNullOrEmpty(@Model.Title)) 

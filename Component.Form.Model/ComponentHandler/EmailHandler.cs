@@ -36,7 +36,7 @@ public class EmailHandler : IComponentHandler
         return type.Equals("email", StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
         var errors = new List<string>();
 
@@ -49,7 +49,7 @@ public class EmailHandler : IComponentHandler
 
         if (validationExpressions == null || validationExpressions.Count == 0)
         {
-            errors.AddRange(await ExpressionHelper.Validate(data, validationExpressions));
+            errors.AddRange(await ExpressionHelper.Validate(data, validationExpressions, repeatIndex));
         }
 
         return errors;

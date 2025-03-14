@@ -10,6 +10,9 @@ namespace Component.Form.UI.Controllers
 {
     public class FormController : Controller
     {
+        public const string TempData_ReturnWithErrorsKey = "ReturnWithErrors";
+        public const string TempData_ErrorsKey = "Errors";
+
         private readonly FormAPIService _formAPIService;
         private readonly FormHelper _formHelper;
         private readonly IFormPresenter _formPresenter;
@@ -166,7 +169,7 @@ namespace Component.Form.UI.Controllers
         }
 
         [HttpGet("form/{formId}/{page}/{repeatIndex?}")]
-        public async Task<IActionResult> ShowPage(string formId, string page, int repeatIndex = -1)
+        public async Task<IActionResult> ShowPage(string formId, string page, int repeatIndex = 0)
         {   
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
@@ -175,21 +178,19 @@ namespace Component.Form.UI.Controllers
             var formModel = await _formAPIService.GetFormAsync(formId);
             if (formModel == null) return NotFound();
 
-            var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
+            // change GetFormDataAsync to also calculate errors?
+            var data = await _formAPIService.GetFormDataForPageAsync(formId, page, FormSessionHelper.GetApplicantId(HttpContext.Session), repeatIndex);           
 
-            var errors = new Dictionary<string, List<string>>();
-            if (Convert.ToBoolean(TempData["ReturnWIthErrors"]) == true)
-            {
-                errors = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(TempData["Errors"].ToString());
-            }
-
-            var result = await _formPresenter.HandlePage(page, formModel, data, errors, repeatIndex);
+            var result = await _formPresenter.HandlePage(page, formModel, data, repeatIndex);
             if (result == null) return NotFound();
 
             ViewBag.CurrentPage = result.CurrentPage;
             ViewBag.TotalPages = result.TotalPages;
             ViewBag.FormId = formId;
             ViewBag.PreviousPageId = result.PreviousPage;
+            ViewBag.PreviousRepeatIndex = result.PreviousPageIndex;
+            ViewBag.PreviousWasRepeating = result.PreviousWasRepeating;
+            ViewBag.Repeating = result.PageModel.Repeating;
             ViewBag.Errors = result.Errors;
 
             return View(result.NextAction, result.PageModel);
@@ -200,6 +201,7 @@ namespace Component.Form.UI.Controllers
         {
             var formId = Request.Form["FormId"];
             var pageId = Request.Form["PageId"];
+        
             if (String.IsNullOrEmpty(formId) || String.IsNullOrEmpty(pageId))
             {
                 throw new ArgumentException("FormId or PageId is null");
@@ -268,9 +270,6 @@ namespace Component.Form.UI.Controllers
 
             if (result.Errors != null && result.Errors.Any())
             {
-                TempData["ReturnWIthErrors"] = true;
-                TempData["Errors"] = JsonConvert.SerializeObject(result.Errors);
-
                 return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, repeatIndex = processResult.RepeatIndex });
             }
 

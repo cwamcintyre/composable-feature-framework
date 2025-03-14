@@ -77,7 +77,7 @@
                     "validationRules": [
                         {
                             "id": "vr2",
-                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().what_are_you_going_to_do_today != null && ((IEnumerable<dynamic>)Data.tasks).Last().what_are_you_going_to_do_today.Trim() != \"\" ",
+                            "expression": "Data.tasks[RepeatIndex].what_are_you_going_to_do_today != null && Data.tasks[RepeatIndex].what_are_you_going_to_do_today.Trim() != \"\" ",
                             "errorMessage": "Enter what you are going to do today"
                         }
                     ]
@@ -100,17 +100,17 @@
                     "validationRules": [
                         {
                             "id": "vr2",
-                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"\" ",
-                            "errorMessage": "Enter your name"
+                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"\" ",
+                            "errorMessage": "Enter how long it will take"
                         },
                         {
                             "id": "vr2",
-                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"TOO LONG\" ",
+                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"TOO LONG\" ",
                             "errorMessage": "It can't take too long, try again.."
                         },
                         {
                             "id": "vr2",
-                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take != null && ((IEnumerable<dynamic>)Data.tasks).Last().how_long_will_it_take.Trim() != \"FOREVER\" ",
+                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"FOREVER\" ",
                             "errorMessage": "If it'll never happen then leave it.."
                         }
                     ]
@@ -134,7 +134,7 @@
                     "validationRules": [
                         {
                             "id": "vr2",
-                            "expression": "((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task != null && ((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task.Trim() != \"\" ",
+                            "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task != null && Data.tasks[RepeatIndex].do_you_want_to_add_another_task.Trim() != \"\" ",
                             "errorMessage": "Select yes or no"
                         }
                     ]
@@ -143,7 +143,7 @@
             "conditions": [
                 {
                     "id": "c1",
-                    "expression": "((IEnumerable<dynamic>)Data.tasks).Last().do_you_want_to_add_another_task == \"yes\"",
+                    "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task == \"yes\"",
                     "nextPageId": "what-are-you-going-to-do-today"
                 }
             ],

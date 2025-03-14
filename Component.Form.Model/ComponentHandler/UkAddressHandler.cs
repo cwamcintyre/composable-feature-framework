@@ -45,7 +45,7 @@ public class UkAddressHandler : IComponentHandler
         return type.Equals("ukaddress", StringComparison.CurrentCultureIgnoreCase);        
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
         var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
 
@@ -69,6 +69,6 @@ public class UkAddressHandler : IComponentHandler
         }
         else validationExpressions = validationRules;
         
-        return await ExpressionHelper.Validate(data, validationExpressions);
+        return await ExpressionHelper.Validate(data, validationExpressions, repeatIndex);
     }
 }

@@ -5,6 +5,7 @@ using Component.Form.Model.ComponentHandler;
 using System.Dynamic;
 using Newtonsoft.Json;
 using Component.Form.Model;
+using Component.Form.Application.Helpers;
 namespace Component.Form.Application.UseCase.ProcessForm;
 
 public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, ProcessFormResponseModel>
@@ -28,7 +29,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         var formData = formDataModel.Data;
         var routeData = formDataModel.Route;
 
-        dynamic data = ParseData(formData);
+        dynamic data = FormHelper.ParseData(formData, _componentHandlerFactory);
 
         if (form == null)
         {
@@ -54,7 +55,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         }
         else
         {
-            var newData = GetData(currentPage, request.Form);
+            var newData = FormHelper.GetData(currentPage, request.Form, _componentHandlerFactory);
             foreach (var item in newData)
             {
                 ((IDictionary<string, object>)data)[item.Key] = item.Value;
@@ -72,13 +73,16 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
             // Evaluate validation rules
             if (!question.Optional)
             {
-                var validationResult = await handler.Validate(inputName, data, question.ValidationRules, currentPage.Repeating, currentPage.RepeatKey);
+                var validationResult = await handler.Validate(inputName, data, question.ValidationRules, currentPage.Repeating, currentPage.RepeatKey, repeatingModel?.RepeatIndex ?? 0);
                 if (validationResult.Count > 0)
                 {
                     errors.Add(inputName, validationResult);
                 }
             }
         }
+
+        // store the current form data. errors and all...
+        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, JsonConvert.SerializeObject(data), routeData);
 
         // If there are validation errors, return to the same page
         if (errors.Any())
@@ -87,47 +91,38 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
             {
                 Errors = errors,
                 NextPage = currentPage.PageId,
-                FormData = JsonConvert.SerializeObject(data),
-                RepeatIndex = repeatingModel?.RepeatIndex ?? -1
+                RepeatIndex = repeatingModel?.RepeatIndex ?? 0
             };
         }
 
-        // add the current page ID to the route..
-        routeData.Push(currentPage.PageId);
-
-        // store the current form data.
-        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, JsonConvert.SerializeObject(data), routeData);
-
         // If there is a condition to move to the next page, evaluate it.
         // else move to the next page or submit the form if on the last page
-        if (currentPage.Conditions != null)
+        var conditionMetResult = await FormHelper.MeetsCondition(currentPage, data, repeatingModel?.RepeatIndex ?? 0);
+        if (conditionMetResult.MetCondition)
+        {                        
+            return new ProcessFormResponseModel()
+            {
+                NextPage = conditionMetResult.NextPageId,
+                RepeatIndex = conditionMetResult.RepeatIndex
+            };
+        }
+        else
         {
-            var nextPageId = "";
-            int repeatIndex = -1;
-            bool metCondition = false;
-
-            foreach (var condition in currentPage.Conditions)
+            // check that the user has not gone back to a previous page and not met the condition to repeat the page
+            // there may be extraneous data after the current page that needs to be removed
+            if (currentPage.Repeating && currentPage.RepeatEnd) 
             {
-                if (await ExpressionHelper.EvaluateCondition(condition.Expression, data))
+                var dataAsDictionary = (IDictionary<string, object>)data;
+                var repeatingData = dataAsDictionary[currentPage.RepeatKey];
+                var repeatDataList = (List<object>)repeatingData;
+                if (repeatDataList.Count - 1 > repeatingModel.RepeatIndex)
                 {
-                    nextPageId = condition.NextPageId;
-                    metCondition = true;
-
-                    if (currentPage.Repeating)
-                    {
-                        repeatIndex = repeatingModel.RepeatIndex + 1;
-                    }
+                    repeatDataList.RemoveRange(repeatingModel.RepeatIndex + 1, repeatDataList.Count - (repeatingModel.RepeatIndex + 1));
+                    dataAsDictionary[currentPage.RepeatKey] = repeatDataList;
+                    // save again...
+                    await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, JsonConvert.SerializeObject(data), routeData);
                 }
-            }
-
-            if (metCondition)
-            {
-                return new ProcessFormResponseModel()
-                {
-                    NextPage = nextPageId,
-                    RepeatIndex = repeatIndex
-                };
-            }
+            } 
         }
 
         if (currentPage.Repeating)
@@ -143,50 +138,11 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         {
             NextPage = currentPage.NextPageId
         };
-    }
-
-    public dynamic ParseData(string formData) 
-    {
-        var jsonSettings = GetJsonSerializerSettings();
-        var data = JsonConvert.DeserializeObject<ExpandoObject>(formData, jsonSettings);
-        
-        if (data == null) 
-        {
-            data = new ExpandoObject();
-        }
-
-        return data;
-    }
-
-    public dynamic GetData(Page currentPage, Dictionary<string, string> newData) 
-    {
-        dynamic data = new ExpandoObject();
-
-        foreach (var question in currentPage.Components.Where(c => c.IsQuestionType))
-        {
-            string inputName = question.Name;
-
-            if (newData.ContainsKey(inputName))
-            {
-                IComponentHandler handler = _componentHandlerFactory.GetFor(question.Type);
-
-                if (handler.GetDataType().Equals(ComponentHandlerFactory.GetDataType(typeof(string)))) 
-                {
-                    ((IDictionary<string, object>)data)[inputName] = newData[inputName];
-                }
-                else 
-                {
-                    ((IDictionary<string, object>)data)[inputName] = ParseData(newData[inputName]);
-                }
-            }
-        }
-
-        return data;
-    }
+    }    
 
     private void UpdateRepeatingData(Page currentPage, ProcessFormRequestModel request, dynamic data, RepeatingModel repeatingModel)
     {
-        var newData = GetData(currentPage, repeatingModel.FormData);
+        var newData = FormHelper.GetData(currentPage, repeatingModel.FormData, _componentHandlerFactory);
 
         var dataAsDictionary = (IDictionary<string, object>)data;
 
@@ -227,14 +183,5 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
             repeatData.Add(newRepeatData);
             dataAsDictionary[currentPage.RepeatKey] = (IEnumerable<ExpandoObject>)repeatData;
         }
-    }
-
-    private JsonSerializerSettings GetJsonSerializerSettings()
-    {
-        return new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.None,
-            SerializationBinder = new SafeTypeResolver(_componentHandlerFactory.GetAllTypes())
-        };
     }
 }

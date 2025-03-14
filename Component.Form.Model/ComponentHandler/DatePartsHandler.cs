@@ -56,9 +56,9 @@ public class DatePartsHandler : IComponentHandler
         return type.Equals("dateparts", StringComparison.OrdinalIgnoreCase);
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "")
+    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
-        var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
+        var prefix = repeating ? $"Data.{repeatKey}[{repeatIndex}]" : $"Data";
 
         var validationRules = new List<ValidationRule>
         {
@@ -90,6 +90,6 @@ public class DatePartsHandler : IComponentHandler
         }
         else validationExpressions = validationRules;
 
-        return await ExpressionHelper.Validate(data, validationExpressions);
+        return await ExpressionHelper.Validate(data, validationExpressions, repeatIndex);
     }
 }

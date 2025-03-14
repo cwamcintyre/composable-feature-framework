@@ -11,6 +11,7 @@ public class FormAPIService
     private readonly IConfiguration _configuration;
     private const string GetFormApiUrl = "api/getForm/";
     private const string GetFormDataApiUrl = "api/getData/";
+    private const string GetFormDataForPageApiUrl = "api/getDataForPage/";
     private const string ProcessFormApiUrl = "api/processForm/";
     private const string UpdateFormApiUrl = "api/updateForm/";
 
@@ -39,6 +40,18 @@ public class FormAPIService
         {
             var dataModel = await GetApiResponseAsync<GetDataResponseModel>($"{GetFormDataApiUrl}{applicantId}");
             return dataModel;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("An error occurred while getting form data.", ex);
+        }
+    }
+
+    public async Task<GetDataForPageResponseModel> GetFormDataForPageAsync(string formId, string pageId, string applicantId, int repeatIndex)
+    {
+        try
+        {
+            return await GetApiResponseAsync<GetDataForPageResponseModel>($"{GetFormDataForPageApiUrl}{formId}/{pageId}/{applicantId}/{repeatIndex}");
         }
         catch (Exception ex)
         {

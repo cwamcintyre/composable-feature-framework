@@ -48,13 +48,13 @@ public class SimpleHandler : IComponentHandler
         throw new NotImplementedException();       
     }
 
-    public async Task<List<string>> Validate(string name, dynamic data, List<ValidationRule> validationRules, bool repeating = false, string repeatKey = "")
+    public async Task<List<string>> Validate(string name, dynamic data, List<ValidationRule> validationRules, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
         if (validationRules == null || validationRules.Count == 0)
         {
             return new List<string>();
         }
         
-        return await ExpressionHelper.Validate(data, validationRules);
+        return await ExpressionHelper.Validate(data, validationRules, repeatIndex);
     }
 }

@@ -1,12 +1,14 @@
 using Component.Form.Model;
 using Component.Form.Model.ComponentHandler;
+using Component.Form.UI.Controllers;
 using Component.Form.UI.Services.Model;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 public interface IFormPresenter
 {
-    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataModel, Dictionary<string, List<string>> Errors, int repeatIndex);
+    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataForPageResponseModel dataModel, int repeatIndex);
     Task<StopResult> HandleStop(string pageId, FormModel formModel);
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
@@ -29,19 +31,30 @@ public class FormPresenter : IFormPresenter
         _componentHandlerFactory = componentHandlerFactory;
     }
 
-    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataResponseModel dataResponse, Dictionary<string, List<string>> errors, int repeatIndex = 0)
+    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataForPageResponseModel dataResponse, int repeatIndex = 0)
     {
         var currentPage = formModel.Pages.Find(p => p.PageId == page);
         if (currentPage == null) return null;
 
-        var formData = new Dictionary<string, object>();
-        
-        if (!String.IsNullOrEmpty(dataResponse.FormData.Data))
+        if (currentPage.Repeating)
         {
-            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataResponse.FormData.Data, GetJsonSerializerSettings());
+            currentPage.RepeatIndex = repeatIndex > 0 ? repeatIndex : 0;
+        }
+
+        var previousPage = formModel.Pages.Find(p => p.PageId == dataResponse.PreviousPage);
+
+        var formData = dataResponse.FormData;
+
+        if (currentPage.Repeating && formData.ContainsKey(currentPage.RepeatKey))
+        {
+            var innerFormData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(formData[currentPage.RepeatKey].ToString(), GetJsonSerializerSettings());
+            if (innerFormData.Count > repeatIndex)
+            {
+                formData = innerFormData[repeatIndex];
+            }
         }
         
-        if (dataResponse.FormData.Data != null) 
+        if (formData != null) 
         {
             foreach (var data in formData)
             {
@@ -54,25 +67,16 @@ public class FormPresenter : IFormPresenter
             }
         }
 
-        var previousPage = "";
-        if (dataResponse.FormData.Route != null && dataResponse.FormData.Route.Count > 0) 
-        {
-            previousPage = dataResponse.FormData.Route.Peek();
-        }
-
-        if (currentPage.Repeating)
-        {
-            currentPage.RepeatIndex = repeatIndex > 0 ? repeatIndex : 0;
-        }
-
         return new IndexResult
         {
-            Errors = errors,
+            Errors = dataResponse.Errors,
             PageModel = currentPage,
             CurrentPage = page,
             TotalPages = formModel.TotalPages,
             NextAction = IndexViewName,
-            PreviousPage = previousPage
+            PreviousPage = dataResponse.PreviousPage,
+            PreviousPageIndex = dataResponse.PreviousRepeatIndex,
+            PreviousWasRepeating = previousPage?.Repeating ?? false
         };
     }
 
@@ -201,6 +205,8 @@ public class IndexResult
     public int TotalPages { get; set; }
     public string NextAction { get; set; }
     public string PreviousPage { get; set; }
+    public int PreviousPageIndex { get; set; }
+    public bool PreviousWasRepeating { get; set; }
     public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
 }
 

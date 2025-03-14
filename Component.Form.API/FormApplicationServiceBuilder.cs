@@ -11,6 +11,7 @@ using Component.Form.Application.UseCase.GetData;
 using Component.Form.Model.ComponentHandler;
 using Component.Form.Application.UseCase.UpdateForm.Model;
 using Component.Form.Application.UseCase.UpdateForm;
+using Component.Form.Application.UseCase.GetDataForPage.Model;
 
 namespace Component.Form.Application;
 public static class FormApplicationServiceBuilder
@@ -26,6 +27,8 @@ public static class FormApplicationServiceBuilder
         services.AddScoped<IRequestResponseUseCase<GetDataRequestModel, GetDataResponseModel>, GetData>();
 
         services.AddScoped<IRequestResponseUseCase<UpdateFormRequestModel, UpdateFormResponseModel>, UpdateForm>();
+
+        services.AddScoped<IRequestResponseUseCase<GetDataForPageRequestModel, GetDataForPageResponseModel>, GetDataForPage>();
 
         services.AddSingleton<ComponentHandlerFactory>();
         services.AddSingleton<IComponentHandler, UkAddressHandler>();

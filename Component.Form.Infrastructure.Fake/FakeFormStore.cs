@@ -3,23 +3,50 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
+using Newtonsoft.Json;
 
 namespace Component.Form.Infrastructure.Fake
 {
     public class FakeFormStore : IFormStore
     {
-        private readonly Dictionary<string, FormModel> _store = new();
+        private static Dictionary<string, FormModel> _formStore;
 
-        public Task<FormModel> GetFormAsync(string formId)
+        public FakeFormStore()
         {
-            _store.TryGetValue(formId, out var formModel);
-            return Task.FromResult(formModel);
+            if (_formStore == null) 
+            {
+                _formStore = new Dictionary<string, FormModel>();
+                LoadForms();
+            }
         }
 
-        public Task SaveFormAsync(string formId, FormModel model)
+        private void LoadForms()
+        {        
+            var formFiles = Directory.GetFiles("..\\..\\..\\..\\Component.Form.Infrastructure.Fake", "*.json");
+            foreach (var file in formFiles)
+            {
+                var json = File.ReadAllText(file);
+                var formModel = JsonConvert.DeserializeObject<FormModel>(json);
+                if (formModel != null && formModel.FormId != null)
+                {
+                    var formId = Path.GetFileNameWithoutExtension(file);
+                    _formStore[formId] = formModel;
+                }
+            }
+        }
+
+        public async Task<FormModel> GetFormAsync(string formId)
         {
-            _store[formId] = model;
-            return Task.CompletedTask;
+            if (_formStore.TryGetValue(formId, out var formModel))
+            {
+                return formModel;
+            }
+            return null;
+        }
+
+        public async Task SaveFormAsync(string formId, FormModel formModel)
+        {
+            _formStore[formId] = formModel;
         }
     }
 }
