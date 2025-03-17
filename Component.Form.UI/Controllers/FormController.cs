@@ -5,6 +5,7 @@ using Component.Form.Model;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
+using Component.Form.UI.PageHandler;
 
 namespace Component.Form.UI.Controllers
 {
@@ -14,141 +15,17 @@ namespace Component.Form.UI.Controllers
         public const string TempData_ErrorsKey = "Errors";
 
         private readonly FormAPIService _formAPIService;
-        private readonly FormHelper _formHelper;
         private readonly IFormPresenter _formPresenter;
-
-        public FormController(IFormPresenter formPresenter, FormAPIService formAPIService, FormHelper formHelper)
+        private readonly PageHandlerFactory _pageHanderFactory;
+        
+        public FormController(
+            IFormPresenter formPresenter, 
+            FormAPIService formAPIService, 
+            PageHandlerFactory pageHanderFactory)
         {
             _formAPIService = formAPIService;
             _formPresenter = formPresenter;
-            _formHelper = formHelper;
-        }
-
-        [HttpGet("form/{formId}/list")]
-        public async Task<IActionResult> Index(string formId)
-        {
-            if (string.IsNullOrEmpty(formId))
-            {
-                return BadRequest("FormId is required.");
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            ViewBag.FormId = formId;
-            return View("ListForm", form);
-        }
-
-        [HttpGet("form/{formId}/edit")]
-        public async Task<IActionResult> Edit(string formId)
-        {
-            if (string.IsNullOrEmpty(formId))
-            {
-                return BadRequest("FormId is required.");
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            ViewBag.FormId = formId;
-            return View("EditForm", form);
-        }
-
-        [HttpPost("form/{formId}/edit")]
-        public async Task<IActionResult> Edit(FormModel updatedForm)
-        {
-            var form = await _formAPIService.GetFormAsync(updatedForm.FormId);
-            form.StartPage = updatedForm.StartPage;
-            form.Title = updatedForm.Title;
-            form.Description = updatedForm.Description;
-            form.Submission = updatedForm.Submission;
-            await _formAPIService.UpdateFormAsync(form);
-            return RedirectToAction("Index", new { formId = updatedForm.FormId });
-        }
-
-        [HttpGet("form/{formId}/addPage")]
-        public IActionResult AddPage(string formId)
-        {
-            if (string.IsNullOrEmpty(formId))
-            {
-                return BadRequest("FormId is required.");
-            }
-            ViewBag.FormId = formId;
-            return View("AddPage");
-        }
-
-        [HttpPost("form/{formId}/addPage")]
-        public async Task<IActionResult> AddPage(string formId, Page newPage)
-        {
-            if (string.IsNullOrEmpty(formId))
-            {
-                return BadRequest("FormId is required.");
-            }
-            if (string.IsNullOrEmpty(newPage.PageId) || string.IsNullOrEmpty(newPage.Title) || string.IsNullOrEmpty(newPage.PageType) || string.IsNullOrEmpty(newPage.NextPageId))
-            {
-                ModelState.AddModelError(string.Empty, "All fields are required.");
-                ViewBag.FormId = formId;
-                return View("AddPage", newPage);
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            if (form.Pages == null)
-            {
-                form.Pages = new List<Page>();
-            }
-            form.Pages.Add(newPage);
-            form.TotalPages = form.Pages.Count;
-            await _formAPIService.UpdateFormAsync(form);
-            return RedirectToAction("Edit", new { formId });
-        }
-
-        [HttpGet("form/{formId}/removePage/{pageId}")]
-        public async Task<IActionResult> RemovePage(string formId, string pageId)
-        {
-            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
-            {
-                return BadRequest("FormId and PageId are required.");
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
-            if (page != null)
-            {
-                form.Pages.Remove(page);
-                form.TotalPages = form.Pages.Count;
-                await _formAPIService.UpdateFormAsync(form);
-            }
-            return RedirectToAction("Edit", new { formId });
-        }
-
-        [HttpGet("form/{formId}/editPage/{pageId}")]
-        public async Task<IActionResult> EditPage(string formId, string pageId)
-        {
-            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
-            {
-                return BadRequest("FormId and PageId are required.");
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
-            if (page == null)
-            {
-                return NotFound();
-            }
-            ViewBag.FormId = formId;
-            ViewBag.PageId = pageId;
-            return View("EditPage", page);
-        }
-
-        [HttpPost("form/{formId}/editPage/{pageId}")]
-        public async Task<IActionResult> EditPage(string formId, string pageId, Page updatedPage)
-        {
-            if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(pageId))
-            {
-                return BadRequest("FormId and PageId are required.");
-            }
-            var form = await _formAPIService.GetFormAsync(formId);
-            var page = form.Pages.FirstOrDefault(p => p.PageId == pageId);
-            if (page == null)
-            {
-                return NotFound();
-            }
-            page.Title = updatedPage.Title;
-            page.PageType = updatedPage.PageType;
-            page.NextPageId = updatedPage.NextPageId;
-            await _formAPIService.UpdateFormAsync(form);
-            return RedirectToAction("Edit", new { formId });
+            _pageHanderFactory = pageHanderFactory;
         }
 
         [HttpGet("form/{formId}/start")]
@@ -168,8 +45,8 @@ namespace Component.Form.UI.Controllers
             return RedirectToAction("ShowPage", new { formId = formModel.FormId, page = formModel.StartPage });
         }
 
-        [HttpGet("form/{formId}/{page}/{repeatIndex?}")]
-        public async Task<IActionResult> ShowPage(string formId, string page, int repeatIndex = 0)
+        [HttpGet("form/{formId}/{page}/{*extraData}")]
+        public async Task<IActionResult> ShowPage(string formId, string page, string extraData)
         {   
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
@@ -178,22 +55,22 @@ namespace Component.Form.UI.Controllers
             var formModel = await _formAPIService.GetFormAsync(formId);
             if (formModel == null) return NotFound();
 
-            // change GetFormDataAsync to also calculate errors?
-            var data = await _formAPIService.GetFormDataForPageAsync(formId, page, FormSessionHelper.GetApplicantId(HttpContext.Session), repeatIndex);           
+            var currentPage = formModel.Pages.Find(p => p.PageId == page);
+            if (currentPage == null) return NotFound();
+            
+            var data = await _formAPIService.GetFormDataForPageAsync(formId, page, FormSessionHelper.GetApplicantId(HttpContext.Session), extraData);           
 
-            var result = await _formPresenter.HandlePage(page, formModel, data, repeatIndex);
-            if (result == null) return NotFound();
+            var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
+            if (pageHandler == null) return NotFound();
 
-            ViewBag.CurrentPage = result.CurrentPage;
-            ViewBag.TotalPages = result.TotalPages;
+            var result = await pageHandler.HandlePage(currentPage, data, extraData);
+
             ViewBag.FormId = formId;
             ViewBag.PreviousPageId = result.PreviousPage;
-            ViewBag.PreviousRepeatIndex = result.PreviousPageIndex;
-            ViewBag.PreviousWasRepeating = result.PreviousWasRepeating;
-            ViewBag.Repeating = result.PageModel.Repeating;
+            ViewBag.PreviousExtraData = result.PreviousExtraData;
             ViewBag.Errors = result.Errors;
 
-            return View(result.NextAction, result.PageModel);
+            return View(result.ViewName, result.PageModel);
         }
 
         [HttpPost]
@@ -209,12 +86,12 @@ namespace Component.Form.UI.Controllers
 
             var formModel = await _formAPIService.GetFormAsync(formId);
             var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
-            if (currentPage == null) 
-            {
-                throw new ArgumentException($"Page {pageId} not found in form {formId}");    
-            }
+            if (currentPage == null) return NotFound();
 
-            var formData = _formHelper.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
+            var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
+            if (pageHandler == null) return NotFound();
+
+            var formData = await pageHandler.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
             
             // Check if there are any submitted files
             if (Request.Form.Files.Count > 0)
@@ -265,28 +142,10 @@ namespace Component.Form.UI.Controllers
                 FormSessionHelper.GetApplicantId(HttpContext.Session),
                 pageId,
                 formData);
-
+            
             var result = await _formPresenter.HandleSubmit(formModel, processResult);
 
-            if (result.Errors != null && result.Errors.Any())
-            {
-                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, repeatIndex = processResult.RepeatIndex });
-            }
-
-            var nextPage = formModel.Pages.Find(p => p.PageId == result.NextPage);
-            if (nextPage == null) 
-            {
-                throw new ArgumentException($"Page {pageId} not found in form {formId}");    
-            }
-
-            if (nextPage.Repeating)
-            {
-                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, repeatIndex = processResult.RepeatIndex });
-            }
-            else 
-            {
-                return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage });
-            }
+            return RedirectToAction(result.NextAction, new { formId = formModel.FormId, page = result.NextPage, extraData = result.ExtraData });
         }
 
         [HttpGet("form/{formId}/summary")]
@@ -304,7 +163,7 @@ namespace Component.Form.UI.Controllers
             var result = await _formPresenter.HandleSummary(formModel, data);
 
             ViewBag.FormId = formId;
-            return View(result.NextAction, formModel);
+            return View(result.ViewName, formModel);
         }
 
         [HttpGet("form/{formId}/{page}/stop")]
@@ -318,7 +177,7 @@ namespace Component.Form.UI.Controllers
             if (formModel == null) return NotFound();
 
             var result = await _formPresenter.HandleStop(page, formModel);
-            return View(result.NextAction, result.PageModel);
+            return View(result.ViewName, result.PageModel);
         }
 
         [HttpGet("form/{formId}/confirmation")]
@@ -335,7 +194,7 @@ namespace Component.Form.UI.Controllers
 
             var result = await _formPresenter.HandleConfirmation(applicationId);
 
-            return View(result.NextAction, result.ApplicationId);
+            return View(result.ViewName, result.ApplicationId);
         }
     }
 }

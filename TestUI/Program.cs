@@ -17,7 +17,7 @@ public class Program
         builder.Services
             .AddFormFeatureServices(builder.Configuration)
             .AddSearchFeatureServices(builder.Configuration);
-
+            
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

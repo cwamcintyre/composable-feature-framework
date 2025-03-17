@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Component.Core.Application\Component.Core.Application.csproj" />
+    <ProjectReference Include="..\Component.Core\Component.Core.csproj" />
     <ProjectReference Include="..\Component.Form.Model\Component.Form.Model.csproj" />
   </ItemGroup>
 

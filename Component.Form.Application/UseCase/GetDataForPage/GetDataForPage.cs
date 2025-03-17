@@ -4,6 +4,8 @@ using Component.Form.Application.UseCase.GetDataForPage.Model;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model.ComponentHandler;
 using Component.Form.Application.Helpers;
+using Component.Form.Application.ComponentHandler;
+using Component.Form.Application.PageHandler;
 
 namespace Component.Form.Application.UseCase.GetData;
 
@@ -12,12 +14,18 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
     private readonly IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
     private readonly ComponentHandlerFactory _componentHandlerFactory;
+    private readonly PageHandlerFactory _pageHandlerFactory;
 
-    public GetDataForPage(IFormDataStore formDataStore, IFormStore formStore, ComponentHandlerFactory componentHandlerFactory)
+    public GetDataForPage(
+        IFormDataStore formDataStore, 
+        IFormStore formStore, 
+        PageHandlerFactory pageHandlerFactory,
+        ComponentHandlerFactory componentHandlerFactory)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
         _componentHandlerFactory = componentHandlerFactory;
+        _pageHandlerFactory = pageHandlerFactory;
     }   
 
     public async Task<GetDataForPageResponseModel> HandleAsync(GetDataForPageRequestModel request)
@@ -42,40 +50,31 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
             throw new ArgumentException($"Page {request.PageId} not found");
         }
 
-        var parsedData = FormHelper.ParseData(formData.Data, _componentHandlerFactory);
-        var parsedDataAsDictionary = (IDictionary<string, object>)parsedData;
+        var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
 
-        var errors = new Dictionary<string, List<string>>();
-
-        // Loop through questions and validate them
-        foreach (var question in page.Components.Where(c => c.IsQuestionType))
+        if (pageHandler == null)
         {
-            string inputName = question.Name;
-            IComponentHandler handler = _componentHandlerFactory.GetFor(question.Type);
-
-            // Evaluate validation rules
-            if (!question.Optional && (parsedDataAsDictionary.ContainsKey(inputName) || (page.Repeating && parsedDataAsDictionary.ContainsKey(page.RepeatKey))))
-            {
-                var validationResult = await handler.Validate(inputName, parsedData, question.ValidationRules, page.Repeating, page.RepeatKey, request.RepeatIndex);
-                if (validationResult.Count > 0)
-                {
-                    errors.Add(inputName, validationResult);
-                }
-            }
+            throw new ArgumentException($"Page handler not found for page type {page.PageType}");
         }
-  
-        var forThisPage = FormHelper.GetDataForPage(page, parsedDataAsDictionary);
 
-        var previousPage = await FormHelper.CalculatePreviousPage(form, request.PageId, parsedData, request.RepeatIndex);
+        var parsedData = FormHelper.ParseData(formData.Data, _componentHandlerFactory);
 
-        var response = new GetDataForPageResponseModel
+        var result = await pageHandler.Get(page, parsedData, request.ExtraData);
+
+        // calculate previous page..
+        var previousPageModel = await FormHelper.CalculatePreviousPage(
+            _pageHandlerFactory, 
+            form, 
+            request.PageId, 
+            parsedData, 
+            request.ExtraData);
+
+        return new GetDataForPageResponseModel
         {
-            Errors = errors,
-            FormData = forThisPage,
-            PreviousPage = previousPage.PageId,
-            PreviousRepeatIndex = previousPage.RepeatIndex
+            FormData = result.FormData,
+            Errors = result.Errors,
+            PreviousPage = previousPageModel.PageId,
+            PreviousExtraData = previousPageModel.ExtraData
         };
-
-        return response;
     }
 }

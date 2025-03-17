@@ -1,8 +1,8 @@
-using System;
-using System.Reflection.Metadata;
+using Component.Form.Application.Helpers;
+using Component.Form.Model;
 using PhoneNumbers;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.Application.ComponentHandler.PhoneNumber;
 
 public class PhoneNumberHandler: IComponentHandler
 {
@@ -28,7 +28,7 @@ public class PhoneNumberHandler: IComponentHandler
     
     public string GetDataType()
     {
-        return ComponentHandlerFactory.GetDataType(typeof(string));
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 
     public bool IsFor(string type)

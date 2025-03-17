@@ -18,7 +18,7 @@
                     "validationRules": [
                         {
                             "id": "vr1",
-                            "expression": "Data.complainant_name != null && Data.complainant_name.Trim() != '' ",
+                            "expression": "Data.complainant_name != null && Data.complainant_name.Trim() != \"\" ",
                             "errorMessage": "Enter your name"
                         }
                     ]
@@ -32,7 +32,7 @@
                     "validationRules": [
                         {
                             "id": "vr2",
-                            "expression": "Data.complainant_address != null && Data.complainant_address.Trim() != '' ",
+                            "expression": "Data.complainant_address != null && Data.complainant_address.Trim() != \"\" ",
                             "errorMessage": "Enter your address"
                         }
                     ]
@@ -46,7 +46,7 @@
                     "validationRules": [
                         {
                             "id": "vr3",
-                            "expression": "Data.complainant_email != null && Data.complainant_email.Trim() != '' ",
+                            "expression": "Data.complainant_email != null && Data.complainant_email.Trim() != \"\" ",
                             "errorMessage": "Enter your email"
                         }
                     ]
@@ -60,7 +60,7 @@
                     "validationRules": [
                         {
                             "id": "vr4",
-                            "expression": "Data.complainant_phone != null && Data.complainant_phone.Trim() != '' ",
+                            "expression": "Data.complainant_phone != null && Data.complainant_phone.Trim() != \"\" ",
                             "errorMessage": "Enter your phone number"
                         }
                     ]
@@ -80,7 +80,7 @@
                     "validationRules": [
                         {
                             "id": "vr5",
-                            "expression": "Data.practitioner_name != null && Data.practitioner_name.Trim() != '' ",
+                            "expression": "Data.practitioner_name != null && Data.practitioner_name.Trim() != \"\" ",
                             "errorMessage": "Enter the practitioner's name"
                         }
                     ]
@@ -94,7 +94,7 @@
                     "validationRules": [
                         {
                             "id": "vr6",
-                            "expression": "Data.practitioner_firm != null && Data.practitioner_firm.Trim() != '' ",
+                            "expression": "Data.practitioner_firm != null && Data.practitioner_firm.Trim() != \"\" ",
                             "errorMessage": "Enter the practitioner's firm"
                         }
                     ]
@@ -108,7 +108,7 @@
                     "validationRules": [
                         {
                             "id": "vr7",
-                            "expression": "Data.practitioner_email != null && Data.practitioner_email.Trim() != '' ",
+                            "expression": "Data.practitioner_email != null && Data.practitioner_email.Trim() != \"\" ",
                             "errorMessage": "Enter the practitioner's email"
                         }
                     ]
@@ -122,7 +122,7 @@
                     "validationRules": [
                         {
                             "id": "vr8",
-                            "expression": "Data.practitioner_phone != null && Data.practitioner_phone.Trim() != '' ",
+                            "expression": "Data.practitioner_phone != null && Data.practitioner_phone.Trim() != \"\" ",
                             "errorMessage": "Enter the practitioner's phone number"
                         }
                     ]
@@ -143,7 +143,7 @@
                     "validationRules": [
                         {
                             "id": "vr9",
-                            "expression": "Data.authorising_body != null && Data.authorising_body.Trim() != '' ",
+                            "expression": "Data.authorising_body != null && Data.authorising_body.Trim() != \"\" ",
                             "errorMessage": "Select the authorising body"
                         }
                     ]
@@ -163,7 +163,7 @@
                     "validationRules": [
                         {
                             "id": "vr10",
-                            "expression": "Data.complaint_details != null && Data.complaint_details.Trim() != '' ",
+                            "expression": "Data.complaint_details != null && Data.complaint_details.Trim() != \"\" ",
                             "errorMessage": "Enter the details of your complaint"
                         }
                     ]
@@ -177,7 +177,7 @@
                     "validationRules": [
                         {
                             "id": "vr11",
-                            "expression": "Data.ip_fault_reason != null && Data.ip_fault_reason.Trim() != '' ",
+                            "expression": "Data.ip_fault_reason != null && Data.ip_fault_reason.Trim() != \"\" ",
                             "errorMessage": "Enter why you think the IP is at fault"
                         }
                     ]
@@ -191,7 +191,7 @@
                     "validationRules": [
                         {
                             "id": "vr12",
-                            "expression": "Data.complaint_outcome != null && Data.complaint_outcome.Trim() != '' ",
+                            "expression": "Data.complaint_outcome != null && Data.complaint_outcome.Trim() != \"\" ",
                             "errorMessage": "Enter what happened when you complained"
                         }
                     ]
@@ -225,7 +225,7 @@
                     "validationRules": [
                         {
                             "id": "vr13",
-                            "expression": "Data.declaration != null && Data.declaration.Trim() != '' ",
+                            "expression": "Data.declaration != null && Data.declaration.Trim() != \"\" ",
                             "errorMessage": "You must confirm the declaration"
                         }
                     ]

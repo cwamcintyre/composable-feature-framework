@@ -1,9 +1,7 @@
-using System;
-using Component.Form.Model.ComponentModel;
-using Newtonsoft.Json;
+using Component.Form.Model.ComponentHandler;
 using Newtonsoft.Json.Linq;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.UI.ComponentHandler;
 
 public class UkAddressHandler : IComponentHandler
 {
@@ -34,41 +32,14 @@ public class UkAddressHandler : IComponentHandler
 
         throw new ArgumentException("UkAddress data is not a JObject");
     }
-
-    public string GetDataType()
-    {
-        return ComponentHandlerFactory.GetDataType(typeof(UkAddressModel));
-    }
-
+    
     public bool IsFor(string type)
     {
         return type.Equals("ukaddress", StringComparison.CurrentCultureIgnoreCase);        
     }
 
-    public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
+    public string GetPartialName(string type)
     {
-        var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
-
-        var validationRules = new List<ValidationRule>
-        {
-            new ValidationRule
-            {
-                Expression = $"{prefix}.{name}.AddressLine1 != null && {prefix}.{name}.AddressLine1.Length > 0",
-                ErrorMessage = ERR_LINE_1_REQUIRED
-            },
-            new ValidationRule
-            {
-                Expression = $"{prefix}.{name}.Postcode != null && {prefix}.{name}.Postcode.Length > 0",
-                ErrorMessage = ERR_POSTCODE_REQUIRED
-            }
-        };
-
-        if (validationExpressions != null) 
-        {
-            validationExpressions.AddRange(validationRules);
-        }
-        else validationExpressions = validationRules;
-        
-        return await ExpressionHelper.Validate(data, validationExpressions, repeatIndex);
+        return "FormComponents/_UkAddress";
     }
 }

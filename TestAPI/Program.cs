@@ -3,6 +3,12 @@ using Microsoft.Extensions.Hosting;
 using Component.Form.Application;
 using Component.Search.API;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.DependencyInjection;
+using Azure.Core.Serialization;
+using System.Text.Json;
+using Component.Core.SafeJson;
+using Component.Form.Model;
 
 namespace TestAPI;
 
@@ -15,6 +21,16 @@ public class Program
         builder.ConfigureFunctionsWebApplication();
         builder.Services.AddFormApplicationServices();
         builder.Services.AddSearchApplicationServices(new SearchApplicationServiceOptions { UseFakes = true });
+        builder.Services.Configure<WorkerOptions>(options =>
+        {
+            options.Serializer = new JsonObjectSerializer(new JsonSerializerOptions
+            {                
+                Converters =
+                {
+                    new PolymorphicJsonConverter<PageBase>() // Custom converter for type hints
+                }
+            });
+        });
 
         var config = builder.Configuration;
 

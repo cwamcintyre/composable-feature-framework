@@ -1,10 +1,13 @@
-using System;
-using System.ComponentModel;
-using Component.Form.Model.ComponentHandler;
-using Component.Form.UI.Helpers;
+using Component.Form.Application.Helpers;
+using Component.Form.Model.ComponentHandler.DateParts;
+using Component.Form.UI.ComponentHandler;
+using Component.Form.UI.ComponentHandler.Default;
+using Component.Form.UI.PageHandler;
+using Component.Form.UI.PageHandler.Default;
+using Component.Form.UI.PageHandler.InlineRepeatingPageHandler;
 using Component.Form.UI.Services;
 using GovUk.Frontend.AspNetCore;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Component.Form.UI.Configuration;
 
@@ -25,12 +28,21 @@ public static class FormFeatureExtensions
 
         services.AddSingleton<ComponentHandlerFactory>();
         services.AddSingleton<IComponentHandler, UkAddressHandler>();
-        services.AddSingleton<IComponentHandler, EmailHandler>();
         services.AddSingleton<IComponentHandler, DatePartsHandler>();
-        services.AddSingleton<IComponentHandler, PhoneNumberHandler>();
+        services.AddSingleton<IComponentHandler, DefaultHandler>();
 
-        services.AddSingleton<FormHelper>();
+        services.AddSingleton<PageHandlerFactory>();
+        services.AddSingleton<IPageHandler, DefaultPageHandler>();
+        services.AddSingleton<IPageHandler, InlineRepeatingPageHandler>();
 
+        services.AddSingleton(serviceProvider => {
+            var allTypes = new HashSet<string>();
+            allTypes.Add(DefaultPageHandler.GetSafeType());
+            allTypes.Add(InlineRepeatingPageHandler.GetSafeType());
+
+            return new SafeJsonHelper(allTypes.ToHashSet());
+        });
+        
         if (Convert.ToBoolean(configuration["UseRedisCache"]) == true)
         {
             services.AddStackExchangeRedisCache(options =>

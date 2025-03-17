@@ -1,16 +1,13 @@
 using Component.Form.Model;
-using Component.Form.Model.ComponentHandler;
-using Component.Form.UI.Controllers;
+using Component.Form.UI.ComponentHandler;
+using Component.Form.UI.PageHandler;
 using Component.Form.UI.Services.Model;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 public interface IFormPresenter
 {
-    Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataForPageResponseModel dataModel, int repeatIndex);
-    Task<StopResult> HandleStop(string pageId, FormModel formModel);
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
+    Task<StopResult> HandleStop(string pageId, FormModel formModel);    
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
     Task<ConfirmationResult> HandleConfirmation(string applicationId);
 }
@@ -22,82 +19,30 @@ public class FormPresenter : IFormPresenter
 
     public virtual string SummaryViewName { get; set; } = "Summary";
 
-    public virtual string ConfirmationViewName { get; set; } = "Confirmation";
+    public virtual string ConfirmationViewName { get; set; } = "Confirmation";   
 
     private readonly ComponentHandlerFactory _componentHandlerFactory;
+    private readonly PageHandlerFactory _pageHandlerFactory;
 
-    public FormPresenter(ComponentHandlerFactory componentHandlerFactory)
+    public FormPresenter(ComponentHandlerFactory componentHandlerFactory, PageHandlerFactory pageHandlerFactory)
     {
         _componentHandlerFactory = componentHandlerFactory;
-    }
-
-    public virtual async Task<IndexResult> HandlePage(string page, FormModel formModel, GetDataForPageResponseModel dataResponse, int repeatIndex = 0)
-    {
-        var currentPage = formModel.Pages.Find(p => p.PageId == page);
-        if (currentPage == null) return null;
-
-        if (currentPage.Repeating)
-        {
-            currentPage.RepeatIndex = repeatIndex > 0 ? repeatIndex : 0;
-        }
-
-        var previousPage = formModel.Pages.Find(p => p.PageId == dataResponse.PreviousPage);
-
-        var formData = dataResponse.FormData;
-
-        if (currentPage.Repeating && formData.ContainsKey(currentPage.RepeatKey))
-        {
-            var innerFormData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(formData[currentPage.RepeatKey].ToString(), GetJsonSerializerSettings());
-            if (innerFormData.Count > repeatIndex)
-            {
-                formData = innerFormData[repeatIndex];
-            }
-        }
-        
-        if (formData != null) 
-        {
-            foreach (var data in formData)
-            {
-                var component = currentPage.Components.Find(c => c.Name == data.Key);
-                if (component != null)
-                {
-                    var handler = _componentHandlerFactory.GetFor(component.Type);
-                    component.Answer = handler.GetFromObject(data.Value);
-                }
-            }
-        }
-
-        return new IndexResult
-        {
-            Errors = dataResponse.Errors,
-            PageModel = currentPage,
-            CurrentPage = page,
-            TotalPages = formModel.TotalPages,
-            NextAction = IndexViewName,
-            PreviousPage = dataResponse.PreviousPage,
-            PreviousPageIndex = dataResponse.PreviousRepeatIndex,
-            PreviousWasRepeating = previousPage?.Repeating ?? false
-        };
+        _pageHandlerFactory = pageHandlerFactory;
     }
 
     public virtual async Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response)
     {
-        var currentPage = formModel.Pages.Find(p => p.PageId == response.NextPage);
-        if (currentPage == null) return null;
+        var nextPageId = response.NextPageId;
+        var extraData = response.ExtraData;
 
-        var formData = new Dictionary<string, object>();
-        
-        if (!String.IsNullOrEmpty(response.FormData))
-        {
-            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData, GetJsonSerializerSettings());
-        }
+        var currentPage = formModel.Pages.Find(p => p.PageId == nextPageId);
+        if (currentPage == null) return null;
 
         if (!String.IsNullOrEmpty(currentPage.PageType) && currentPage.PageType.Equals("summary"))
         {
             return new SubmitResult()
             {
-                NextAction = SummaryViewName,
-                NextPage = response.NextPage
+                NextAction = SummaryViewName
             };
         }
 
@@ -106,37 +51,15 @@ public class FormPresenter : IFormPresenter
             return new SubmitResult()
             {
                 NextAction = StopViewName,
-                NextPage = response.NextPage
+                NextPage = response.NextPageId
             };
         }
 
-        if (currentPage.Repeating && formData.ContainsKey(currentPage.RepeatKey))
-        {
-            var innerFormData = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(formData[currentPage.RepeatKey].ToString(), GetJsonSerializerSettings());
-            formData = innerFormData[response.RepeatIndex];
-        }
-
-        foreach (var data in formData)
-        {
-            var component = currentPage.Components.Find(c => c.Name == data.Key);
-            if (component != null)
-            {
-                var handler = _componentHandlerFactory.GetFor(component.Type);
-                component.Answer = handler.GetFromObject(data.Value);
-            }
-        }
-
-        var errors = response.Errors;
-        var nextPage = response.NextPage;
-
         return new SubmitResult
         {
-            Errors = errors,
-            NextPage = nextPage,
-            PageModel = currentPage,
             NextAction = IndexViewName,
-            RepeatIndex = response.RepeatIndex,
-            Repeating = currentPage.Repeating
+            NextPage = nextPageId,
+            ExtraData = extraData
         };
     }
 
@@ -146,7 +69,7 @@ public class FormPresenter : IFormPresenter
         
         if (!String.IsNullOrEmpty(response.FormData.Data))
         {
-            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData.Data, GetJsonSerializerSettings());
+            formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData.Data);
         }
 
         foreach (var page in formModel.Pages) 
@@ -164,7 +87,7 @@ public class FormPresenter : IFormPresenter
         return new SummaryResult
         {
             FormModel = formModel,
-            NextAction = SummaryViewName
+            ViewName = SummaryViewName
         };
     }
 
@@ -175,7 +98,7 @@ public class FormPresenter : IFormPresenter
 
         return new StopResult
         {
-            NextAction = StopViewName,
+            ViewName = StopViewName,
             PageModel = currentPage
         };
     }
@@ -185,58 +108,32 @@ public class FormPresenter : IFormPresenter
         return new ConfirmationResult
         {
             ApplicationId = applicationId,
-            NextAction = ConfirmationViewName
+            ViewName = ConfirmationViewName
         };
     }
-
-    private JsonSerializerSettings GetJsonSerializerSettings()
-    {
-        return new JsonSerializerSettings
-        {
-            SerializationBinder = new SafeTypeResolver(_componentHandlerFactory.GetAllTypes())
-        };
-    }
-}
-
-public class IndexResult
-{
-    public Page PageModel { get; set; }
-    public string CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-    public string NextAction { get; set; }
-    public string PreviousPage { get; set; }
-    public int PreviousPageIndex { get; set; }
-    public bool PreviousWasRepeating { get; set; }
-    public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
 }
 
 public class SubmitResult
 {
-    public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
-    public string NextPage { get; set; }
-    public Page PageModel { get; set;}
     public string NextAction { get; set; }
-    public bool Repeating { get; set; }
-    public int RepeatIndex { get; set; }
-
-    public string BackLinkPage { get; set; }
-    public string BackLinkRepeatIndex { get; set; }
+    public string NextPage {get; set; }
+    public string ExtraData { get; set; }
 }
 
 public class SummaryResult
 {
     public FormModel FormModel { get; set; }
-    public string NextAction { get; set; }
+    public string ViewName { get; set; }
 }
 
 public class StopResult
 {
-    public Page PageModel { get; set; }
-    public string NextAction { get; set; }
+    public PageBase PageModel { get; set; }
+    public string ViewName { get; set; }
 }
 
 public class ConfirmationResult
 {
     public string ApplicationId { get; set; }
-    public string NextAction { get; set; }
+    public string ViewName { get; set; }
 }

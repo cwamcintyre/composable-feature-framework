@@ -1,6 +1,7 @@
-﻿@model Component.Form.Model.Component
-@using Component.Form.Model.ComponentModel;
-@using Component.Form.Model.ComponentHandler;
+﻿@using Component.Form.Model.ComponentHandler
+@using Component.Form.UI.ComponentHandler;
+@using Component.Form.Model;
+@model Component
 @{
    var answer = (UkAddressModel)Model.Answer;
    if (answer == null) {

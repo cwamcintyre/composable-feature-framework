@@ -1,6 +1,4 @@
-using System;
-
-namespace Component.Form.Model.ComponentModel;
+namespace Component.Form.Model.ComponentHandler;
 
 public class DatePartsModel
 {

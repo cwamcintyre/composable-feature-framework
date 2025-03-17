@@ -1,23 +1,10 @@
-using System;
-using System.ComponentModel;
-using Component.Form.Model.ComponentHandler;
+using Component.Form.Application.Helpers;
 using Component.Form.Model;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.Application.ComponentHandler.Default;
 
-/// <summary>
-/// This class is a simple handler for components. THIS MUST NOT BE INJECTED INTO THE DI CONTAINER.
-/// </summary>
-public class SimpleHandler : IComponentHandler
+public class DefaultHandler : IComponentHandler
 {
-    private static readonly Lazy<SimpleHandler> instance = new Lazy<SimpleHandler>(() => new SimpleHandler());
-
-    public static SimpleHandler Instance => instance.Value;
-
-    private SimpleHandler() {} // prevent DI injection
-
     public object Get(string name, Dictionary<string, string> data)
     {
         if (data.ContainsKey(name))
@@ -40,12 +27,21 @@ public class SimpleHandler : IComponentHandler
 
     public string GetDataType()
     {
-        return ComponentHandlerFactory.GetDataType(typeof(string));
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 
     public bool IsFor(string type)
     {
-        throw new NotImplementedException();       
+        return String.IsNullOrEmpty(type) || 
+            type.Equals("text") ||
+            type.Equals("select") ||
+            type.Equals("multilineText") ||
+            type.Equals("radio") ||
+            type.Equals("checkbox") ||
+            type.Equals("yesno") ||
+            type.Equals("email") ||
+            type.Equals("phonenumber") ||
+            type.Equals("fileupload");    
     }
 
     public async Task<List<string>> Validate(string name, dynamic data, List<ValidationRule> validationRules, bool repeating = false, string repeatKey = "", int repeatIndex = 0)

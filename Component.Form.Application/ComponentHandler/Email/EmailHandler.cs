@@ -1,8 +1,9 @@
-using Component.Form.Model.ComponentModel;
-using Newtonsoft.Json.Linq;
 using System.Net.Mail;
+using Component.Form.Application.ComponentHandler;
+using Component.Form.Application.Helpers;
+using Component.Form.Model;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.Application.ComponentHandler.Email;
 
 public class EmailHandler : IComponentHandler
 {
@@ -28,7 +29,7 @@ public class EmailHandler : IComponentHandler
     
     public string GetDataType()
     {
-        return ComponentHandlerFactory.GetDataType(typeof(string));
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 
     public bool IsFor(string type)
@@ -39,6 +40,8 @@ public class EmailHandler : IComponentHandler
     public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
         var errors = new List<string>();
+
+        
 
         var email = ((IDictionary<string, object>)data)[name].ToString();        
 

@@ -19,11 +19,11 @@ namespace Component.Form.API
         }
 
         [Function("GetDataForPage")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "getDataForPage/{formId}/{pageId}/{applicantId}/{repeatIndex}")] HttpRequest req, 
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "getDataForPage/{formId}/{pageId}/{applicantId}/{*data}")] HttpRequest req, 
             string formId, 
             string pageId, 
             string applicantId,
-            int repeatIndex)
+            string data)
         {
             _logger.LogInformation("Fetching data for form {formId}, page {pageId}, applicant {applicantId}", formId, pageId, applicantId);
 
@@ -32,7 +32,7 @@ namespace Component.Form.API
                 FormId = formId,
                 PageId = pageId,
                 ApplicantId = applicantId,
-                RepeatIndex = repeatIndex
+                ExtraData = data
             };
 
             var response = await _getDataForPageUseCase.HandleAsync(request);

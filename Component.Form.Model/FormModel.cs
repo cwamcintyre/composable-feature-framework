@@ -10,7 +10,7 @@ namespace Component.Form.Model
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         public string StartPage { get; set; }
-        public List<Page> Pages { get; set; }
+        public List<PageBase> Pages { get; set; }
         public Submission Submission { get; set; }
     }
 }

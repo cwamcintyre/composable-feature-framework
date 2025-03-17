@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Component.Core\Component.Core.csproj" />
     <ProjectReference Include="..\Component.Form.Application\Component.Form.Application.csproj" />
     <ProjectReference Include="..\Component.Form.Model\Component.Form.Model.csproj" />
   </ItemGroup>
@@ -54,6 +55,12 @@
     <None Update="fileUploadComponent.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>    
+    <None Update="repeatingInlinePage.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None> 
+    <None Update="ipComplaint.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>            
   </ItemGroup>
 
   <ItemGroup>

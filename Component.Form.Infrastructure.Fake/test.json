@@ -8,6 +8,7 @@
     "pages": [
         {
             "pageId": "do-you-want-to-fill-in-this-form",
+            "pageType": "default",
             "components": [
                 {
                     "questionId": "0",
@@ -36,6 +37,7 @@
         },
         {
             "pageId": "what-is-your-name",
+            "pageType": "default",
             "title": "",
             "components": [
                 {
@@ -58,93 +60,96 @@
                     ]
                 }
             ],
-            "nextPageId": "what-are-you-going-to-do-today"
+            "nextPageId": "tasks-repeat"
         },
         {
-            "pageId": "what-are-you-going-to-do-today",
+            "pageId": "tasks-repeat",
             "title": "",
-            "repeating": true,
-            "repeatStart": true,
+            "pageType": "repeating",
             "repeatKey": "tasks",
             "summaryLabel": "Tasks",
-            "components": [
+            "pages": [                
                 {
-                    "questionId": "1",
-                    "type": "text",
-                    "label": "What are you going to do today?",
-                    "name": "what_are_you_going_to_do_today",
-                    "labelIsPageTitle": true,
-                    "validationRules": [
+                    "pageId": "what-do-you-want-to-do-today",
+                    "title": "",
+                    "repeatStart": true,
+                    "components": [
                         {
-                            "id": "vr2",
-                            "expression": "Data.tasks[RepeatIndex].what_are_you_going_to_do_today != null && Data.tasks[RepeatIndex].what_are_you_going_to_do_today.Trim() != \"\" ",
-                            "errorMessage": "Enter what you are going to do today"
+                            "questionId": "1",
+                            "type": "text",
+                            "label": "What are you going to do today?",
+                            "name": "what_are_you_going_to_do_today",
+                            "labelIsPageTitle": true,
+                            "validationRules": [
+                                {
+                                    "id": "vr2",
+                                    "expression": "Data.tasks[RepeatIndex].what_are_you_going_to_do_today != null && Data.tasks[RepeatIndex].what_are_you_going_to_do_today.Trim() != \"\" ",
+                                    "errorMessage": "Enter what you are going to do today"
+                                }
+                            ]
                         }
-                    ]
-                }
-            ],
-            "nextPageId": "how-long-will-it-take"
-        },
-        {
-            "pageId": "how-long-will-it-take",
-            "title": "",
-            "repeating": true,
-            "repeatKey": "tasks",
-            "components": [
+                    ],
+                    "nextPageId": "do-you-want-to-add-another-task"
+                },                
                 {
-                    "questionId": "1",
-                    "type": "text",
-                    "label": "How long will it take?",
-                    "name": "how_long_will_it_take",
-                    "labelIsPageTitle": true,
-                    "validationRules": [
+                    "pageId": "how-long-will-it-take",
+                    "title": "",
+                    "components": [
                         {
-                            "id": "vr2",
-                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"\" ",
-                            "errorMessage": "Enter how long it will take"
-                        },
-                        {
-                            "id": "vr2",
-                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"TOO LONG\" ",
-                            "errorMessage": "It can't take too long, try again.."
-                        },
-                        {
-                            "id": "vr2",
-                            "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"FOREVER\" ",
-                            "errorMessage": "If it'll never happen then leave it.."
+                            "questionId": "1",
+                            "type": "text",
+                            "label": "How long will it take?",
+                            "name": "how_long_will_it_take",
+                            "labelIsPageTitle": true,
+                            "validationRules": [
+                                {
+                                    "id": "vr2",
+                                    "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"\" ",
+                                    "errorMessage": "Enter how long it will take"
+                                },
+                                {
+                                    "id": "vr2",
+                                    "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"TOO LONG\" ",
+                                    "errorMessage": "It can't take too long, try again.."
+                                },
+                                {
+                                    "id": "vr2",
+                                    "expression": "Data.tasks[RepeatIndex].how_long_will_it_take != null && Data.tasks[RepeatIndex].how_long_will_it_take.Trim() != \"FOREVER\" ",
+                                    "errorMessage": "If it'll never happen then leave it.."
+                                }
+                            ]
                         }
-                    ]
-                }
-            ],
-            "nextPageId": "do-you-want-to-add-another-task"
-        },
-        {
-            "pageId": "do-you-want-to-add-another-task",
-            "title": "",
-            "repeating": true,
-            "repeatKey": "tasks",
-            "repeatEnd": true,        
-            "components": [
+                    ],
+                    "nextPageId": "do-you-want-to-add-another-task"
+                },
                 {
-                    "questionId": "1",
-                    "type": "yesno",
-                    "label": "Do you want to add another task?",
-                    "name": "do_you_want_to_add_another_task",
-                    "labelIsPageTitle": true,
-                    "validationRules": [
+                    "pageId": "do-you-want-to-add-another-task",
+                    "title": "",
+                    "repeatEnd": true,
+                    "components": [
                         {
-                            "id": "vr2",
-                            "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task != null && Data.tasks[RepeatIndex].do_you_want_to_add_another_task.Trim() != \"\" ",
-                            "errorMessage": "Select yes or no"
+                            "questionId": "1",
+                            "type": "yesno",
+                            "label": "Do you want to add another task?",
+                            "name": "do_you_want_to_add_another_task",
+                            "labelIsPageTitle": true,
+                            "validationRules": [
+                                {
+                                    "id": "vr2",
+                                    "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task != null && Data.tasks[RepeatIndex].do_you_want_to_add_another_task.Trim() != \"\" ",
+                                    "errorMessage": "Select yes or no"
+                                }
+                            ]
                         }
-                    ]
-                }
-            ],
-            "conditions": [
-                {
-                    "id": "c1",
-                    "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task == \"yes\"",
-                    "nextPageId": "what-are-you-going-to-do-today"
+                    ],
+                    "conditions": [
+                        {
+                            "id": "c1",
+                            "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task == \"yes\"",
+                            "nextPageId": "what-are-you-going-to-do-today"
+                        }
+                    ],
+                    "nextPageId": "what-is-your-address"
                 }
             ],
             "nextPageId": "what-is-your-address"

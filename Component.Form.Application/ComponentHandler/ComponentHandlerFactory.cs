@@ -1,6 +1,6 @@
-using System;
+using Component.Form.Application.ComponentHandler.Default;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.Application.ComponentHandler;
 
 public class ComponentHandlerFactory
 {
@@ -20,18 +20,19 @@ public class ComponentHandlerFactory
                 return parser;
             }
         }
-
-        // no parser found, assume SimpleHandler
-        return SimpleHandler.Instance;
+        
+        throw new NoComponentHandlerFoundException($"No component handler found for type {type}");
     }
 
     public HashSet<string> GetAllTypes()
     {
         return _parsers.Select(p => p.GetDataType()).ToHashSet();
     }
+}
 
-    public static string GetDataType(Type type)
+public class NoComponentHandlerFoundException : Exception
+{
+    public NoComponentHandlerFoundException(string message) : base(message)
     {
-        return $"{type.Name} {type.Assembly.GetName().Name}";
     }
 }

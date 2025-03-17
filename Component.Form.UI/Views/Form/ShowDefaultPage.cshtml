@@ -1,0 +1,57 @@
+﻿@using Component.Form.UI.ComponentHandler
+@model Component.Form.Model.PageBase
+@inject ComponentHandlerFactory componentHandlerFactory
+
+@{
+    ViewData["Title"] = Model.Title;
+    string formId = ViewBag.FormId;
+
+    var backLink = String.Empty;
+    
+    if (!String.IsNullOrEmpty(ViewBag.PreviousPageId))
+    {
+        backLink = $"{formId}/{ViewBag.PreviousPageId}";
+    }
+}
+
+@if (!String.IsNullOrEmpty(backLink)) 
+{
+    <govuk-back-link href="/form/@backLink">Back</govuk-back-link>
+}
+
+@if (!String.IsNullOrEmpty(@Model.Title)) 
+{
+    <h1 class="govuk-heading-l">@Model.Title</h1>
+}
+
+@if (ViewBag.Errors != null && ViewBag.Errors.Count > 1)
+{
+    <govuk-error-summary>
+        @foreach (var error in ViewBag.Errors)
+        {
+            <govuk-error-summary-item>@error</govuk-error-summary-item>
+        }
+    </govuk-error-summary>
+}
+
+<form method="POST" enctype="multipart/form-data" asp-controller="Form" asp-action="Submit" gfa-prepend-error-summary="false">
+    
+    <input type="hidden" name="pageId" value="@Model.PageId" />
+    <input type="hidden" name="formId" value="@formId" />
+    
+    @foreach (var component in Model.Components)
+    {
+        switch (component.Type)
+        {
+            case "html":
+                @Html.Raw(component.Content);
+                break;
+            default:
+                var handler = componentHandlerFactory.GetFor(component.Type);
+                @await Html.PartialAsync(handler.GetPartialName(component.Type), component)
+                break;
+            }
+    }
+    
+    <govuk-button type="submit" class="btn btn-primary">Continue</govuk-button>
+</form>

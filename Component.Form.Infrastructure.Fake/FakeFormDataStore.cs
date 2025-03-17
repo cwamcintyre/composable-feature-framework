@@ -9,8 +9,7 @@ namespace Component.Form.Infrastructure.Fake
     public class FakeFormDataStore : IFormDataStore
     {
         private static Dictionary<string, string> _formData = new Dictionary<string, string>();
-        private static Dictionary<string, Stack<string>> _routeData = new Dictionary<string, Stack<string>>();
-
+        
         public async Task<FormData> GetFormDataAsync(string applicantId)
         {
             if (!_formData.ContainsKey(applicantId))
@@ -24,15 +23,13 @@ namespace Component.Form.Infrastructure.Fake
 
             return new FormData() 
             {
-                Data = _formData[applicantId],
-                Route = _routeData[applicantId]
+                Data = _formData[applicantId]
             };
         }
 
-        public async Task SaveFormDataAsync(string formId, string applicantId, string formData, Stack<string> routeData)
+        public async Task SaveFormDataAsync(string formId, string applicantId, string formData)
         {
             _formData[applicantId] = formData;
-            _routeData[applicantId] = routeData;
         }
     }
 }

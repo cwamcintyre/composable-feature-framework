@@ -1,69 +1,45 @@
 ﻿@using Component.Form.Model
-@using Component.Form.Model.ComponentModel
+@using Component.Form.Model.ComponentHandler
 @model FormModel
 
 @{
     ViewData["Title"] = Model.Title;
     string formId = ViewBag.FormId;
     string previousPageId = ViewBag.PreviousPageId;
-
-    // group pages depending on whether they repeat or not..
-    var groupedByRepeat = new Dictionary<string, List<Page>>();
-    foreach (var page in Model.Pages)
-    {
-        if (page.Repeating)
-        {
-            if (groupedByRepeat.ContainsKey(page.RepeatKey))
-            {
-                groupedByRepeat[page.RepeatKey].Add(page);
-            }
-            else
-            {
-                groupedByRepeat.Add(page.RepeatKey, new List<Page> { page });
-            }
-        }
-        else
-        {
-            groupedByRepeat.Add(page.PageId, new List<Page> { page });
-        }
-    }
 }
 
 <govuk-summary-list>
-    @foreach (var group in @groupedByRepeat) 
+    @foreach (var page in @Model.Pages)
     {
-        @foreach (var page in @group.Value)
+        @foreach (var component in page.Components.Where(c => c.IsQuestionType))
         {
-            @foreach (var component in page.Components.Where(c => c.IsQuestionType))
-            {
-                <govuk-summary-list-row>
-                    <govuk-summary-list-row-key id="@component.Name-key">
-                        @component.Label
-                    </govuk-summary-list-row-key>
-                    <govuk-summary-list-row-value id="@component.Name-value">
-                        @switch (component.Type)
-                        {                       
-                            case "ukaddress":
-                                var address = (UkAddressModel)component.Answer;
-                                @(address != null ? $"{address.AddressLine1}, {address.AddressLine2}, {address.Town}, {address.County}, {address.Postcode}" : "Not provided")
-                                break;
-                            case "dateparts":
-                                var datePartsModel = (DatePartsModel)component.Answer;
-                                @(datePartsModel != null && 
-                                    (datePartsModel.Day != 0 &&
-                                    datePartsModel.Month != 0 &&
-                                    datePartsModel.Year != 0) ? $"{datePartsModel.Day}/{datePartsModel.Month}/{datePartsModel.Year}" : "Not provided")
-                                break;
-                            default:
-                                @(String.IsNullOrEmpty(component.Answer?.ToString()) ? "Not provided" : component.Answer)
-                                break;
-                        }
-                    </govuk-summary-list-row-value>
-                    <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action href="#" id="@component.Name-change-link" visually-hidden-text="name">Change</govuk-summary-list-row-action>
-                    </govuk-summary-list-row-actions>
-                </govuk-summary-list-row>
-            }
+            <govuk-summary-list-row>
+                <govuk-summary-list-row-key id="@component.Name-key">
+                    @component.Label
+                </govuk-summary-list-row-key>
+                <govuk-summary-list-row-value id="@component.Name-value">
+                    @switch (component.Type)
+                    {                       
+                        case "ukaddress":
+                            var address = (UkAddressModel)component.Answer;
+                            @(address != null ? $"{address.AddressLine1}, {address.AddressLine2}, {address.Town}, {address.County}, {address.Postcode}" : "Not provided")
+                            break;
+                        case "dateparts":
+                            var datePartsModel = (DatePartsModel)component.Answer;
+                            @(datePartsModel != null && 
+                                (datePartsModel.Day != 0 &&
+                                datePartsModel.Month != 0 &&
+                                datePartsModel.Year != 0) ? $"{datePartsModel.Day}/{datePartsModel.Month}/{datePartsModel.Year}" : "Not provided")
+                            break;
+                        default:
+                            @(String.IsNullOrEmpty(component.Answer?.ToString()) ? "Not provided" : component.Answer)
+                            break;
+                    }
+                </govuk-summary-list-row-value>
+                <govuk-summary-list-row-actions>
+                    <govuk-summary-list-row-action href="#" id="@component.Name-change-link" visually-hidden-text="name">Change</govuk-summary-list-row-action>
+                </govuk-summary-list-row-actions>
+            </govuk-summary-list-row>
         }
     }
 </govuk-summary-list>

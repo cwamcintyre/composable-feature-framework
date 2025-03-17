@@ -1,8 +1,10 @@
-using System;
-using Component.Form.Model.ComponentModel;
+using Component.Form.Application.ComponentHandler;
+using Component.Form.Application.Helpers;
+using Component.Form.Model;
+using Component.Form.Model.ComponentHandler;
 using Newtonsoft.Json.Linq;
 
-namespace Component.Form.Model.ComponentHandler;
+namespace Component.Form.Application.ComponentHandler.DateParts;
 
 public class DatePartsHandler : IComponentHandler
 {
@@ -38,7 +40,7 @@ public class DatePartsHandler : IComponentHandler
 
     public string GetDataType()
     {
-        return ComponentHandlerFactory.GetDataType(typeof(DatePartsModel));
+        return SafeJsonHelper.GetSafeType(typeof(DatePartsModel));
     }
 
     public object GetFromObject(object data)

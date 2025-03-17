@@ -2,6 +2,7 @@ using System;
 using Component.Form.Model;
 using Newtonsoft.Json;
 using Component.Form.UI.Services.Model;
+using Component.Form.Application.Helpers;
 
 namespace Component.Form.UI.Services;
 
@@ -9,16 +10,18 @@ public class FormAPIService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
+    private readonly SafeJsonHelper _safeJsonHelper;
     private const string GetFormApiUrl = "api/getForm/";
     private const string GetFormDataApiUrl = "api/getData/";
     private const string GetFormDataForPageApiUrl = "api/getDataForPage/";
     private const string ProcessFormApiUrl = "api/processForm/";
     private const string UpdateFormApiUrl = "api/updateForm/";
 
-    public FormAPIService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public FormAPIService(IHttpClientFactory httpClientFactory, IConfiguration configuration, SafeJsonHelper safeJsonHelper)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
+        _safeJsonHelper = safeJsonHelper;
     }
 
     public async Task<FormModel> GetFormAsync(string formId)
@@ -47,11 +50,11 @@ public class FormAPIService
         }
     }
 
-    public async Task<GetDataForPageResponseModel> GetFormDataForPageAsync(string formId, string pageId, string applicantId, int repeatIndex)
+    public async Task<GetDataForPageResponseModel> GetFormDataForPageAsync(string formId, string pageId, string applicantId, string data)
     {
         try
         {
-            return await GetApiResponseAsync<GetDataForPageResponseModel>($"{GetFormDataForPageApiUrl}{formId}/{pageId}/{applicantId}/{repeatIndex}");
+            return await GetApiResponseAsync<GetDataForPageResponseModel>($"{GetFormDataForPageApiUrl}{formId}/{pageId}/{applicantId}/{data}");
         }
         catch (Exception ex)
         {
@@ -133,7 +136,7 @@ public class FormAPIService
             throw new ApplicationException("The response content is empty.");
         }
 
-        var responseObject = JsonConvert.DeserializeObject<T>(responseString);
+        var responseObject = _safeJsonHelper.SafeDeserializeObject<T>(responseString);
         if (responseObject == null)
         {
             throw new ApplicationException("Failed to deserialize the response data.");
@@ -160,7 +163,7 @@ public class FormAPIService
             throw new ApplicationException("The response content is empty.");
         }
 
-        var responseObject = JsonConvert.DeserializeObject<T>(responseString);
+        var responseObject = _safeJsonHelper.SafeDeserializeObject<T>(responseString);
         if (responseObject == null)
         {
             throw new ApplicationException("Failed to deserialize the response data.");
