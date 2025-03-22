@@ -11,12 +11,14 @@ public class BlobFileStore : IFileStore
     private readonly ILogger<BlobFileStore> _logger;
     private readonly BlobServiceClient _blobServiceClient;
     private readonly string _containerName;
+    private readonly string _quarantineName;
 
     public BlobFileStore(BlobServiceClient blobServiceClient, IConfiguration configuration, ILogger<BlobFileStore> logger)
     {
         _logger = logger;
         _blobServiceClient = blobServiceClient;
         _containerName = configuration["BlobStorage:ContainerName"];
+        _quarantineName = configuration["BlobStorage:QuarantineContainerName"];
     }
 
     public async Task DeleteFileAsync(string fileName, CancellationToken cancellationToken = default)
@@ -63,7 +65,7 @@ public class BlobFileStore : IFileStore
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         var blobClient = containerClient.GetBlobClient(fileName);
 
-        var quarantineContainerClient = _blobServiceClient.GetBlobContainerClient("quarantine");
+        var quarantineContainerClient = _blobServiceClient.GetBlobContainerClient(_quarantineName);
         await quarantineContainerClient.CreateIfNotExistsAsync(PublicAccessType.None, cancellationToken: cancellationToken);
 
         var quarantineBlobClient = quarantineContainerClient.GetBlobClient(fileName);
