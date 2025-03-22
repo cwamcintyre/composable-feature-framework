@@ -5,6 +5,7 @@ using Component.Form.Application.Helpers;
 using Component.Form.Application.PageHandler;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.ProcessForm.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Component.Form.Application.UseCase.ProcessChangeInForm;
 
@@ -15,23 +16,28 @@ public class ProcessChangeInForm : IRequestResponseUseCase<ProcessChangeInFormRe
     private readonly IComponentHandlerFactory _componentHandlerFactory;
     private readonly IPageHandlerFactory _pageHandlerFactory;
     private readonly SafeJsonHelper _safeJsonHelper;
+    private ILogger<ProcessChangeInForm> _logger;
     
     public ProcessChangeInForm(
         IPageHandlerFactory pageHandlerFactory, 
         IComponentHandlerFactory componentHandlerFactory, 
         IFormStore formStore, 
         IFormDataStore formDataStore,
-        SafeJsonHelper safeJsonHelper)
+        SafeJsonHelper safeJsonHelper,
+        ILogger<ProcessChangeInForm> logger)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
         _componentHandlerFactory = componentHandlerFactory;
         _pageHandlerFactory = pageHandlerFactory;
         _safeJsonHelper = safeJsonHelper;
+        _logger = logger;
     }
     
     public async Task<ProcessChangeInFormResponseModel> HandleAsync(ProcessChangeInFormRequestModel request)
     {
+        _logger.LogInformation("Processing change in form for formId: {FormId}, pageId: {PageId}, applicantId: {ApplicantId}", request.FormId, request.PageId, request.ApplicantId);
+
         var form = await _formStore.GetFormAsync(request.FormId);
 
         if (form == null)
@@ -53,6 +59,7 @@ public class ProcessChangeInForm : IRequestResponseUseCase<ProcessChangeInFormRe
             throw new ArgumentException($"Page handler not found for page type {basePage.PageType}");
         }
 
+        _logger.LogInformation($"Fetching existing data for form {request.FormId} and applicant: {request.ApplicantId}");
         var formDataModel = await _formDataStore.GetFormDataAsync(request.ApplicantId);
 
         var formData = formDataModel.Data;
@@ -62,10 +69,12 @@ public class ProcessChangeInForm : IRequestResponseUseCase<ProcessChangeInFormRe
         var response = await pageHandler.ProcessChange(form, basePage, data, request.Form);
 
         // store the current form data. errors and all...
+        _logger.LogInformation($"Saving form data for form {request.FormId} and applicant: {request.ApplicantId}");
         await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, _safeJsonHelper.SafeSerializeObject(response.Data));
         
         if (response.HasErrors) 
         {
+            _logger.LogWarning($"Form {request.FormId} for applicant {request.ApplicantId} has errors. Returning user to the same page: {basePage.PageId}");
             return new ProcessChangeInFormResponseModel
             {
                 Data = response.Data,
@@ -75,7 +84,10 @@ public class ProcessChangeInForm : IRequestResponseUseCase<ProcessChangeInFormRe
         }
         else 
         {
+            _logger.LogInformation($"Form {request.FormId} has no errors, walking to next page");
             var walkResult = await FormHelper.WalkToNextInvalidOrUnfilledPageRecursive(_pageHandlerFactory, form, basePage, response.Data, response.ExtraData);
+
+            _logger.LogInformation($"Walking user to next page result: {walkResult.Page.PageId}");
             return new ProcessChangeInFormResponseModel
             {
                 Data = response.Data,

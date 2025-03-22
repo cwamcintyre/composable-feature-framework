@@ -4,6 +4,7 @@ using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.UpdateForm.Model;
 using Component.Core.Application;
 using Component.Form.Model;
+using Microsoft.Extensions.Logging;
 
 namespace Component.Form.Application.UseCase.UpdateForm;
 
@@ -12,10 +13,12 @@ namespace Component.Form.Application.UseCase.UpdateForm;
 public class UpdateForm : IRequestResponseUseCase<UpdateFormRequestModel, UpdateFormResponseModel>
 {
     private readonly IFormStore _formStore;
+    private readonly ILogger<UpdateForm> _logger;
 
-    public UpdateForm(IFormStore formStore)
+    public UpdateForm(IFormStore formStore, ILogger<UpdateForm> logger)
     {
         _formStore = formStore;
+        _logger = logger;
     }
 
     public async Task<UpdateFormResponseModel> HandleAsync(UpdateFormRequestModel request)
@@ -25,6 +28,7 @@ public class UpdateForm : IRequestResponseUseCase<UpdateFormRequestModel, Update
             throw new ArgumentNullException(nameof(request.Form));
         }
 
+        _logger.LogInformation("Updating form with ID: {FormId}", request.Form.FormId);
         await _formStore.SaveFormAsync(request.Form.FormId, request.Form);
 
         return new UpdateFormResponseModel { Success = true };

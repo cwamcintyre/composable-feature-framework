@@ -5,6 +5,7 @@ using Component.Form.Application.PageHandler;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.AddRepeatingSection.Model;
 using Component.Form.Model.PageHandler;
+using Microsoft.Extensions.Logging;
 
 namespace Component.Form.Application.UseCase.AddRepeatingSection;
 
@@ -14,9 +15,11 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
     private readonly IFormDataStore _formDataStore;
     private readonly IPageHandlerFactory _pageHandlerFactory;
     private readonly SafeJsonHelper _safeJsonHelper;
+    private readonly ILogger<AddRepeatingSection> _logger;
 
-    public AddRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, IPageHandlerFactory pageHandlerFactory, SafeJsonHelper safeJsonHelper)
+    public AddRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, IPageHandlerFactory pageHandlerFactory, SafeJsonHelper safeJsonHelper, ILogger<AddRepeatingSection> logger)
     {
+        _logger = logger;
         _formStore = formStore;
         _formDataStore = formDataStore;
         _safeJsonHelper = safeJsonHelper;
@@ -25,6 +28,8 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
 
     public async Task<AddRepeatingSectionResponseModel> HandleAsync(AddRepeatingSectionRequestModel request)
     {
+        _logger.LogInformation($"Adding repeating section for form {request.FormId}, page {request.PageId} and applicant {request.ApplicantId}");
+
         if (request.FormId == null)
         {
             throw new ArgumentNullException(nameof(request.FormId));
@@ -42,7 +47,7 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
 
         if (page == null)
         {
-            throw new ArgumentException($"Page {request.PageId} not found");
+            throw new ArgumentException($"Page {request.PageId} not found in form {request.FormId}");
         }
 
         var formData = _safeJsonHelper.SafeDeserializeObject<ExpandoObject>(formDataModel.Data);
@@ -51,7 +56,7 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
         var repeatingPage = page as InlineRepeatingPageSection;
         if (repeatingPage == null)
         {
-            throw new ArgumentException($"Page {request.PageId} is not a repeating page");
+            throw new ArgumentException($"Page {request.PageId} in form {request.FormId} is not a repeating page");
         }
 
         if (formDataDict == null || !formDataDict.ContainsKey(repeatingPage.RepeatKey))
@@ -63,7 +68,7 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
 
         if (repeatList == null)
         {
-            throw new ArgumentException($"Invalid data structure for repeating page {repeatingPage.RepeatKey}");
+            throw new ArgumentException($"Invalid data structure for repeating page {repeatingPage.RepeatKey} in form {request.FormId} for {request.ApplicantId}");
         }
 
         if (repeatList.Count > 0)
@@ -88,6 +93,8 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
         repeatList.Add(newItem);
 
         await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, _safeJsonHelper.SafeSerializeObject(formDataDict));
+
+        _logger.LogInformation($"Added repeating section for form {request.FormId}, page {request.PageId} and applicant {request.ApplicantId}");
 
         return new AddRepeatingSectionResponseModel { Success = true, NewRepeatIndex = repeatList.Count - 1, StartPageId = repeatingPage.RepeatingPages.Find(p => p.RepeatStart).PageId };
     }

@@ -5,6 +5,7 @@ using Component.Form.Application.PageHandler;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.RemoveRepeatingSection.Model;
 using Component.Form.Model.PageHandler;
+using Microsoft.Extensions.Logging;
 
 namespace Component.Form.Application.UseCase.RemoveRepeatingSection;
 
@@ -14,23 +15,28 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
     private readonly IFormDataStore _formDataStore;
     private readonly IPageHandlerFactory _pageHandlerFactory;
     private readonly SafeJsonHelper _safeJsonHelper;
+    private readonly ILogger<RemoveRepeatingSection> _logger;
 
-    public RemoveRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, IPageHandlerFactory pageHandlerFactory, SafeJsonHelper safeJsonHelper)
+    public RemoveRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, IPageHandlerFactory pageHandlerFactory, SafeJsonHelper safeJsonHelper, ILogger<RemoveRepeatingSection> logger)
     {
+        _logger = logger;
         _formStore = formStore;
         _formDataStore = formDataStore;
-        _safeJsonHelper = safeJsonHelper;
         _pageHandlerFactory = pageHandlerFactory;
+        _safeJsonHelper = safeJsonHelper;
     }
 
     public async Task<RemoveRepeatingSectionResponseModel> HandleAsync(RemoveRepeatingSectionRequestModel request)
     {
+        _logger.LogInformation("Removing repeating section for formId: {FormId}, pageId: {PageId}, applicantId: {ApplicantId}", request.FormId, request.PageId, request.ApplicantId);
+        
         if (request.FormId == null)
         {
             throw new ArgumentNullException(nameof(request.FormId));
         }
 
         var form = await _formStore.GetFormAsync(request.FormId);
+        _logger.LogInformation($"fetching existing data for formId: {request.FormId}, applicantId: {request.ApplicantId}");
         var formDataModel = await _formDataStore.GetFormDataAsync(request.ApplicantId);
 
         if (form == null)
@@ -66,6 +72,7 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
             throw new ArgumentException($"No data found for repeating page at index {request.Index}");
         }
 
+        _logger.LogInformation($"Removing repeating section at index {request.Index}");
         repeatList.RemoveAt(request.Index);
 
         var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
@@ -77,6 +84,7 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
         var meetsCondition = repeatingPage.DataThatMeetsCondition;
         var doesNotMeetCondition = repeatingPage.DataThatDoesNotMeetCondition;
 
+        _logger.LogInformation($"Resetting condition data for repeating section");
         for (int i = 0; i < repeatList.Count; i++)
         {
             var repeatListData = repeatList[i] as IDictionary<string, object>;
@@ -102,6 +110,7 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
             }
         }
 
+        _logger.LogInformation($"Saving form data for formId: {request.FormId}, applicantId: {request.ApplicantId}");
         await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, _safeJsonHelper.SafeSerializeObject(formDataDict));
 
         return new RemoveRepeatingSectionResponseModel { Success = true };
