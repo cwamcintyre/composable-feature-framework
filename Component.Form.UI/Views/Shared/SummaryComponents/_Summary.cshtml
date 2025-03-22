@@ -1,0 +1,10 @@
+﻿@using Component.Form.Model
+@using Component.Form.Model.ComponentHandler
+@model FormSummaryViewModel
+
+<dl class="govuk-summary-list">
+    @foreach (var item in @Model.SummaryItems)
+    {
+        @await Html.PartialAsync(item.PartialName, item);
+    }
+</dl>

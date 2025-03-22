@@ -63,12 +63,13 @@
             "nextPageId": "tasks-repeat"
         },
         {
+            "$type": "Component.Form.Model.PageHandler.InlineRepeatingPageSection, Component.Form.Model",
             "pageId": "tasks-repeat",
             "title": "",
-            "pageType": "repeating",
+            "pageType": "inlineRepeating",
             "repeatKey": "tasks",
             "summaryLabel": "Tasks",
-            "pages": [                
+            "repeatingPages": [                
                 {
                     "pageId": "what-do-you-want-to-do-today",
                     "title": "",
@@ -89,7 +90,7 @@
                             ]
                         }
                     ],
-                    "nextPageId": "do-you-want-to-add-another-task"
+                    "nextPageId": "how-long-will-it-take"
                 },                
                 {
                     "pageId": "how-long-will-it-take",
@@ -146,7 +147,7 @@
                         {
                             "id": "c1",
                             "expression": "Data.tasks[RepeatIndex].do_you_want_to_add_another_task == \"yes\"",
-                            "nextPageId": "what-are-you-going-to-do-today"
+                            "nextPageId": "what-do-you-want-to-do-today"
                         }
                     ],
                     "nextPageId": "what-is-your-address"

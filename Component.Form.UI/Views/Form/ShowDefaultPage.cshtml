@@ -4,13 +4,18 @@
 
 @{
     ViewData["Title"] = Model.Title;
+    bool isChange = ViewBag.IsChange ?? false;
     string formId = ViewBag.FormId;
 
     var backLink = String.Empty;
     
-    if (!String.IsNullOrEmpty(ViewBag.PreviousPageId))
+    if (!String.IsNullOrEmpty(ViewBag.PreviousPageId) && String.IsNullOrEmpty(ViewBag.PreviousExtraData))
     {
         backLink = $"{formId}/{ViewBag.PreviousPageId}";
+    }
+    else if (!String.IsNullOrEmpty(ViewBag.PreviousPageId) && !String.IsNullOrEmpty(ViewBag.PreviousExtraData))
+    {
+        backLink = $"{formId}/{ViewBag.PreviousPageId}/{ViewBag.PreviousExtraData}";
     }
 }
 
@@ -34,7 +39,7 @@
     </govuk-error-summary>
 }
 
-<form method="POST" enctype="multipart/form-data" asp-controller="Form" asp-action="Submit" gfa-prepend-error-summary="false">
+<form method="POST" enctype="multipart/form-data" asp-controller="Form" asp-action="@(isChange ? "SubmitChange" : "Submit")" gfa-prepend-error-summary="false">
     
     <input type="hidden" name="pageId" value="@Model.PageId" />
     <input type="hidden" name="formId" value="@formId" />
@@ -53,5 +58,5 @@
             }
     }
     
-    <govuk-button type="submit" class="btn btn-primary">Continue</govuk-button>
+    <govuk-button type="submit" class="btn btn-primary">@(isChange ? "Change" : "Continue")</govuk-button>
 </form>

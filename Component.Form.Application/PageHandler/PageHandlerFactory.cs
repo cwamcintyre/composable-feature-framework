@@ -2,7 +2,7 @@ using System;
 
 namespace Component.Form.Application.PageHandler;
 
-public class PageHandlerFactory
+public class PageHandlerFactory : IPageHandlerFactory
 {
     private readonly IEnumerable<IPageHandler> _handlers;
 

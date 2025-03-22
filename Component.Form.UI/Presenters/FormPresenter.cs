@@ -1,5 +1,6 @@
 using Component.Form.Model;
 using Component.Form.UI.ComponentHandler;
+using Component.Form.UI.Models;
 using Component.Form.UI.PageHandler;
 using Component.Form.UI.Services.Model;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 public interface IFormPresenter
 {
     Task<SubmitResult> HandleSubmit(FormModel formModel, ProcessFormResponseModel response);
+    Task<SubmitResult> HandleChangeSubmit(FormModel formModel, ProcessFormResponseModel response);
     Task<StopResult> HandleStop(string pageId, FormModel formModel);    
     Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response);
     Task<ConfirmationResult> HandleConfirmation(string applicationId);
@@ -14,12 +16,13 @@ public interface IFormPresenter
 
 public class FormPresenter : IFormPresenter
 {
-    public virtual string IndexViewName { get; set; } = "ShowPage";
-    public virtual string StopViewName { get; set; } = "Stop";
+    public virtual string IndexAction { get; set; } = "ShowPage";
+    public virtual string ChangeAction { get; set; } = "ShowChangePage";
+    public virtual string StopAction { get; set; } = "Stop";
 
-    public virtual string SummaryViewName { get; set; } = "Summary";
+    public virtual string SummaryAction { get; set; } = "Summary";
 
-    public virtual string ConfirmationViewName { get; set; } = "Confirmation";   
+    public virtual string ConfirmationAction { get; set; } = "Confirmation";   
 
     private readonly ComponentHandlerFactory _componentHandlerFactory;
     private readonly PageHandlerFactory _pageHandlerFactory;
@@ -42,7 +45,7 @@ public class FormPresenter : IFormPresenter
         {
             return new SubmitResult()
             {
-                NextAction = SummaryViewName
+                NextAction = SummaryAction
             };
         }
 
@@ -50,17 +53,29 @@ public class FormPresenter : IFormPresenter
         {
             return new SubmitResult()
             {
-                NextAction = StopViewName,
+                NextAction = StopAction,
                 NextPage = response.NextPageId
             };
         }
 
         return new SubmitResult
         {
-            NextAction = IndexViewName,
+            NextAction = IndexAction,
             NextPage = nextPageId,
             ExtraData = extraData
         };
+    }
+
+    public virtual async Task<SubmitResult> HandleChangeSubmit(FormModel formModel, ProcessFormResponseModel response) 
+    {
+        var result = await HandleSubmit(formModel, response);
+
+        if (result.NextAction.Equals(IndexAction))
+        {
+            result.NextAction = ChangeAction;
+        }
+
+        return result;
     }
 
     public virtual async Task<SummaryResult> HandleSummary(FormModel formModel, GetDataResponseModel response)
@@ -72,22 +87,31 @@ public class FormPresenter : IFormPresenter
             formData = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.FormData.Data);
         }
 
+        var formSummaryViewModel = new FormSummaryViewModel
+        {
+            FormModel = formModel
+        };
+
         foreach (var page in formModel.Pages) 
         {
-            foreach (var component in page.Components.Where(c => c.IsQuestionType))
+            // REFACTOR SO THESE ITEMS HAVE A PAGE HANDLER?
+            if (page.PageType == "summary") continue;
+            if (page.PageType == "stop") continue;
+
+            var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
+
+            var summaryItem = await pageHandler.GetSummaryItem(page, formData);
+            if (summaryItem != null)
             {
-                if (formData.TryGetValue(component.Name, out object? value))
-                {
-                    var handler = _componentHandlerFactory.GetFor(component.Type);
-                    component.Answer = handler.GetFromObject(value);
-                }
+                summaryItem.PageId = page.PageId;
+                formSummaryViewModel.SummaryItems.Add(summaryItem);
             }
         }
 
         return new SummaryResult
         {
-            FormModel = formModel,
-            ViewName = SummaryViewName
+            SummaryModel = formSummaryViewModel,
+            ViewName = SummaryAction
         };
     }
 
@@ -98,7 +122,7 @@ public class FormPresenter : IFormPresenter
 
         return new StopResult
         {
-            ViewName = StopViewName,
+            ViewName = StopAction,
             PageModel = currentPage
         };
     }
@@ -108,7 +132,7 @@ public class FormPresenter : IFormPresenter
         return new ConfirmationResult
         {
             ApplicationId = applicationId,
-            ViewName = ConfirmationViewName
+            ViewName = ConfirmationAction
         };
     }
 }
@@ -122,7 +146,7 @@ public class SubmitResult
 
 public class SummaryResult
 {
-    public FormModel FormModel { get; set; }
+    public FormSummaryViewModel SummaryModel { get; set; }
     public string ViewName { get; set; }
 }
 

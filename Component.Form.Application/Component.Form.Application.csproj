@@ -20,6 +20,7 @@
   <ItemGroup>
     <Folder Include="Shared\" />
     <Folder Include="Shared\Infrastructure\" />
+    <Folder Include="UseCase\ProcessChangeInForm\Model\" />
   </ItemGroup>
 
 </Project>

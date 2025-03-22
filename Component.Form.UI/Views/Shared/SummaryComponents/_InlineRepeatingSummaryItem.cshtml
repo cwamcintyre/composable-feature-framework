@@ -1,0 +1,72 @@
+﻿@using Component.Form.Model.ComponentHandler
+@using Component.Form.UI.PageHandler.InlineRepeatingPageHandler;
+@model InlineRepeatingSummaryItemViewModel;    
+
+<div class="govuk-summary-list__row">
+    <dt id="@Model.PageId-key" class="govuk-summary-list__key">
+        @Model.SummaryLabel
+    </dt>
+
+    <dd id="@Model.PageId-value" class="govuk-summary-list__value">
+        @{
+            int pageIndex = 0;
+        }
+        @foreach (var pageData in @Model.RepeatingData)
+        {
+            <dl class="govuk-summary-list">
+                @foreach (var componentSummary in @pageData.Where(c => c.Component.IsQuestionType))
+                {
+                    int componentIndex = 0;
+
+                    <div class="govuk-summary-list__row">
+                        <dt id="@componentSummary.Component.Name-@pageIndex-key" class="govuk-summary-list__key">
+                            @componentSummary.Component.Label
+                        </dt>
+                        <dd id="@componentSummary.Component.Name-@pageIndex-value" class="govuk-summary-list__value">
+                            @switch (componentSummary.Component.Type)
+                            {
+                                case "ukaddress":
+                                    var address = (UkAddressModel)componentSummary.Component.Answer;
+                                    @(address != null ? $"{address.AddressLine1}, {address.AddressLine2}, {address.Town}, {address.County}, {address.Postcode}" : "Not provided")
+                                    break;
+                                case "dateparts":
+                                    var datePartsModel = (DatePartsModel)componentSummary.Component.Answer;
+                                    @(datePartsModel != null &&
+                                        (datePartsModel.Day != 0 &&
+                                        datePartsModel.Month != 0 &&
+                                        datePartsModel.Year != 0) ? $"{datePartsModel.Day}/{datePartsModel.Month}/{datePartsModel.Year}" : "Not provided")
+                                    break;
+                                default:
+                                    @(String.IsNullOrEmpty(componentSummary.Component.Answer?.ToString()) ? "Not provided" : componentSummary.Component.Answer)
+                                    break;
+                            }
+                        </dd>
+                        <dd id="@componentSummary.Component.Name-@pageIndex-actions" class="govuk-summary-list__actions">
+                            @if (componentSummary.ShowChangeLink)
+                            {
+                                var changeLink = pageIndex == 0 && componentIndex == 0 ? $"/form/{ViewBag.FormId}/{Model.PageId}/change" : $"/form/{ViewBag.FormId}/{Model.PageId}/change/{pageIndex}-{componentSummary.PageId}";
+                                <a id="@componentSummary.Component.Name-change-@pageIndex-link" class="govuk-link" href="@changeLink">Change <span class="govuk-visually-hidden"> @componentSummary.Component.Name in @Model.SummaryLabel</span></a>
+                            } 
+                        </dd>
+                    </div>
+
+                    componentIndex++;
+                }
+                <div class="govuk-summary-list__row">
+                    <dt id="@Model.PageId-remove-@pageIndex-key" class="govuk-summary-list__key">
+                    </dt>
+                    <dd id="@Model.PageId-remove-@pageIndex-value" class="govuk-summary-list__value">
+                    </dd>
+                    <dd id="@Model.PageId-remove-@pageIndex-actions" class="govuk-summary-list__actions">
+                        <a id="@Model.PageId-remove-@pageIndex-link" class="govuk-link" href="/form/@ViewBag.FormId/@Model.PageId/remove/@pageIndex">Remove<span class="govuk-visually-hidden">section from @Model.SummaryLabel</span></a>
+                    </dd>
+                </div>
+            </dl>
+
+            pageIndex++;
+        }
+    </dd>
+    <dd class="govuk-summary-list__actions">
+        <a id="@Model.PageId-add-link" class="govuk-link" href="/form/@ViewBag.FormId/@Model.PageId/add">Add <span class="govuk-visually-hidden">to @Model.SummaryLabel</span></a>
+    </dd>
+</div>

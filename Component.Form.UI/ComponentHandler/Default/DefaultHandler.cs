@@ -1,3 +1,4 @@
+using Component.Form.Application.Helpers;
 using Component.Form.Model;
 
 namespace Component.Form.UI.ComponentHandler.Default;
@@ -61,5 +62,10 @@ public class DefaultHandler : IComponentHandler
             default:
                 return "FormComponents/_TextInput";
         }
+    }
+
+    public string GetDataType()
+    {
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 }

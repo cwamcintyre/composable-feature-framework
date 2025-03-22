@@ -22,5 +22,27 @@ namespace Component.Form.Model
         public bool Optional { get; set; }
         public List<ValidationRule> ValidationRules { get; set; }
         public bool IsQuestionType { get { return Type != "html" && Type != "summary"; } }
+
+        /// <summary>
+        /// Creates a shallow copy of the current component.
+        /// </summary>
+        /// <returns>Component</returns>
+        public Component Clone()
+        {
+            return new Component
+            {
+                QuestionId = this.QuestionId,
+                Type = this.Type,
+                Label = this.Label,
+                Name = this.Name,
+                Required = this.Required,
+                LabelIsPageTitle = this.LabelIsPageTitle,
+                Options = this.Options,
+                FileOptions = this.FileOptions,
+                Content = this.Content,
+                Optional = this.Optional,
+                ValidationRules = this.ValidationRules
+            };
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Dynamic;
 using Component.Form.Application.Helpers;
 using Component.Form.Model.ComponentHandler.DateParts;
 using Component.Form.UI.ComponentHandler;
@@ -5,6 +6,7 @@ using Component.Form.UI.ComponentHandler.Default;
 using Component.Form.UI.PageHandler;
 using Component.Form.UI.PageHandler.Default;
 using Component.Form.UI.PageHandler.InlineRepeatingPageHandler;
+using Component.Form.UI.Presenters;
 using Component.Form.UI.Services;
 using GovUk.Frontend.AspNetCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,6 +25,7 @@ public static class FormFeatureExtensions
     {
         services.AddScoped<FormAPIService>();
         services.AddScoped<IFormPresenter, FormPresenter>();
+        services.AddScoped<IRepeatingPagePresenter, RepeatingPagePresenter>();
         services.AddGovUkFrontend();
         services.AddHttpClient();
 

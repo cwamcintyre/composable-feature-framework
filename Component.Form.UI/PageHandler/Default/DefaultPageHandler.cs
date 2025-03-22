@@ -2,6 +2,7 @@ using System;
 using Component.Form.Application.Helpers;
 using Component.Form.Model;
 using Component.Form.UI.ComponentHandler;
+using Component.Form.UI.Models;
 using Component.Form.UI.Services.Model;
 using Newtonsoft.Json;
 
@@ -49,7 +50,8 @@ public class DefaultPageHandler : IPageHandler
             PageModel = page,
             Errors = dataResponse.Errors,
             ViewName = ViewName,
-            PreviousPage = dataResponse.PreviousPage
+            PreviousPage = dataResponse.PreviousPage,
+            PreviousExtraData = dataResponse.PreviousExtraData
         };
     }
 
@@ -73,5 +75,23 @@ public class DefaultPageHandler : IPageHandler
         }
 
         return formData;
+    }
+
+    public async Task<PageSummaryItemViewModelBase> GetSummaryItem(PageBase page, Dictionary<string, object> formData)
+    {
+        var model = new DefaultSummaryItemViewModel();
+
+        foreach (var component in page.Components.Where(c => c.IsQuestionType))
+        {
+            if (formData.TryGetValue(component.Name, out object? value))
+            {
+                var handler = _componentHandlerFactory.GetFor(component.Type);
+                component.Answer = handler.GetFromObject(value);
+            }
+        }
+
+        model.Components = page.Components;
+        model.PartialName = "SummaryComponents/_DefaultSummaryItem";
+        return model;
     }
 }

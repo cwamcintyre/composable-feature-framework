@@ -1,6 +1,7 @@
 using Component.Form.UI.ComponentHandler;
 using Component.Form.Model.ComponentHandler;
 using Newtonsoft.Json.Linq;
+using Component.Form.Application.Helpers;
 
 namespace Component.Form.Model.ComponentHandler.DateParts;
 
@@ -46,5 +47,10 @@ public class DatePartsHandler : IComponentHandler
     public string GetPartialName(string type)
     {
         return "FormComponents/_DateParts";
+    }
+
+    public string GetDataType()
+    {
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 }

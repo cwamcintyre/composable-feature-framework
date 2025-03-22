@@ -3,57 +3,54 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Component.Form.Model.ComponentHandler;
+using Component.Form.Application.ComponentHandler.Default;
+using Component.Form.Model;
 
-namespace Component.Form.Model.Tests;
+namespace Component.Form.Application.ComponentHandler.Tests;
 
 public class SimpleHandlerTests
 {
+    private readonly DefaultHandler _handler;
+    
+    public SimpleHandlerTests()
+    {
+        _handler = new DefaultHandler();
+    }
+
     [Fact]
     public void Get_ReturnsValue_WhenKeyExists()
     {
-        var handler = SimpleHandler.Instance;
         var data = new Dictionary<string, string> { { "key", "value" } };
-        var result = handler.Get("key", data);
+        var result = _handler.Get("key", data);
         Assert.Equal("value", result);
     }
 
     [Fact]
     public void Get_ReturnsEmptyString_WhenKeyDoesNotExist()
     {
-        var handler = SimpleHandler.Instance;
         var data = new Dictionary<string, string>();
-        var result = handler.Get("key", data);
+        var result = _handler.Get("key", data);
         Assert.Equal("", result);
     }
 
     [Fact]
     public void GetFromObject_ReturnsString_WhenDataIsString()
     {
-        var handler = SimpleHandler.Instance;
-        var result = handler.GetFromObject("value");
+        var result = _handler.GetFromObject("value");
         Assert.Equal("value", result);
     }
 
     [Fact]
     public void GetDataType_ReturnsStringType()
     {
-        var handler = SimpleHandler.Instance;
-        var result = handler.GetDataType();
-        Assert.Equal("String System.Private.CoreLib", result);
-    }
-
-    [Fact]
-    public async Task IsFor_ThrowsNotImplementedException()
-    {
-        var handler = SimpleHandler.Instance;
-        await Assert.ThrowsAsync<NotImplementedException>(() => Task.FromResult(handler.IsFor("type")));
+        var result = _handler.GetDataType();
+        Assert.Equal("System.String, System.Private.CoreLib", result);
     }
 
     [Fact]
     public async Task Validate_ReturnsEmptyList_WhenNoValidationRules()
     {
-        var handler = SimpleHandler.Instance;
-        var result = await handler.Validate("name", new object(), new List<ValidationRule>());
+        var result = await _handler.Validate("name", new object(), new List<ValidationRule>());
         Assert.Empty(result);
     }
 

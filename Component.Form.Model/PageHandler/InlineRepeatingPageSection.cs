@@ -6,6 +6,8 @@ namespace Component.Form.Model.PageHandler
     {
         public string RepeatKey { get; set; }
         public string SummaryLabel { get; set; }
-        public List<InlineRepeatingPage> RepeatingPages { get; set; }   
+        public List<InlineRepeatingPage> RepeatingPages { get; set; }
+        public Dictionary<string, object> DataThatMeetsCondition { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> DataThatDoesNotMeetCondition { get; set; } = new Dictionary<string, object>();   
     }
 }

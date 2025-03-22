@@ -1,10 +1,7 @@
 using Component.Core.Application;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.ProcessForm.Model;
-using Component.Form.Model.ComponentHandler;
-using System.Dynamic;
 using Newtonsoft.Json;
-using Component.Form.Model;
 using Component.Form.Application.Helpers;
 using Component.Form.Application.ComponentHandler;
 using Component.Form.Application.PageHandler;
@@ -14,19 +11,22 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
 {
     private IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
-    private readonly ComponentHandlerFactory _componentHandlerFactory;
-    private readonly PageHandlerFactory _pageHandlerFactory;
+    private readonly IComponentHandlerFactory _componentHandlerFactory;
+    private readonly IPageHandlerFactory _pageHandlerFactory;
+    private readonly SafeJsonHelper _safeJsonHelper; 
     
     public ProcessForm(
-        PageHandlerFactory pageHandlerFactory, 
-        ComponentHandlerFactory componentHandlerFactory, 
+        IPageHandlerFactory pageHandlerFactory, 
+        IComponentHandlerFactory componentHandlerFactory, 
         IFormStore formStore, 
-        IFormDataStore formDataStore)
+        IFormDataStore formDataStore,
+        SafeJsonHelper safeJsonHelper)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
         _componentHandlerFactory = componentHandlerFactory;
         _pageHandlerFactory = pageHandlerFactory;
+        _safeJsonHelper = safeJsonHelper;
     }
 
     public async Task<ProcessFormResponseModel> HandleAsync(ProcessFormRequestModel request)
@@ -61,7 +61,7 @@ public class ProcessForm : IRequestResponseUseCase<ProcessFormRequestModel, Proc
         var response = await pageHandler.Process(basePage, data, request.Form);
 
         // store the current form data. errors and all...
-        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, JsonConvert.SerializeObject(response.Data));
+        await _formDataStore.SaveFormDataAsync(request.FormId, request.ApplicantId, _safeJsonHelper.SafeSerializeObject(response.Data));
 
         return new ProcessFormResponseModel()
         {

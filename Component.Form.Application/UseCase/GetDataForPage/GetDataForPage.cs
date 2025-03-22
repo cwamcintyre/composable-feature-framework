@@ -13,14 +13,14 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
 {
     private readonly IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
-    private readonly ComponentHandlerFactory _componentHandlerFactory;
-    private readonly PageHandlerFactory _pageHandlerFactory;
+    private readonly IComponentHandlerFactory _componentHandlerFactory;
+    private readonly IPageHandlerFactory _pageHandlerFactory;
 
     public GetDataForPage(
         IFormDataStore formDataStore, 
         IFormStore formStore, 
-        PageHandlerFactory pageHandlerFactory,
-        ComponentHandlerFactory componentHandlerFactory)
+        IPageHandlerFactory pageHandlerFactory,
+        IComponentHandlerFactory componentHandlerFactory)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
@@ -74,7 +74,8 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
             FormData = result.FormData,
             Errors = result.Errors,
             PreviousPage = previousPageModel.PageId,
-            PreviousExtraData = previousPageModel.ExtraData
+            PreviousExtraData = previousPageModel.ExtraData,
+            ForceRedirect = previousPageModel.ForceRedirect
         };
     }
 }

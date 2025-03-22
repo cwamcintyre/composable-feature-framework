@@ -3,6 +3,7 @@ using Component.Form.Application.Helpers;
 using Component.Form.Model;
 using Component.Form.Model.PageHandler;
 using Component.Form.UI.ComponentHandler;
+using Component.Form.UI.Models;
 using Component.Form.UI.Services.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -90,6 +91,7 @@ public class InlineRepeatingPageHandler : IPageHandler
         var formData = new Dictionary<string, string>();
         var repeatIndex = Convert.ToInt32(data["RepeatIndex"]);
         var repeatPageId = data["RepeatPageId"];
+        var extraData = data["ExtraData"];
 
         InlineRepeatingPageSection section = (InlineRepeatingPageSection)page;
 
@@ -120,8 +122,54 @@ public class InlineRepeatingPageHandler : IPageHandler
         {
             { section.RepeatKey, JsonConvert.SerializeObject(repeatModel) },
             { "RepeatIndex", repeatIndex.ToString() },
-            { "RepeatPageId", repeatPageId }
+            { "RepeatPageId", repeatPageId },
+            { "ExtraData", extraData }
         };
+    }
+
+    public async Task<PageSummaryItemViewModelBase> GetSummaryItem(PageBase page, Dictionary<string, object> formData)
+    {
+        var section = (InlineRepeatingPageSection)page;
+
+        var repeatDataList = _safeJsonHelper.SafeDeserializeObject<List<Dictionary<string, object>>>(formData[section.RepeatKey].ToString());
+
+        var repeatingData = new List<List<ComponentSummaryItem>>();
+
+        foreach (var data in repeatDataList)
+        {
+            var components = new List<ComponentSummaryItem>();
+            
+            foreach (var repeatingPage in section.RepeatingPages)
+            {
+                foreach (var component in repeatingPage.Components.Where(c => c.IsQuestionType))
+                {
+                    var componentClone = component.Clone();
+                    if (data.TryGetValue(componentClone.Name, out object? value))
+                    {
+                        var handler = _componentHandlerFactory.GetFor(componentClone.Type);
+                        componentClone.Answer = handler.GetFromObject(value);
+                    }
+                    components.Add(new ComponentSummaryItem
+                    {
+                        PageId = repeatingPage.PageId,
+                        Component = componentClone,
+                        ShowChangeLink = !repeatingPage.RepeatEnd
+                    });
+                }                
+            }
+
+            repeatingData.Add(components);
+        }
+
+        var summary = new InlineRepeatingSummaryItemViewModel
+        {
+            PartialName = "SummaryComponents/_InlineRepeatingSummaryItem",
+            RepeatingData = repeatingData,
+            SummaryLabel = section.SummaryLabel,
+            PageId = section.PageId
+        };
+
+        return summary;
     }
 }
 

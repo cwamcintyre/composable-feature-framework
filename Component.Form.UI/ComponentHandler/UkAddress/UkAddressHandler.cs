@@ -1,3 +1,4 @@
+using Component.Form.Application.Helpers;
 using Component.Form.Model.ComponentHandler;
 using Newtonsoft.Json.Linq;
 
@@ -41,5 +42,10 @@ public class UkAddressHandler : IComponentHandler
     public string GetPartialName(string type)
     {
         return "FormComponents/_UkAddress";
+    }
+
+    public string GetDataType()
+    {
+        return SafeJsonHelper.GetSafeType(typeof(string));
     }
 }

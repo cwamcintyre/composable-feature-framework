@@ -1,7 +1,7 @@
-﻿@model Component.Form.Model.FormModel;
+﻿@model Component.Form.UI.Models.FormSummaryViewModel;
 @{
     ViewData["Title"] = "Summary";
-    var page = Model.Pages.Find(page => page.PageType == "summary");
+    var page = Model.FormModel.Pages.Find(page => page.PageType == "summary");
     var title = page.Title;
 }
 
@@ -18,9 +18,9 @@
             @Html.Raw(component.Content)
             break;
         case "summary":
-            @await Html.PartialAsync("FormComponents/_Summary", Model)
+            @await Html.PartialAsync("SummaryComponents/_Summary", Model)
             break;
     }
 }
 
-<govuk-button-link href="/form/@Model.FormId/confirmation">Accept and send</govuk-button-link>
+<govuk-button-link href="/form/@Model.FormModel.FormId/confirmation">Accept and send</govuk-button-link>

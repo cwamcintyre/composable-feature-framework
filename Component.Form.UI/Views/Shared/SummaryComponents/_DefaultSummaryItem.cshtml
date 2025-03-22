@@ -1,0 +1,34 @@
+﻿@using Component.Form.Model.ComponentHandler
+@using Component.Form.UI.PageHandler.Default;
+@model DefaultSummaryItemViewModel      
+
+@foreach (var component in @Model.Components.Where(c => c.IsQuestionType))
+{
+    <div class="govuk-summary-list__row">
+        <dt id="@component.Name-key" class="govuk-summary-list__key">
+            @component.Label
+        </dt>
+        <dd id="@component.Name-value" class="govuk-summary-list__value">
+            @switch (component.Type)
+            {                       
+                case "ukaddress":
+                    var address = (UkAddressModel)component.Answer;
+                    @(address != null ? $"{address.AddressLine1}, {address.AddressLine2}, {address.Town}, {address.County}, {address.Postcode}" : "Not provided")
+                    break;
+                case "dateparts":
+                    var datePartsModel = (DatePartsModel)component.Answer;
+                    @(datePartsModel != null && 
+                        (datePartsModel.Day != 0 &&
+                        datePartsModel.Month != 0 &&
+                        datePartsModel.Year != 0) ? $"{datePartsModel.Day}/{datePartsModel.Month}/{datePartsModel.Year}" : "Not provided")
+                    break;
+                default:
+                    @(String.IsNullOrEmpty(component.Answer?.ToString()) ? "Not provided" : component.Answer)
+                    break;
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a id="@component.Name-change-link" class="govuk-link" href="/form/@ViewBag.FormId/@Model.PageId/change">Change<span class="govuk-visually-hidden"> @component.Label</span></a>
+        </dd>
+    </div>
+}

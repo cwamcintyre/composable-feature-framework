@@ -1,7 +1,3 @@
-using System;
-using Component.Form.Application.PageHandler;
-using Component.Form.Model;
-
 namespace Component.Form.Application.UseCase.ProcessForm.Model;
 
 public class ProcessFormResponseModel

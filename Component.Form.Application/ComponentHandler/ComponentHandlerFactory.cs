@@ -2,7 +2,7 @@ using Component.Form.Application.ComponentHandler.Default;
 
 namespace Component.Form.Application.ComponentHandler;
 
-public class ComponentHandlerFactory
+public class ComponentHandlerFactory : IComponentHandlerFactory
 {
     private readonly IEnumerable<IComponentHandler> _parsers;
 

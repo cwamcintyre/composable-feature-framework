@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Component.Form.Model.ComponentHandler;
-using Component.Form.Model.ComponentModel;
-using Component.Form.Model;
 using Newtonsoft.Json.Linq;
-using Xunit;
 using System.Dynamic;
+using Component.Form.Application.ComponentHandler.DateParts;
+using Component.Form.Model.ComponentHandler;
+using Component.Form.Model;
 
-namespace Component.Form.Model.Tests;
+namespace Component.Form.Application.ComponentHandler.Tests;
 
 public class DatePartsHandlerTests
 {

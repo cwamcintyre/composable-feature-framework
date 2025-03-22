@@ -21,6 +21,11 @@ using Component.Form.Application.PageHandler.Default;
 using Component.Form.Application.ComponentHandler.Default;
 using Component.Form.Application.PageHandler.InlineRepeating;
 using Component.Form.Application.Helpers;
+using Component.Form.Application.UseCase.ProcessChangeInForm;
+using Component.Form.Application.UseCase.RemoveRepeatingSection;
+using Component.Form.Application.UseCase.RemoveRepeatingSection.Model;
+using Component.Form.Application.UseCase.AddRepeatingSection;
+using Component.Form.Application.UseCase.AddRepeatingSection.Model;
 
 namespace Component.Form.Application;
 public static class FormApplicationServiceBuilder
@@ -33,25 +38,31 @@ public static class FormApplicationServiceBuilder
         services.AddScoped<IRequestResponseUseCase<ProcessFormRequestModel, ProcessFormResponseModel>, ProcessForm>();
         services.AddScoped<IFormDataStore, FakeFormDataStore>();
 
+        services.AddScoped<IRequestResponseUseCase<ProcessChangeInFormRequestModel, ProcessChangeInFormResponseModel>, ProcessChangeInForm>();
+
         services.AddScoped<IRequestResponseUseCase<GetDataRequestModel, GetDataResponseModel>, GetData>();
 
         services.AddScoped<IRequestResponseUseCase<UpdateFormRequestModel, UpdateFormResponseModel>, UpdateForm>();
 
         services.AddScoped<IRequestResponseUseCase<GetDataForPageRequestModel, GetDataForPageResponseModel>, GetDataForPage>();
 
-        services.AddSingleton<ComponentHandlerFactory>();
+        services.AddScoped<IRequestResponseUseCase<AddRepeatingSectionRequestModel, AddRepeatingSectionResponseModel>, AddRepeatingSection>();
+
+        services.AddScoped<IRequestResponseUseCase<RemoveRepeatingSectionRequestModel, RemoveRepeatingSectionResponseModel>, RemoveRepeatingSection>();
+
+        services.AddSingleton<IComponentHandlerFactory, ComponentHandlerFactory>();
         services.AddSingleton<IComponentHandler, UkAddressHandler>();
         services.AddSingleton<IComponentHandler, DatePartsHandler>();
         services.AddSingleton<IComponentHandler, EmailHandler>();
         services.AddSingleton<IComponentHandler, PhoneNumberHandler>();
         services.AddSingleton<IComponentHandler, DefaultHandler>();
 
-        services.AddSingleton<PageHandlerFactory>();
+        services.AddSingleton<IPageHandlerFactory, PageHandlerFactory>();
         services.AddSingleton<IPageHandler, DefaultPageHandler>();
         services.AddSingleton<IPageHandler, InlineRepeatingPageHandler>();
 
         services.AddSingleton(serviceProvider => {
-            var componentHandlerFactory = serviceProvider.GetService<ComponentHandlerFactory>();
+            var componentHandlerFactory = serviceProvider.GetService<IComponentHandlerFactory>();
             var allTypes = componentHandlerFactory.GetAllTypes();
 
             // will have to do the page handlers manually as they have SafeJsonHelper injected in them...

@@ -8,7 +8,7 @@ namespace Component.Form.Application.Helpers;
 
 public static class FormHelper
 {
-    public static dynamic ParseData(string formData, ComponentHandlerFactory _componentHandlerFactory) 
+    public static dynamic ParseData(string formData, IComponentHandlerFactory _componentHandlerFactory) 
     {
         var jsonSettings = GetJsonSerializerSettings(_componentHandlerFactory);
         var data = JsonConvert.DeserializeObject<ExpandoObject>(formData, jsonSettings);
@@ -50,7 +50,7 @@ public static class FormHelper
         return withMe;
     }
 
-    public static JsonSerializerSettings GetJsonSerializerSettings(ComponentHandlerFactory _componentHandlerFactory)
+    public static JsonSerializerSettings GetJsonSerializerSettings(IComponentHandlerFactory _componentHandlerFactory)
     {
         return new JsonSerializerSettings
         {
@@ -62,14 +62,14 @@ public static class FormHelper
     // considering that the user has the back link and the back button (and we cannot effectively test for the back button), we have to calculate the previous page
     // based on first principles every time a page is loaded.
     public static async Task<PreviousPageModel> CalculatePreviousPage(
-        PageHandlerFactory pageHandlerFactory,
+        IPageHandlerFactory pageHandlerFactory,
         FormModel formModel, 
         string currentPageId, 
         IDictionary<string, object> data, 
         string extraData)
     {
         // calculate forward journey up until now...
-        var pages = new Stack<PageItemModel>();
+        var pages = new Stack<PreviousPageModel>();
 
         if (!String.IsNullOrEmpty(extraData))
         {
@@ -94,21 +94,16 @@ public static class FormHelper
             };
         }
 
-        return new PreviousPageModel
-        {
-            PageId = pages.Peek().PageId,
-            RepeatIndex = pages.Peek().RepeatIndex,
-            ExtraData = pages.Peek().ExtraData
-        };
+        return pages.Peek();
     }
 
     private static async Task CalculatePreviousPageRecursive(
-        PageHandlerFactory pageHandlerFactory,
+        IPageHandlerFactory pageHandlerFactory,
         FormModel formModel,
         PageBase page, 
         string currentPageId, 
         IDictionary<string, object> data, 
-        Stack<PageItemModel> pages,
+        Stack<PreviousPageModel> pages,
         string extraData,
         string nextExtraData = "")
     {
@@ -123,7 +118,7 @@ public static class FormHelper
             return;
         }   
 
-        pages.Push(new PageItemModel { PageId = page.PageId, ExtraData = nextExtraData });
+        pages.Push(new PreviousPageModel { PageId = page.PageId, ExtraData = nextExtraData });
                 
         var pageHandler = pageHandlerFactory.GetFor(page.PageType);
 
@@ -132,7 +127,15 @@ public static class FormHelper
             throw new ArgumentException($"Page handler not found for page type {page.PageType}");
         }
 
-        var nextPageIdResult = await pageHandler.GetNextPageId(page, data, nextExtraData);    
+        var nextPageIdResult = await pageHandler.GetNextPageId(page, data, nextExtraData, extraData);
+
+        // kill it here..
+        if (nextPageIdResult.ForceRedirect)
+        {
+            pages.Peek().ForceRedirect = true;
+            return;
+        }
+
         var nextPage = formModel.Pages.FirstOrDefault(p => p.PageId == nextPageIdResult.NextPageId);
         if (nextPage == null)
         {
@@ -141,6 +144,40 @@ public static class FormHelper
 
         await CalculatePreviousPageRecursive(pageHandlerFactory, formModel, nextPage, currentPageId, data, pages, extraData, nextPageIdResult.ExtraData);        
     }
+
+    public static async Task<WalkResult> WalkToNextInvalidOrUnfilledPageRecursive(
+        IPageHandlerFactory pageHandlerFactory, 
+        FormModel formModel, 
+        PageBase currentPage, 
+        IDictionary<string, object> data,
+        string extraData)
+    {
+        // if the page is a summary or stop page, return the current page and stop
+        if (currentPage.PageType == "summary" || currentPage.PageType == "stop")
+        {
+            return new WalkResult
+            {
+                Page = currentPage,
+                Stop = true
+            };
+        }
+
+        var pageHandler = pageHandlerFactory.GetFor(currentPage.PageType);
+
+        if (pageHandler == null)
+        {
+            throw new ArgumentException($"Page handler not found for page type {currentPage.PageType}");
+        }
+
+        var walkResult = await pageHandler.WalkToNextInvalidOrUnfilledPage(formModel, currentPage, data, extraData);
+
+        if (!walkResult.Stop)
+        {
+            return await WalkToNextInvalidOrUnfilledPageRecursive(pageHandlerFactory, formModel, walkResult.Page, data, extraData);
+        }
+
+        return walkResult;
+    }
 }
 
 public class PreviousPageModel 
@@ -148,13 +185,7 @@ public class PreviousPageModel
     public string PageId { get; set; }
     public int RepeatIndex { get; set; }
     public string ExtraData { get; set; }
-}
-
-public class PageItemModel
-{
-    public string PageId { get; set; }
-    public int RepeatIndex { get; set; }
-    public string ExtraData { get; set; }
+    public bool ForceRedirect { get; set; }
 }
 
 public class ConditionResult
@@ -163,4 +194,11 @@ public class ConditionResult
     public string NextPageId { get; set; }
     public string ExtraData { get; set; }
     public int RepeatIndex { get; set; }
+}
+
+public class WalkResult
+{
+    public PageBase Page { get; set; }
+    public bool Stop { get; set; }
+    public string ExtraData { get; set; }
 }

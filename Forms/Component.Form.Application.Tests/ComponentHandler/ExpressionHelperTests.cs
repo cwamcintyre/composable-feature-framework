@@ -1,6 +1,6 @@
-﻿using Component.Form.Model.ComponentHandler;
+﻿using Component.Form.Application.ComponentHandler;
 
-namespace Component.Form.Model.Tests;
+namespace Component.Form.Application.ComponentHandler.Tests;
 
 public class ExpressionHelperTests
 {

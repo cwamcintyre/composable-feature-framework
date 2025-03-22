@@ -11,6 +11,12 @@
             "pageType": "inlineRepeating",
             "repeatKey": "tasks",
             "summaryLabel": "Tasks",
+            "dataThatMeetsCondition": {
+                "do_you_want_to_add_another_task": "yes"
+            }, 
+            "dataThatDoesNotMeetCondition": {
+                "do_you_want_to_add_another_task": "no"
+            },  
             "repeatingPages": [                
                 {
                     "pageId": "what-do-you-want-to-do-today",

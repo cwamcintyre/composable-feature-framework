@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using Component.Form.Model.ComponentHandler;
+using Component.Form.Application.ComponentHandler.PhoneNumber;
+using Component.Form.Model;
 
-namespace Component.Form.Model.Tests;
+namespace Component.Form.Application.ComponentHandler.Tests;
 
 public class PhoneNumberHandlerTests
 {
@@ -34,7 +31,7 @@ public class PhoneNumberHandlerTests
     public void GetDataType_ShouldReturnStringType()
     {
         var result = _handler.GetDataType();
-        Assert.Equal("String System.Private.CoreLib", result);
+        Assert.Equal("System.String, System.Private.CoreLib", result);
     }
 
     [Fact]

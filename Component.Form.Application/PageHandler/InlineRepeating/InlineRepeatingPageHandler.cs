@@ -1,4 +1,5 @@
 using System.Dynamic;
+using System.Reflection.PortableExecutable;
 using Component.Form.Application.ComponentHandler;
 using Component.Form.Application.Helpers;
 using Component.Form.Application.Shared.Infrastructure;
@@ -13,10 +14,10 @@ public class InlineRepeatingPageHandler : IPageHandler
 {
     private readonly IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
-    private readonly ComponentHandlerFactory _componentHandlerFactory;
+    private readonly IComponentHandlerFactory _componentHandlerFactory;
     private readonly SafeJsonHelper _safeJsonHelper;
     
-    public InlineRepeatingPageHandler(IFormStore formStore, IFormDataStore formDataStore, ComponentHandlerFactory componentHandlerFactory, SafeJsonHelper safeJsonHelper)
+    public InlineRepeatingPageHandler(IFormStore formStore, IFormDataStore formDataStore, IComponentHandlerFactory componentHandlerFactory, SafeJsonHelper safeJsonHelper)
     {
         _formStore = formStore;
         _formDataStore = formDataStore;
@@ -178,10 +179,79 @@ public class InlineRepeatingPageHandler : IPageHandler
         };
     }
 
-    public async Task<NextPageIdResult> GetNextPageId(PageBase page, dynamic data, string extraData)
+    public async Task<ProcessChangeInFormResponseModel> ProcessChange(FormModel formModel, PageBase page, dynamic existingData, Dictionary<string, string> formData)
+    {
+        InlineRepeatingPageSection section = (InlineRepeatingPageSection)page;
+        
+        var repeatIndex = Convert.ToInt32(formData["RepeatIndex"]);
+        var repeatPageId = formData["RepeatPageId"];
+        var repeatingPageData = new InlineRepeatingData()
+        {
+            PageId = repeatPageId,
+            RepeatIndex = repeatIndex
+        };
+
+        var extraData = formData["ExtraData"];
+
+        InlineRepeatingPage repeatPage = section.RepeatingPages.Find(p => p.PageId == repeatPageId);
+        
+        if (repeatPage == null)
+        {
+            throw new ArgumentException($"Could not find repeating page with id {repeatPageId}");
+        }
+
+        var errors = new Dictionary<string, List<string>>();
+
+        var repeatingModelString = formData[section.RepeatKey];
+        var repeatingModel = _safeJsonHelper.SafeDeserializeObject<RepeatingModel>(repeatingModelString);
+
+        UpdateRepeatingData(section, new ProcessFormRequestModel()
+        {
+            PageId = repeatPageId,
+            Form = formData
+        }, existingData, repeatingModel);
+
+        // Loop through questions and validate them
+        foreach (var question in repeatPage.Components.Where(c => c.IsQuestionType))
+        {
+            string inputName = question.Name;
+            IComponentHandler handler = _componentHandlerFactory.GetFor(question.Type);
+
+            // Evaluate validation rules
+            if (!question.Optional)
+            {
+                var validationResult = await handler.Validate(inputName, existingData, question.ValidationRules, true, section.RepeatKey, repeatIndex);
+                if (validationResult.Count > 0)
+                {
+                    errors.Add(inputName, validationResult);
+                }
+            }
+        }
+
+        // If there are validation errors, return to the same page
+        if (errors.Any())
+        {
+            return new ProcessChangeInFormResponseModel
+            {
+                Data = existingData,
+                NextPageId = page.PageId,
+                ExtraData = extraData,
+                HasErrors = true
+            };
+        }
+
+        return new ProcessChangeInFormResponseModel
+        {
+            Data = existingData,
+            ExtraData = extraData
+        };
+    }
+
+    public async Task<NextPageIdResult> GetNextPageId(PageBase page, dynamic data, string extraData, string endExtraDataCondition = "")
     {
         InlineRepeatingPageSection section = (InlineRepeatingPageSection)page;
         InlineRepeatingData repeatingData = (InlineRepeatingData)extraData;
+        InlineRepeatingData endCondition = (InlineRepeatingData)endExtraDataCondition;
         
         InlineRepeatingPage repeatPage = null;
 
@@ -211,6 +281,17 @@ public class InlineRepeatingPageHandler : IPageHandler
 
         if (repeatPage.RepeatEnd)
         {
+            // check whether there is data after this repeat. If so, redirect the user to this end page..
+            if (endCondition.RepeatIndex > repeatingData.RepeatIndex)
+            {
+                return new NextPageIdResult()
+                {
+                    NextPageId = section.PageId,
+                    ExtraData = $"{repeatingData.RepeatIndex}-{repeatPage.PageId}",
+                    ForceRedirect = true
+                };
+            }
+            
             return new NextPageIdResult()
             {
                 NextPageId = section.NextPageId
@@ -262,7 +343,7 @@ public class InlineRepeatingPageHandler : IPageHandler
         };
     }
 
-    private Dictionary<string, object> GetData(PageBase currentPage, Dictionary<string, string> newData, ComponentHandlerFactory _componentHandlerFactory) 
+    private Dictionary<string, object> GetData(PageBase currentPage, Dictionary<string, string> newData, IComponentHandlerFactory _componentHandlerFactory) 
     {
         var data = new Dictionary<string, object>();
 
@@ -338,6 +419,131 @@ public class InlineRepeatingPageHandler : IPageHandler
             dataAsDictionary[section.RepeatKey] = (IEnumerable<ExpandoObject>)repeatData;
         }
     }
+
+    public async Task<WalkResult> WalkToNextInvalidOrUnfilledPage(FormModel formModel, PageBase currentPage, IDictionary<string, object> data, string extraData)
+    {
+        var repeatingSection = (InlineRepeatingPageSection)currentPage;
+
+        // if we're adding a new section, move to the next, if we're at the end and the condition has been met, move to the start of a new repeat
+        if (extraData.Contains("/add")) 
+        {
+            var repeatingData = (InlineRepeatingData)extraData.Replace("/add", "");
+            
+            var repeatPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatingData.PageId);
+            if (repeatPage == null)
+            {
+                throw new ArgumentException($"Could not find repeating page with id {repeatingData.PageId}");
+            }
+            
+            if (repeatPage.RepeatEnd)
+            {
+                var conditionResult = await MeetsCondition(repeatPage, data, repeatingData.RepeatIndex);
+                if (conditionResult.MetCondition)
+                {
+                    return new WalkResult()
+                    {
+                        Page = repeatingSection.RepeatingPages.Find(p => p.RepeatStart),
+                        ExtraData = $"{conditionResult.ExtraData}/add",
+                        Stop = true
+                    };
+                }
+
+                return new WalkResult()
+                {
+                    Page = formModel.Pages.FirstOrDefault(p => p.PageId == repeatingSection.NextPageId),
+                    Stop = false
+                };
+            }
+
+            var nextRepeatingPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatPage.NextPageId);
+            
+            if (nextRepeatingPage == null)
+            {
+                throw new ArgumentException($"Could not find repeating page with id {repeatPage.PageId}");
+            }
+
+            return new WalkResult()
+            {
+                Page = nextRepeatingPage,
+                ExtraData = $"{nextRepeatingPage.RepeatIndex}-{nextRepeatingPage.PageId}/add",
+                Stop = true
+            };
+        }
+        // if we're changing an existing, move next until we hit the end, then move outside the section
+        else 
+        {
+            var repeatingData = (InlineRepeatingData)extraData;
+
+            InlineRepeatingPage repeatPage = null;
+            if (string.IsNullOrEmpty(repeatingData.PageId))
+            {
+                repeatPage = repeatingSection.RepeatingPages.Find(p => p.RepeatStart);
+            }
+            else
+            {
+                repeatPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatingData.PageId);
+            }
+
+            if (repeatPage == null)
+            {
+                throw new ArgumentException($"Could not find repeating page with id {repeatingData.PageId}");
+            }
+
+            var nextRepeatingPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatPage.NextPageId);
+            
+            if (nextRepeatingPage != null && !nextRepeatingPage.RepeatEnd)
+            {
+                return new WalkResult()
+                {
+                    Page = repeatingSection,
+                    ExtraData = $"{repeatingData.RepeatIndex}-{nextRepeatingPage.PageId}",
+                    Stop = true
+                };
+            }
+            else
+            {
+                var nextPage = formModel.Pages.FirstOrDefault(p => p.PageId == repeatingSection.NextPageId);
+                
+                if (nextPage == null)
+                {
+                    throw new ArgumentException($"Could not find next page with id {repeatingSection.NextPageId}");
+                }
+
+                return new WalkResult()
+                {
+                    Page = nextPage,
+                    Stop = false
+                };
+            }
+        }
+    }
+
+    public async Task<Dictionary<string, object>> GetSubmissionData(PageBase page, IDictionary<string, object> data)
+    {
+        // go through the list. Once you hit the stop condition, stop and return the data
+        var repeatingSection = (InlineRepeatingPageSection)page;
+        var repeatingData = _safeJsonHelper.SafeDeserializeObject<List<Dictionary<string, object>>>(data[repeatingSection.RepeatKey].ToString());
+
+        var cleanRepatingData = new List<Dictionary<string, object>>();
+
+        int repeatIndex = 0;
+
+        foreach (var repeatItem in repeatingData) 
+        {
+            if ((await MeetsCondition(page, repeatItem, repeatIndex)).MetCondition)
+            {
+                cleanRepatingData.Add(repeatItem);
+            }
+            else break;
+
+            repeatIndex++;
+        }
+
+        return new Dictionary<string, object>()
+        {
+            { repeatingSection.RepeatKey, cleanRepatingData }
+        };
+    }
 }
 
 public class InlineRepeatingData
@@ -361,7 +567,7 @@ public class InlineRepeatingData
         
         if (split.Length != 2)
         {
-            throw new ArgumentException($"Invalid InlineRepeatingData format - expected repeatIndex/pageId, got {data}");
+            throw new ArgumentException($"Invalid InlineRepeatingData format - expected repeatIndex-pageId, got {data}");
         }
 
         return new InlineRepeatingData

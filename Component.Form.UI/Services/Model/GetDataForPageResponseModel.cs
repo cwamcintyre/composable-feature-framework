@@ -8,4 +8,5 @@ public class GetDataForPageResponseModel
     public Dictionary<string, List<string>> Errors { get; set; } = new Dictionary<string, List<string>>();
     public string PreviousPage { get; set; }
     public string PreviousExtraData { get; set; }
+    public bool ForceRedirect { get; set; }
 }

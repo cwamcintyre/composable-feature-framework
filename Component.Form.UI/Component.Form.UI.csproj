@@ -10,6 +10,7 @@
     <PackageReference Include="GovUk.Frontend.AspNetCore" Version="2.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.13.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
   </ItemGroup>
