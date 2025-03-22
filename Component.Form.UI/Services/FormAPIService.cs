@@ -3,6 +3,7 @@ using Component.Form.UI.Services.Model;
 using Component.Form.Application.Helpers;
 using Polly;
 using Polly.Retry;
+using Newtonsoft.Json;
 
 namespace Component.Form.UI.Services;
 
@@ -249,5 +250,21 @@ public class FormAPIService
 
             return responseObject;
         });
+    }
+
+    public async Task<UploadFileResponse> StreamFileToExternalApi(IFormFile file, string uploadEndpoint)
+    {
+        using var fileStream = file.OpenReadStream();
+        using var content = new StreamContent(fileStream);
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+
+        using var multipartContent = new MultipartFormDataContent();
+        multipartContent.Add(content, "file", file.FileName);
+
+        var client = _httpClientFactory.CreateClient();
+        var response = await client.PostAsync(uploadEndpoint, multipartContent);
+        response.EnsureSuccessStatusCode();
+
+        return JsonConvert.DeserializeObject<UploadFileResponse>(await response.Content.ReadAsStringAsync());
     }
 }

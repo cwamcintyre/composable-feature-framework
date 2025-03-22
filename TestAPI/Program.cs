@@ -9,6 +9,7 @@ using Azure.Core.Serialization;
 using System.Text.Json;
 using Component.Core.SafeJson;
 using Component.Form.Model;
+using Component.Files.API;
 
 namespace TestAPI;
 
@@ -20,6 +21,7 @@ public class Program
 
         builder.ConfigureFunctionsWebApplication();
         builder.Services.AddFormApplicationServices();
+        builder.Services.AddFileApplicationServices(builder.Configuration);
         builder.Services.AddSearchApplicationServices(new SearchApplicationServiceOptions { UseFakes = true });
         builder.Services.Configure<WorkerOptions>(options =>
         {

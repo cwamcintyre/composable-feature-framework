@@ -79,6 +79,7 @@ namespace Component.Form.UI.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(512 * 1024 * 1024)]
         public async Task<IActionResult> Submit()
         {
             var formId = Request.Form["FormId"];
@@ -111,34 +112,7 @@ namespace Component.Form.UI.Controllers
 
                 foreach (var file in Request.Form.Files)
                 {
-                    // Find the file upload component and post the file to the UploadEndpoint
-                    using (var stream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(stream);
-                        stream.Position = 0;
-                        var fileContent = new ByteArrayContent(stream.ToArray());
-                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-
-                        using (var client = new HttpClient())
-                        {
-                            var fileFormData = new MultipartFormDataContent
-                            {
-                                { fileContent, "files", file.FileName }
-                            };
-
-                            var response = await client.PostAsync(fileComponent.FileOptions.UploadEndpoint, fileFormData);
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                ModelState.AddModelError(string.Empty, "File upload failed.");
-                                ViewBag.FormId = formId;
-                                return View("Error");
-                            }
-
-                            // TODO: add a property to the component to store multiple file names.
-                            // BUG: the file name is not stored in the data...
-                            fileComponent.Answer = file.FileName;
-                        }
-                    }
+                    var response = await _formAPIService.StreamFileToExternalApi(file, fileComponent.FileOptions.UploadEndpoint);
                 }
             }
 
@@ -221,34 +195,7 @@ namespace Component.Form.UI.Controllers
 
                 foreach (var file in Request.Form.Files)
                 {
-                    // Find the file upload component and post the file to the UploadEndpoint
-                    using (var stream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(stream);
-                        stream.Position = 0;
-                        var fileContent = new ByteArrayContent(stream.ToArray());
-                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
-
-                        using (var client = new HttpClient())
-                        {
-                            var fileFormData = new MultipartFormDataContent
-                            {
-                                { fileContent, "files", file.FileName }
-                            };
-
-                            var response = await client.PostAsync(fileComponent.FileOptions.UploadEndpoint, fileFormData);
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                ModelState.AddModelError(string.Empty, "File upload failed.");
-                                ViewBag.FormId = formId;
-                                return View("Error");
-                            }
-
-                            // TODO: add a property to the component to store multiple file names.
-                            // BUG: the file name is not stored in the data...
-                            fileComponent.Answer = file.FileName;
-                        }
-                    }
+                    var response = await _formAPIService.StreamFileToExternalApi(file, fileComponent.FileOptions.UploadEndpoint);
                 }
             }
 

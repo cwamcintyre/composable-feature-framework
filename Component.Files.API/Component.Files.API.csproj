@@ -12,14 +12,10 @@
     <!-- <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" /> -->
     <!-- <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.0.0" /> -->
     <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.OpenApi" Version="1.5.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Component.Files.API\Component.Files.API.csproj" />
-    <ProjectReference Include="..\Component.Form.API\Component.Form.API.csproj" />
-    <ProjectReference Include="..\Component.Search.API\Component.Search.API.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -32,5 +28,12 @@
   </ItemGroup>
   <ItemGroup>
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Triggers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Component.Files.Application\Component.Files.Application.csproj" />
+    <ProjectReference Include="..\Component.Files.Infrastructure.Blob\Component.Files.Infrastructure.Blob.csproj" />
   </ItemGroup>
 </Project>

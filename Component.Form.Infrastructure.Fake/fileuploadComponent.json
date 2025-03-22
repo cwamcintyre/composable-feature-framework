@@ -19,7 +19,7 @@
                   "labelIsPageTitle": true,
                   "fileOptions": 
                   {
-                    "uploadEndpoint": "http://localhost:7163/api/v1/files",
+                    "uploadEndpoint": "http://localhost:7170/api/upload",
                     "acceptedFormats": [
                         "pdf",
                         "doc",
@@ -29,7 +29,8 @@
                         "csv",
                         "jpg",
                         "jpeg",
-                        "png"
+                        "png",
+                        "zip"
                     ]
                   }
               }

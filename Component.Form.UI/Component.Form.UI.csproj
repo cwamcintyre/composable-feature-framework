@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Component.Core\Component.Core.csproj" />
+    <ProjectReference Include="..\Component.Files.Model\Component.Files.Model.csproj" />
     <ProjectReference Include="..\Component.Form.Model\Component.Form.Model.csproj" />
   </ItemGroup>
   
