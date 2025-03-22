@@ -50,6 +50,7 @@ public class UploadFile : IRequestResponseUseCase<UploadFileRequest, UploadFileR
         {
             case ScanResult.Clean:
                 // File is clean, proceed with the upload
+                _logger.LogInformation($"File {fileName} uploaded successfully. Scan result: {scanResult.Status}.");
                 break;
             case ScanResult.Malicious:
                 // Handle infected file scenario (e.g., delete the uploaded file)
@@ -57,7 +58,7 @@ public class UploadFile : IRequestResponseUseCase<UploadFileRequest, UploadFileR
                 _logger.LogWarning($"File {fileName} is infected with a virus. Moved to quarantine.");
                 break;            
         }
-
+        
         return new UploadFileResponse
         {
             UploadResult = uploadResult,

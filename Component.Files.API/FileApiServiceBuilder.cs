@@ -27,7 +27,7 @@ public static class FileApiConfigurationExtensions
         services.AddScoped<IVirusScanner, AzureOnUploadVirusScanner>();
 
         services.AddScoped<IRequestResponseUseCase<UploadFileRequest, UploadFileResponse>, UploadFile>();
-        services.AddScoped<IRequestResponseUseCase<DeleteFileRequest, DeleteFileResponse>, DeleteFile>();
+        services.AddScoped<IRequestUseCase<DeleteFileRequest>, DeleteFile>();
         services.AddScoped<IRequestResponseUseCase<GetFileRequest, GetFileResponse>, GetFile>();
 
         // Increase request size for multipart form data

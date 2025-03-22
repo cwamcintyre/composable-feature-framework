@@ -3,7 +3,6 @@ using Component.Files.Model;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Configuration;
-using Azure;
 using Microsoft.Extensions.Logging;
 
 public class BlobFileStore : IFileStore
@@ -26,7 +25,6 @@ public class BlobFileStore : IFileStore
         var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
         var blobClient = containerClient.GetBlobClient(fileName);
         await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
-        _logger.LogInformation($"File {fileName} deleted from blob storage.");
     }
 
     public async Task<bool> FileExistsAsync(string fileName, CancellationToken cancellationToken = default)
@@ -38,10 +36,16 @@ public class BlobFileStore : IFileStore
 
     public async Task<Stream> GetFileAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
-        var blobClient = containerClient.GetBlobClient(fileName);
-        var response = await blobClient.DownloadAsync(cancellationToken);
-        return response.Value.Content;
+        try 
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobClient = containerClient.GetBlobClient(fileName);
+            return await blobClient.OpenReadAsync(new BlobOpenReadOptions(false), cancellationToken);
+        }
+        catch (Azure.RequestFailedException ex) when (ex.ErrorCode == "BlobNotFound")
+        {
+            throw new FileNotFoundException($"The file '{fileName}' was not found.");
+        }
     }
 
     public async Task<UploadResult> UploadFileAsync(string fileName, Stream fileStream, CancellationToken cancellationToken)
@@ -51,8 +55,6 @@ public class BlobFileStore : IFileStore
 
         var blobClient = containerClient.GetBlobClient(fileName);
         await blobClient.UploadAsync(fileStream, overwrite: true, cancellationToken);
-
-        _logger.LogInformation($"File {fileName} uploaded to blob storage {_containerName}");
 
         return new UploadResult
         {
@@ -71,7 +73,5 @@ public class BlobFileStore : IFileStore
         var quarantineBlobClient = quarantineContainerClient.GetBlobClient(fileName);
         await quarantineBlobClient.SyncCopyFromUriAsync(blobClient.Uri, cancellationToken: cancellationToken);
         await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
-
-        _logger.LogInformation($"File {fileName} moved to quarantine.");
     }
 }
