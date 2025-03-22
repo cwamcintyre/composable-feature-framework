@@ -9,4 +9,5 @@ public interface IFileStore
     Task DeleteFileAsync(string fileName, CancellationToken cancellationToken = default);
     Task<Stream> GetFileAsync(string fileName, CancellationToken cancellationToken = default);
     Task<bool> FileExistsAsync(string fileName, CancellationToken cancellationToken = default);
+    Task MoveToQuarantineAsync(string fileName, CancellationToken cancellationToken = default);
 }

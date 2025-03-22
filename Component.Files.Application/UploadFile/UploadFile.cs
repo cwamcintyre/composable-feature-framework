@@ -1,6 +1,7 @@
 using System;
 using Component.Core.Application;
 using Component.Files.Application.Shared.Infrastructure;
+using Microsoft.Extensions.Logging;
 using Component.Files.Application.UploadFile.Model;
 using Component.Files.Model;
 using Polly;
@@ -9,11 +10,13 @@ namespace Component.Files.Application.UploadFile;
 
 public class UploadFile : IRequestResponseUseCase<UploadFileRequest, UploadFileResponse>
 {
+    private readonly ILogger<UploadFile> _logger;
     private readonly IFileStore _fileStore;
     private readonly IVirusScanner _virusScanner;
 
-    public UploadFile(IFileStore fileStore, IVirusScanner virusScanner)
+    public UploadFile(IFileStore fileStore, IVirusScanner virusScanner, ILogger<UploadFile> logger)
     {
+        _logger = logger;
         _fileStore = fileStore;
         _virusScanner = virusScanner;
     }
@@ -50,8 +53,9 @@ public class UploadFile : IRequestResponseUseCase<UploadFileRequest, UploadFileR
                 break;
             case ScanResult.Malicious:
                 // Handle infected file scenario (e.g., delete the uploaded file)
-                await _fileStore.DeleteFileAsync(fileName);
-                throw new InvalidOperationException("File is infected and has been deleted.");            
+                await _fileStore.MoveToQuarantineAsync(fileName);
+                _logger.LogWarning($"File {fileName} is infected with a virus. Moved to quarantine.");
+                break;            
         }
 
         return new UploadFileResponse
