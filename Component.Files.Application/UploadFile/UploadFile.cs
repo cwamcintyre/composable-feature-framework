@@ -31,8 +31,11 @@ public class UploadFile : IRequestResponseUseCase<UploadFileRequest, UploadFileR
         var file = request.Files[0];
         var fileName = file.FileName;
         var fileStream = file.OpenReadStream();
-
-        // Assuming you have a file store service injected
+        if (fileStream == null || fileStream.CanRead == false)
+        {
+            throw new ArgumentException("File stream is not readable.");
+        }
+        
         var uploadResult = await _fileStore.UploadFileAsync(fileName, fileStream);
 
         // Define a retry policy with Polly
