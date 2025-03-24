@@ -35,10 +35,21 @@ public class EmailHandlerTests
         Assert.False(result);
     }
 
-    [Fact]
-    public async Task Validate_ShouldReturnErrors_WhenEmailIsInvalid()
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("@")]
+    [InlineData("test@")]
+    [InlineData(".com")]
+    [InlineData("john.doeexample.com")]
+    [InlineData("john.doe@.com")]
+    [InlineData("@example.com")]
+    [InlineData("john doe@example.com")]
+    [InlineData(".johndoe@example.com")]
+    [InlineData("john@doe@example.com")]
+    public async Task Validate_ShouldReturnErrors_WhenEmailIsInvalid(string invalidEmail)
     {
-        var data = new Dictionary<string, object> { { "email", "invalidemail" } };
+        var data = new Dictionary<string, object> { { "email", invalidEmail } };
         var result = await _emailHandler.Validate("email", data, new List<ValidationRule>());
         Assert.Contains("Enter an email address in the correct format, like name@example.com", result);
     }

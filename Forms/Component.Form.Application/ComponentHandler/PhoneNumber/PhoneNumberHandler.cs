@@ -22,7 +22,9 @@ public class PhoneNumberHandler: IComponentHandler
 
         var phoneNumber = ((IDictionary<string, object>)data)[name].ToString();        
 
-        if (string.IsNullOrEmpty(phoneNumber) || !IsValidPhoneNumber(phoneNumber, "GB"))
+        if (string.IsNullOrEmpty(phoneNumber) || 
+            !IsValidPhoneNumber(phoneNumber, "GB") ||
+            (!phoneNumber.StartsWith("0") && !phoneNumber.StartsWith("+44")))
         {
             errors.Add($"Enter a UK phone number");
         }
