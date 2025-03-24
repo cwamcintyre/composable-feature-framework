@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Application.ComponentHandler;
 using Component.Form.Application.ComponentHandler.DateParts;
 using Component.Form.Application.ComponentHandler.Default;
@@ -18,6 +19,7 @@ using Moq;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class ProcessChangeInFormTestBuilder
 {
     private readonly ServiceCollection _serviceCollection;

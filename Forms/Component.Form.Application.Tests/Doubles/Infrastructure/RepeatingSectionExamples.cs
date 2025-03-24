@@ -1,67 +1,15 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Model;
 
 namespace Component.Form.Application.Tests.Doubles.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public class RepeatingSectionExamples
 {
     public const string ApplicantId = "applicant-123";
     public const string FormId = "repeatingInlinePage";
     public const string PageId = "tasks-repeat";
-
-    public const string ExistingFormData_OneEntry = """
-            {
-                "tasks": [
-                    {
-                        "what_are_you_going_to_do_today": "test this thing",
-                        "how_long_will_it_take": "1 hour",
-                        "do_you_want_to_add_another_task": "no" 
-                    }
-                ]
-            }
-        """;
-
-    public const string ExistingFormDataInvalid_OneEntry = """
-            {
-                "tasks": [
-                    {
-                        "what_are_you_going_to_do_today": "test this thing",
-                        "how_long_will_it_take": "TOO LONG" 
-                    }
-                ]
-            }
-        """;
-
-    public const string ExistingFormData_OneEntry_AddRepeatSection_Called = """
-            {
-                "tasks": [
-                    {
-                        "what_are_you_going_to_do_today": "test this thing",
-                        "how_long_will_it_take": "1 hour",
-                        "do_you_want_to_add_another_task": "yes" 
-                    },
-                    {
-                        "do_you_want_to_add_another_task": "no" 
-                    }
-                ]
-            }    
-    """;
-
-    public const string ExistingFormData_OneEntry_WhatAreYouGoingToDoToday_Added = """
-            {
-                "tasks": [
-                    {
-                        "what_are_you_going_to_do_today": "test this thing",
-                        "how_long_will_it_take": "1 hour",
-                        "do_you_want_to_add_another_task": "yes" 
-                    },
-                    {
-                        "what_are_you_going_to_do_today": "test this thing again",
-                        "do_you_want_to_add_another_task": "no" 
-                    }
-                ]
-            }    
-    """;
 
     public static Dictionary<string, string> WhatAreYouGoingToDoToday_Form_AddedData = new Dictionary<string, string>()
     {
@@ -127,6 +75,89 @@ public class RepeatingSectionExamples
         { "ExtraData", "0-how-long-will-it-take" }
     };
 
+    public static Dictionary<string, object> NewRepeatingSectionData = new Dictionary<string, object>
+    {
+        { "what_are_you_going_to_do_today", "test some more" },
+        { "how_long_will_it_take", "2 hours" },
+        { "do_you_want_to_add_another_task", "no" }
+    };
+
+    public const string EmptyForm = "{}";
+
+    public const string FormWithNoRepeatSection = """
+        {
+            "do_you_want_to_fill_in_this_form": "yes",
+            "what_is_your_name": "John Doe"
+        }
+        """;
+
+    public const string EmptyTasks = """
+        {"tasks":[]}
+        """;
+
+    public const string EmptyForm_Tasks_Added = """
+        {"tasks":[{"do_you_want_to_add_another_task":"no"}]}
+        """;
+
+    public const string CorruptedTasks = """
+        {"tasks":{"this-is-not-a-list":{}}}
+        """;
+
+    public const string ExistingFormData_OneEntry = """
+            {
+                "tasks": [
+                    {
+                        "what_are_you_going_to_do_today": "test this thing",
+                        "how_long_will_it_take": "1 hour",
+                        "do_you_want_to_add_another_task": "no" 
+                    }
+                ]
+            }
+        """;
+
+    public const string ExistingFormDataInvalid_OneEntry = """
+            {
+                "tasks": [
+                    {
+                        "what_are_you_going_to_do_today": "test this thing",
+                        "how_long_will_it_take": "TOO LONG" 
+                    }
+                ]
+            }
+        """;
+
+    public const string ExistingFormData_OneEntry_AddRepeatSection_Called = """
+            {
+                "tasks": [
+                    {
+                        "what_are_you_going_to_do_today": "test this thing",
+                        "how_long_will_it_take": "1 hour",
+                        "do_you_want_to_add_another_task": "yes" 
+                    },
+                    {
+                        "do_you_want_to_add_another_task": "no" 
+                    }
+                ]
+            }    
+    """;
+
+    public const string ExistingFormData_OneEntry_WhatAreYouGoingToDoToday_Added = """
+            {
+                "tasks": [
+                    {
+                        "what_are_you_going_to_do_today": "test this thing",
+                        "how_long_will_it_take": "1 hour",
+                        "do_you_want_to_add_another_task": "yes" 
+                    },
+                    {
+                        "what_are_you_going_to_do_today": "test this thing again",
+                        "do_you_want_to_add_another_task": "no" 
+                    }
+                ]
+            }    
+    """;
+
+
     public const string WhatAreYouGoingToDoToday_Saved = """
         {"tasks":[{"what_are_you_going_to_do_today":"test this thing"}]}
         """;
@@ -165,29 +196,6 @@ public class RepeatingSectionExamples
 
     public const string HowLongWillItTakeInvalid_AddedAndSaved = """
         {"tasks":[{"what_are_you_going_to_do_today":"test this thing","how_long_will_it_take":"1 hour","do_you_want_to_add_another_task":"yes"},{"what_are_you_going_to_do_today":"test this thing again","do_you_want_to_add_another_task":"no","how_long_will_it_take":"TOO LONG"}]}
-        """;
-
-    public static FormData ExistingFormData = new FormData
-    {
-        Data = ExistingFormData_OneEntry
-    };
-
-    public static FormData EmptyFormData = new FormData
-    {
-        Data = "{}"
-    };
-
-    public static Dictionary<string, object> NewRepeatingSectionData = new Dictionary<string, object>
-    {
-        { "what_are_you_going_to_do_today", "test some more" },
-        { "how_long_will_it_take", "2 hours" },
-        { "do_you_want_to_add_another_task", "no" }
-    };
-
-    public const string EmptyFormDataStringSaved = "{}";
-
-    public const string EmptyTasksStringSaved = """
-        {"tasks":[]}
         """;
 
     public const string AddRepeatingSectionSaved = """

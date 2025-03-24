@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
 
 namespace Component.Form.Infrastructure.Fake
 {
+    [ExcludeFromCodeCoverage]
     public class FakeFormDataStore : IFormDataStore
     {
         private static Dictionary<string, string> _formData = new Dictionary<string, string>();

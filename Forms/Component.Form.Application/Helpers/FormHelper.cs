@@ -93,11 +93,6 @@ public static class FormHelper
                 
         var pageHandler = pageHandlerFactory.GetFor(page.PageType);
 
-        if (pageHandler == null)
-        {
-            throw new ArgumentException($"Page handler not found for page type {page.PageType}");
-        }
-
         var nextPageIdResult = await pageHandler.GetNextPageId(page, data, nextExtraData, extraData);
 
         // kill it here..
@@ -107,7 +102,7 @@ public static class FormHelper
             return;
         }
 
-        var nextPage = formModel.Pages.FirstOrDefault(p => p.PageId == nextPageIdResult.NextPageId);
+        var nextPage = formModel.Pages.Find(p => p.PageId == nextPageIdResult.NextPageId);
         if (nextPage == null)
         {
             throw new ArgumentException($"Next page {nextPageIdResult.NextPageId} not found");
@@ -134,11 +129,6 @@ public static class FormHelper
         }
 
         var pageHandler = pageHandlerFactory.GetFor(currentPage.PageType);
-
-        if (pageHandler == null)
-        {
-            throw new ArgumentException($"Page handler not found for page type {currentPage.PageType}");
-        }
 
         var walkResult = await pageHandler.WalkToNextInvalidOrUnfilledPage(formModel, currentPage, data, extraData);
 

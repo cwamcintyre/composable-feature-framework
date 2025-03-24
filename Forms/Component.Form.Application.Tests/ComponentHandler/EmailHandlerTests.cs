@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Application.ComponentHandler.Email;
 using Component.Form.Model;
 
 namespace Component.Form.Application.ComponentHandler.Tests;
 
+[ExcludeFromCodeCoverage]
 public class EmailHandlerTests
 {
     private readonly EmailHandler _emailHandler;

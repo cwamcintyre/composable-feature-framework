@@ -1,7 +1,6 @@
 using System.Dynamic;
 using Component.Core.Application;
 using Component.Form.Application.Helpers;
-using Component.Form.Application.PageHandler;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.AddRepeatingSection.Model;
 using Component.Form.Model.PageHandler;
@@ -13,17 +12,15 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
 {
     private readonly IFormStore _formStore;
     private readonly IFormDataStore _formDataStore;
-    private readonly IPageHandlerFactory _pageHandlerFactory;
     private readonly SafeJsonHelper _safeJsonHelper;
     private readonly ILogger<AddRepeatingSection> _logger;
 
-    public AddRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, IPageHandlerFactory pageHandlerFactory, SafeJsonHelper safeJsonHelper, ILogger<AddRepeatingSection> logger)
+    public AddRepeatingSection(IFormStore formStore, IFormDataStore formDataStore, SafeJsonHelper safeJsonHelper, ILogger<AddRepeatingSection> logger)
     {
         _logger = logger;
         _formStore = formStore;
         _formDataStore = formDataStore;
         _safeJsonHelper = safeJsonHelper;
-        _pageHandlerFactory = pageHandlerFactory;
     }
 
     public async Task<AddRepeatingSectionResponseModel> HandleAsync(AddRepeatingSectionRequestModel request)
@@ -59,7 +56,7 @@ public class AddRepeatingSection : IRequestResponseUseCase<AddRepeatingSectionRe
             throw new ArgumentException($"Page {request.PageId} in form {request.FormId} is not a repeating page");
         }
 
-        if (formDataDict == null || !formDataDict.ContainsKey(repeatingPage.RepeatKey))
+        if (!formDataDict.ContainsKey(repeatingPage.RepeatKey))
         {
             formDataDict[repeatingPage.RepeatKey] = new List<object>();
         }

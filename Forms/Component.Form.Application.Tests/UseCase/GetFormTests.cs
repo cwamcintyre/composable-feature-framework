@@ -5,9 +5,11 @@ using Component.Form.Application.UseCase.GetForm.Model;
 using Component.Form.Application.Tests.Doubles.Infrastructure;
 using Xunit;
 using Component.Form.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class GetFormTests
 {
     [Fact]
@@ -15,7 +17,7 @@ public class GetFormTests
     {
         // Arrange
         var getForm = new GetFormTestBuilder()
-            .WithGetFormAsyncThrowing("nonexistent-form")
+            .WithGetFormAsync("nonexistent-form", null)
             .Build();
 
         var request = new GetFormRequestModel { FormId = "nonexistent-form" };

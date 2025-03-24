@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Application.ComponentHandler.PhoneNumber;
 using Component.Form.Model;
 
 namespace Component.Form.Application.ComponentHandler.Tests;
 
+[ExcludeFromCodeCoverage]
 public class PhoneNumberHandlerTests
 {
     private readonly PhoneNumberHandler _handler;

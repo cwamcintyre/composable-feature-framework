@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Application.PageHandler;
 using Component.Form.Application.Tests.Doubles.Infrastructure;
 using Component.Form.Application.Tests.Doubles.UseCase;
@@ -6,6 +7,7 @@ using Component.Form.Model;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class ProcessChangeInFormTests
 {
     [Fact]
@@ -73,7 +75,7 @@ public class ProcessChangeInFormTests
     {
         // Arrange
         var formDataStoreMock = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync("applicant-123", FormDataExamples.WhatIsYourNameAnsweredFormData)
+            .WithGetFormDataAsync("applicant-123", new Model.FormData() { Data = FormDataExamples.WhatIsYourName_Valid })
             .WithSaveFormDataAsync("textComponent", "applicant-123", FormDataExamples.WhatIsYourNameChanged_Saved);
         
         var formDataStore = formDataStoreMock.Build();
@@ -104,8 +106,8 @@ public class ProcessChangeInFormTests
     {
         // Arrange
         var formDataStoreMock = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync("applicant-123", FormDataExamples.WhatIsYourNameAnsweredFormData)
-            .WithSaveFormDataAsync("textComponent", "applicant-123", FormDataExamples.WhatIsYourNameAnsweredFormData_Invalid.Data);
+            .WithGetFormDataAsync("applicant-123", new Model.FormData() { Data = FormDataExamples.WhatIsYourName_Valid })
+            .WithSaveFormDataAsync("textComponent", "applicant-123", FormDataExamples.WhatIsYourName_Invalid);
         
         var formDataStore = formDataStoreMock.Build();
 
@@ -127,7 +129,7 @@ public class ProcessChangeInFormTests
         // Assert
         Assert.NotNull(response);
         Assert.Equal("what-is-your-name", response.NextPageId);
-        formDataStoreMock.VerifySaveFormDataAsync("textComponent", "applicant-123", FormDataExamples.WhatIsYourNameAnsweredFormData_Invalid.Data);
+        formDataStoreMock.VerifySaveFormDataAsync("textComponent", "applicant-123", FormDataExamples.WhatIsYourName_Invalid);
     }
 
     [Fact]

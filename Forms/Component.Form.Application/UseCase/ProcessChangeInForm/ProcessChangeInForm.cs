@@ -54,11 +54,6 @@ public class ProcessChangeInForm : IRequestResponseUseCase<ProcessChangeInFormRe
 
         var pageHandler = _pageHandlerFactory.GetFor(basePage.PageType);
 
-        if (pageHandler == null)
-        {
-            throw new ArgumentException($"Page handler not found for page type {basePage.PageType}");
-        }
-
         _logger.LogInformation($"Fetching existing data for form {request.FormId} and applicant: {request.ApplicantId}");
         var formDataModel = await _formDataStore.GetFormDataAsync(request.ApplicantId);
 

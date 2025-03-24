@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Model;
 
 namespace Component.Form.Application.Tests.Doubles.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public class FormDataExamples
 {
     public const string ApplicantId = "a1b2c3d4-e5f6-7a8b-9c0d-e1f2g3h4i5j6";
@@ -47,41 +49,25 @@ public class FormDataExamples
         {"do_you_want_to_fill_in_this_form":"yes"}
         """;
 
-    public static FormData DoYouWantToFillInThisFormAnsweredFormData = new FormData
-    {
-        Data = DoYouWantToFillInThisFormAnswered_Yes
-    };
+    public const string DoYouWantToFillInThisFormAnswered_No = 
+        """
+        {"do_you_want_to_fill_in_this_form":"no"}
+        """;
 
     public const string WhatIsYourNameChanged_Saved = 
         """
         {"what_is_your_name":"Jane Doe"}
         """;
 
-    public static FormData WhatIsYourNameAnsweredFormData = new FormData
-    {
-        Data = 
-            """
-            {"what_is_your_name":"John Doe"}
-            """
-    };
+    public const string WhatIsYourName_Valid = 
+        """
+        {"what_is_your_name":"John Doe"}
+        """;
 
-    public static FormData WhatIsYourNameAnsweredFormData_Invalid = new FormData
-    {
-        Data = 
-            """
-            {"what_is_your_name":"BOB"}
-            """
-    };
-
-    public static FormData WhatIsYourNameAnsweredFormData_Changed = new FormData
-    {
-        Data = WhatIsYourNameChanged_Saved
-    };
-
-    public static FormData EmptyFormData = new FormData
-    {
-        Data = EmptyForm
-    };
+    public const string WhatIsYourName_Invalid = 
+        """
+        {"what_is_your_name":"BOB"}
+        """;
 
     public static string UnknownComponentData = 
         """

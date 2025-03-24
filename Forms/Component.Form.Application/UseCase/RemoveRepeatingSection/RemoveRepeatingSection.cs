@@ -36,13 +36,13 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
         }
 
         var form = await _formStore.GetFormAsync(request.FormId);
-        _logger.LogInformation($"fetching existing data for formId: {request.FormId}, applicantId: {request.ApplicantId}");
-        var formDataModel = await _formDataStore.GetFormDataAsync(request.ApplicantId);
-
         if (form == null)
         {
-            throw new ArgumentException($"Form {request.FormId} not found");
+            throw new ArgumentNullException($"Form {request.FormId} not found");
         }
+
+        _logger.LogInformation($"fetching existing data for formId: {request.FormId}, applicantId: {request.ApplicantId}");
+        var formDataModel = await _formDataStore.GetFormDataAsync(request.ApplicantId);
 
         var page = form.Pages.Find(p => p.PageId == request.PageId);
 
@@ -53,6 +53,8 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
 
         var formData = _safeJsonHelper.SafeDeserializeObject<ExpandoObject>(formDataModel.Data);
         var formDataDict = formData as IDictionary<string, object>;
+
+        var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
 
         var repeatingPage = page as InlineRepeatingPageSection;
         if (repeatingPage == null)
@@ -67,19 +69,18 @@ public class RemoveRepeatingSection : IRequestResponseUseCase<RemoveRepeatingSec
 
         var repeatList = formDataDict[repeatingPage.RepeatKey] as List<object>;
 
-        if (repeatList == null || repeatList.Count <= request.Index)
+        if (repeatList == null)
         {
             throw new ArgumentException($"No data found for repeating page at index {request.Index}");
         }
 
+        if (repeatList.Count <= request.Index) 
+        {
+            throw new ArgumentOutOfRangeException(nameof(request.Index), $"Index {request.Index} is out of range for repeating section with count {repeatList.Count}");
+        }
+
         _logger.LogInformation($"Removing repeating section at index {request.Index}");
         repeatList.RemoveAt(request.Index);
-
-        var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
-        if (pageHandler == null)
-        {
-            throw new ArgumentException($"Page handler not found for page type {page.PageType}");
-        }
 
         var meetsCondition = repeatingPage.DataThatMeetsCondition;
         var doesNotMeetCondition = repeatingPage.DataThatDoesNotMeetCondition;

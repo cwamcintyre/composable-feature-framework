@@ -15,9 +15,11 @@ using Component.Form.Application.ComponentHandler.Email;
 using Component.Form.Application.ComponentHandler.PhoneNumber;
 using Component.Form.Application.ComponentHandler.Default;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class RemoveRepeatingSectionTestBuilder
 {
     private readonly ServiceCollection _serviceCollection;
@@ -67,6 +69,13 @@ public class RemoveRepeatingSectionTestBuilder
     public RemoveRepeatingSectionTestBuilder WithFormDataStore(IFormDataStore formDataStore)
     {
         _serviceCollection.AddSingleton(formDataStore);
+        return this;
+    }
+
+    public RemoveRepeatingSectionTestBuilder WithFormStore(IFormStore formStore)
+    {
+        _serviceCollection.Remove(new ServiceDescriptor(typeof(IFormStore), typeof(FakeFormStore), ServiceLifetime.Singleton));
+        _serviceCollection.AddSingleton(formStore);
         return this;
     }
 

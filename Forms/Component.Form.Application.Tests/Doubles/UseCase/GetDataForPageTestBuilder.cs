@@ -16,9 +16,11 @@ using Component.Form.Application.ComponentHandler.Default;
 using Component.Form.Application.PageHandler.Default;
 using Component.Form.Application.PageHandler.InlineRepeating;
 using Component.Form.Application.Helpers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class GetDataForPageTestBuilder
 {
     private readonly ServiceCollection _serviceCollection;
@@ -69,6 +71,13 @@ public class GetDataForPageTestBuilder
     public GetDataForPageTestBuilder WithFormDataStore(IFormDataStore formDataStore)
     {
         _serviceCollection.AddSingleton(formDataStore);
+        return this;
+    }
+
+    public GetDataForPageTestBuilder WithFormStore(IFormStore formStore)
+    {
+        _serviceCollection.Remove(new ServiceDescriptor(typeof(IFormStore), ServiceLifetime.Singleton));
+        _serviceCollection.AddSingleton(formStore);
         return this;
     }
 

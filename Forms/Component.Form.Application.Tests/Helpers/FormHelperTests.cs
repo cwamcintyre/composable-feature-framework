@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using Component.Form.Application.Helpers;
 using Component.Form.Application.Tests.Doubles.PageHandler;
@@ -6,6 +7,7 @@ using Component.Form.Model;
 
 namespace Component.Form.Application.Tests.Helpers;
 
+[ExcludeFromCodeCoverage]
 public class FormHelperTests
 {
     private readonly DefaultPageHandlerTestBuilder _builder;

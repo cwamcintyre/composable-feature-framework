@@ -3,9 +3,11 @@ using Component.Form.Application.Shared.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class GetDataTestBuilder
 {
     private readonly ServiceCollection _serviceCollection;

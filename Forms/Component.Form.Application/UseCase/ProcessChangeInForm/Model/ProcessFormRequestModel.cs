@@ -8,5 +8,4 @@ public class ProcessChangeInFormRequestModel
     public string PageId { get; set; }
     public string ApplicantId { get; set; }
     public Dictionary<string, string> Form { get; set; }
-    public string ExtraData { get; set; }
 }

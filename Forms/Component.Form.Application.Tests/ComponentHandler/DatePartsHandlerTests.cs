@@ -3,9 +3,11 @@ using System.Dynamic;
 using Component.Form.Application.ComponentHandler.DateParts;
 using Component.Form.Model.ComponentHandler;
 using Component.Form.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.ComponentHandler.Tests;
 
+[ExcludeFromCodeCoverage]
 public class DatePartsHandlerTests
 {
     private readonly DatePartsHandler _handler;

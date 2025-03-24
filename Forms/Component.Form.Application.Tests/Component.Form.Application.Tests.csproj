@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ComponentHandler\" />
     <Folder Include="PageHandler\" />
   </ItemGroup>
 

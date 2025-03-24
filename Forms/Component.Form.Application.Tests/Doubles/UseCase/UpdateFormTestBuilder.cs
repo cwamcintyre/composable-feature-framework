@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Application.UseCase.UpdateForm;
@@ -8,6 +9,7 @@ using Moq;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class UpdateFormTestBuilder
 {
     private readonly Mock<IFormStore> _mockFormStore;

@@ -6,9 +6,11 @@ using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Infrastructure.Fake
 {
+    [ExcludeFromCodeCoverage]
     public class FakeFormStore : IFormStore
     {
         private readonly Dictionary<string, FormModel> _formStore;

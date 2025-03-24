@@ -5,14 +5,16 @@ using Xunit;
 using Component.Form.Model.ComponentHandler;
 using Component.Form.Application.ComponentHandler.Default;
 using Component.Form.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.ComponentHandler.Tests;
 
-public class SimpleHandlerTests
+[ExcludeFromCodeCoverage]
+public class DefaultHandlerTests
 {
     private readonly DefaultHandler _handler;
     
-    public SimpleHandlerTests()
+    public DefaultHandlerTests()
     {
         _handler = new DefaultHandler();
     }

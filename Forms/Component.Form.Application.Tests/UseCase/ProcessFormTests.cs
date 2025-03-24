@@ -2,9 +2,11 @@
 using Component.Form.Application.Tests.Doubles.Infrastructure;
 using Component.Form.Application.Tests.Doubles.UseCase;
 using Component.Form.Application.PageHandler;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class ProcessFormTests
 {
     [Fact]
@@ -72,8 +74,8 @@ public class ProcessFormTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.EmptyFormData)
-            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourNameAnsweredFormData.Data)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourName_Valid)
             .Build();
 
         var processForm = new ProcessFormTestBuilder()
@@ -100,8 +102,8 @@ public class ProcessFormTests
     public async Task HandleAsync_Should_ProcessFormSuccessfully_WhenDataInvalid()
     {
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.EmptyFormData)
-            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourNameAnsweredFormData_Invalid.Data)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourName_Invalid)
             .Build();
 
         var processForm = new ProcessFormTestBuilder()
@@ -129,8 +131,8 @@ public class ProcessFormTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.EmptyFormData)
-            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.DoYouWantToFillInThisFormAnsweredFormData.Data)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.DoYouWantToFillInThisFormAnswered_Yes)
             .Build();
 
         var processForm = new ProcessFormTestBuilder()
@@ -158,8 +160,8 @@ public class ProcessFormTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.EmptyFormData)
-            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.DoYouWantToFillInThisFormAnsweredFormData.Data)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .WithSaveFormDataAsync("test", FormDataExamples.ApplicantId, FormDataExamples.DoYouWantToFillInThisFormAnswered_No)
             .Build();
 
         var processForm = new ProcessFormTestBuilder()
@@ -187,7 +189,7 @@ public class ProcessFormTests
     {
         // Arrange
         var formDataStoreMock = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync("applicant-123", new Model.FormData() { Data = RepeatingSectionExamples.EmptyFormDataStringSaved })
+            .WithGetFormDataAsync("applicant-123", new Model.FormData() { Data = RepeatingSectionExamples.EmptyForm })
             .WithSaveFormDataAsync("repeatingInlinePage", "applicant-123", RepeatingSectionExamples.WhatAreYouGoingToDoToday_Saved);
         
         var formDataStore = formDataStoreMock.Build();

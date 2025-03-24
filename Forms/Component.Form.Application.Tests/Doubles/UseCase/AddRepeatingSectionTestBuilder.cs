@@ -9,9 +9,11 @@ using Component.Form.Application.PageHandler.Default;
 using Component.Form.Application.PageHandler.InlineRepeating;
 using Component.Form.Application.Helpers;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.Doubles.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class AddRepeatingSectionTestBuilder
 {
     private readonly ServiceCollection _serviceCollection;

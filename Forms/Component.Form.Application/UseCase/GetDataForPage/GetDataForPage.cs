@@ -50,7 +50,7 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
             throw new ArgumentException($"Form {request.FormId} not found");
         }
 
-        var page = form.Pages.FirstOrDefault(p => p.PageId == request.PageId);
+        var page = form.Pages.Find(p => p.PageId == request.PageId);
 
         if (page == null)
         {
@@ -58,11 +58,6 @@ public class GetDataForPage : IRequestResponseUseCase<GetDataForPageRequestModel
         }
 
         var pageHandler = _pageHandlerFactory.GetFor(page.PageType);
-
-        if (pageHandler == null)
-        {
-            throw new ArgumentException($"Page handler not found for page type {page.PageType}");
-        }
 
         var parsedData = FormHelper.ParseData(formData.Data, _componentHandlerFactory);
 

@@ -5,9 +5,11 @@ using Component.Form.Application.UseCase.UpdateForm.Model;
 using Component.Form.Application.Tests.Doubles.UseCase;
 using Component.Form.Model;
 using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class UpdateFormTests
 {
     [Fact]

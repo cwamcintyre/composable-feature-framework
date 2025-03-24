@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Component.Form.Model;
 using Component.Form.Application.Shared.Infrastructure;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.Doubles.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public class FormDataStoreTestBuilder
 {
     public readonly Mock<IFormDataStore> MockFormDataStore;

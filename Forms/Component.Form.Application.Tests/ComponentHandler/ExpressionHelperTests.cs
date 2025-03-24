@@ -1,7 +1,9 @@
-﻿using Component.Form.Application.ComponentHandler;
+﻿using System.Diagnostics.CodeAnalysis;
+using Component.Form.Application.ComponentHandler;
 
 namespace Component.Form.Application.ComponentHandler.Tests;
 
+[ExcludeFromCodeCoverage]
 public class ExpressionHelperTests
 {
     [Fact]

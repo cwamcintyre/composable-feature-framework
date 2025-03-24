@@ -5,17 +5,56 @@ using Component.Form.Application.Tests.Doubles.UseCase;
 using Component.Form.Application.PageHandler;
 using Xunit;
 using Component.Form.Application.ComponentHandler;
+using Component.Form.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class GetDataForPageTests
 {
+    [Fact]
+    public async Task HandleAsync_ShouldThrowArgumentException_WhenFormDataNotFound()
+    {
+        // Arrange
+        var formDataStore = new FormDataStoreTestBuilder()
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, null)
+            .Build();
+
+        var formStore = new FormStoreTestBuilder()
+            .WithGetFormAsync("test", null)
+            .Build();
+
+        var getDataForPage = new GetDataForPageTestBuilder()
+            .WithFormStore(formStore)
+            .WithFormDataStore(formDataStore)
+            .Build();
+
+        var request = new GetDataForPageRequestModel
+        {
+            FormId = "nonexistent-form",
+            PageId = "page1",
+            ApplicantId = FormDataExamples.ApplicantId
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => getDataForPage.HandleAsync(request));
+    }
+
     [Fact]
     public async Task HandleAsync_ShouldThrowArgumentException_WhenFormNotFound()
     {
         // Arrange
-        var formDataStore = new FormDataStoreTestBuilder().Build();
+        var formDataStore = new FormDataStoreTestBuilder()
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .Build();
+
+        var formStore = new FormStoreTestBuilder()
+            .WithGetFormAsync("test", null)
+            .Build();
+
         var getDataForPage = new GetDataForPageTestBuilder()
+            .WithFormStore(formStore)
             .WithFormDataStore(formDataStore)
             .Build();
 
@@ -34,7 +73,10 @@ public class GetDataForPageTests
     public async Task HandleAsync_ShouldThrowArgumentException_WhenPageNotFound()
     {
         // Arrange
-        var formDataStore = new FormDataStoreTestBuilder().Build();
+        var formDataStore = new FormDataStoreTestBuilder()       
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .Build();
+
         var getDataForPage = new GetDataForPageTestBuilder()
             .WithFormDataStore(formDataStore)
             .Build();
@@ -50,7 +92,30 @@ public class GetDataForPageTests
         await Assert.ThrowsAsync<ArgumentException>(() => getDataForPage.HandleAsync(request));
     }
 
-        [Fact]
+    [Fact]
+    public async Task HandleAsync_ShouldThrowArgumentException_WhenPageHandlerIsInvalid()
+    {
+        // Arrange
+        var formDataStore = new FormDataStoreTestBuilder()       
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
+            .Build();
+
+        var getDataForPage = new GetDataForPageTestBuilder()
+            .WithFormDataStore(formDataStore)
+            .Build();
+
+        var request = new GetDataForPageRequestModel
+        {
+            FormId = "incorrectPageHandlerTest",
+            PageId = "what-is-your-name",
+            ApplicantId = FormDataExamples.ApplicantId
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<NoPageHandlerException>(() => getDataForPage.HandleAsync(request));
+    }
+
+    [Fact]
     public async Task HandleAsync_ShouldThrowArgumentException_WhenAnUnknownComponentIsConfigured()
     {
         // Arrange
@@ -78,7 +143,7 @@ public class GetDataForPageTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.EmptyFormData)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.EmptyForm })
             .Build();
 
         var getDataForPage = new GetDataForPageTestBuilder()
@@ -106,7 +171,7 @@ public class GetDataForPageTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourNameAnsweredFormData_Invalid)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.WhatIsYourName_Invalid } )
             .Build();
 
         var getDataForPage = new GetDataForPageTestBuilder()
@@ -135,7 +200,7 @@ public class GetDataForPageTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, FormDataExamples.WhatIsYourNameAnsweredFormData)
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = FormDataExamples.WhatIsYourName_Valid })
             .Build();
 
         var getDataForPage = new GetDataForPageTestBuilder()
@@ -193,7 +258,7 @@ public class GetDataForPageTests
     {
         // Arrange
         var formDataStore = new FormDataStoreTestBuilder()
-            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = RepeatingSectionExamples.EmptyFormDataStringSaved})
+            .WithGetFormDataAsync(FormDataExamples.ApplicantId, new Model.FormData() { Data = RepeatingSectionExamples.EmptyForm})
             .Build();
 
         var getDataForPage = new GetDataForPageTestBuilder()

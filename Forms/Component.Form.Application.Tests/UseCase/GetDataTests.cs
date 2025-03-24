@@ -4,9 +4,11 @@ using Component.Form.Application.Tests.Doubles.Infrastructure;
 using Component.Form.Application.Tests.Doubles.UseCase;
 using Xunit;
 using Component.Form.Model;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Component.Form.Application.Tests.UseCase;
 
+[ExcludeFromCodeCoverage]
 public class GetDataTests
 {
     [Fact]

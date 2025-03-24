@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Xunit;
 
 namespace Component.Form.Application.Tests.PageHandler
 {
+    [ExcludeFromCodeCoverage]
     public class DefaultPageHandlerTests
     {
         private readonly DefaultPageHandlerTestBuilder _builder;

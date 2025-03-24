@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Model;
 
 namespace Component.Form.Application.Tests.Doubles.PageHandler;
 
+[ExcludeFromCodeCoverage]
 public class DefaultPageTestBuilder
 {
     private readonly PageBase _pageBase;

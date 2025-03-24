@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Component.Form.Application.ComponentHandler;
 using Component.Form.Application.PageHandler.Default;
 using Component.Form.Application.Shared.Infrastructure;
@@ -8,6 +9,7 @@ using Moq;
 
 namespace Component.Form.Application.Tests.Doubles.PageHandler;
 
+[ExcludeFromCodeCoverage]
 public class DefaultPageHandlerTestBuilder
 {
         private readonly Mock<IFormStore> _formStoreMock;
