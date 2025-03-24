@@ -1,19 +1,14 @@
 using Component.Form.UI.Helpers;
 using Component.Form.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Component.Form.Model;
-using System.Net.Http.Headers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
 using Component.Form.UI.PageHandler;
+using Component.Form.UI.Exceptions;
 
 namespace Component.Form.UI.Controllers
 {
     public class FormController : Controller
     {
-        public const string TempData_ReturnWithErrorsKey = "ReturnWithErrors";
-        public const string TempData_ErrorsKey = "Errors";
-
+        private readonly ILogger<FormController> _logger;
         private readonly FormAPIService _formAPIService;
         private readonly IFormPresenter _formPresenter;
         private readonly PageHandlerFactory _pageHanderFactory;
@@ -21,11 +16,13 @@ namespace Component.Form.UI.Controllers
         public FormController(
             IFormPresenter formPresenter, 
             FormAPIService formAPIService, 
-            PageHandlerFactory pageHanderFactory)
+            PageHandlerFactory pageHanderFactory, 
+            ILogger<FormController> logger)
         {
             _formAPIService = formAPIService;
             _formPresenter = formPresenter;
             _pageHanderFactory = pageHanderFactory;
+            _logger = logger;
         }
 
         [HttpGet("form/{formId}/start")]
@@ -33,10 +30,10 @@ namespace Component.Form.UI.Controllers
         {
             if (string.IsNullOrEmpty(formId))
             {
-                return BadRequest("FormId is required.");
+                throw new BadRouteParametersException("FormId is required.");
             }
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             // ensure a clean session and generate a new applicant ID.
             FormSessionHelper.ClearApplicantId(HttpContext.Session);
@@ -50,13 +47,13 @@ namespace Component.Form.UI.Controllers
         {   
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
-                return BadRequest("FormId and Page are required.");
+                throw new BadRouteParametersException("FormId and Page are required.");
             }
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var currentPage = formModel.Pages.Find(p => p.PageId == page);
-            if (currentPage == null) return NotFound();
+            if (currentPage == null) throw new ArgumentNullException($"Page {page} not found.");
             
             var data = await _formAPIService.GetFormDataForPageAsync(formId, page, FormSessionHelper.GetApplicantId(HttpContext.Session), extraData);           
 
@@ -66,7 +63,7 @@ namespace Component.Form.UI.Controllers
             }
 
             var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
-            if (pageHandler == null) return NotFound();
+            if (pageHandler == null) throw new ArgumentNullException($"Page handler {currentPage.PageType} not found.");
 
             var result = await pageHandler.HandlePage(currentPage, data, extraData);
 
@@ -87,15 +84,15 @@ namespace Component.Form.UI.Controllers
         
             if (String.IsNullOrEmpty(formId) || String.IsNullOrEmpty(pageId))
             {
-                throw new ArgumentException("FormId or PageId is null");
+                throw new BadRouteParametersException("FormId or PageId is null");
             }
 
             var formModel = await _formAPIService.GetFormAsync(formId);
             var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
-            if (currentPage == null) return NotFound();
+            if (currentPage == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
-            if (pageHandler == null) return NotFound();
+            if (pageHandler == null) throw new ArgumentNullException($"Page handler {currentPage.PageType} not found.");
 
             var formData = await pageHandler.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
             
@@ -132,13 +129,13 @@ namespace Component.Form.UI.Controllers
         {   
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
-                return BadRequest("FormId and Page are required.");
+                throw new BadRouteParametersException("FormId and Page are required.");
             }
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var currentPage = formModel.Pages.Find(p => p.PageId == page);
-            if (currentPage == null) return NotFound();
+            if (currentPage == null) throw new ArgumentNullException($"Page {page} not found.");
             
             var data = await _formAPIService.GetFormDataForPageAsync(formId, page, FormSessionHelper.GetApplicantId(HttpContext.Session), extraData);           
 
@@ -148,7 +145,7 @@ namespace Component.Form.UI.Controllers
             }
 
             var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
-            if (pageHandler == null) return NotFound();
+            if (pageHandler == null) throw new ArgumentNullException($"Page handler {currentPage.PageType} not found.");
 
             var result = await pageHandler.HandlePage(currentPage, data, extraData);
 
@@ -170,15 +167,15 @@ namespace Component.Form.UI.Controllers
         
             if (String.IsNullOrEmpty(formId) || String.IsNullOrEmpty(pageId))
             {
-                throw new ArgumentException("FormId or PageId is null");
+                throw new BadRouteParametersException("FormId or PageId is null");
             }
 
             var formModel = await _formAPIService.GetFormAsync(formId);
             var currentPage = formModel.Pages.Find(p => p.PageId == pageId);
-            if (currentPage == null) return NotFound();
+            if (currentPage == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var pageHandler = _pageHanderFactory.GetFor(currentPage.PageType);
-            if (pageHandler == null) return NotFound();
+            if (pageHandler == null) throw new ArgumentNullException($"Page handler {currentPage.PageType} not found.");
 
             var formData = await pageHandler.GetSubmittedPageData(currentPage, Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString()));
             
@@ -218,7 +215,7 @@ namespace Component.Form.UI.Controllers
                 return BadRequest("FormId is required.");
             }
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var data = await _formAPIService.GetFormDataAsync(FormSessionHelper.GetApplicantId(HttpContext.Session));
 
@@ -233,10 +230,10 @@ namespace Component.Form.UI.Controllers
         {
             if (string.IsNullOrEmpty(formId) || string.IsNullOrEmpty(page))
             {
-                return BadRequest("FormId and Page are required.");
+                throw new BadRouteParametersException("FormId and Page are required.");
             }
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var result = await _formPresenter.HandleStop(page, formModel);
             return View(result.ViewName, result.PageModel);
@@ -246,7 +243,7 @@ namespace Component.Form.UI.Controllers
         public async Task<IActionResult> Confirmation(string formId)
         {
             var formModel = await _formAPIService.GetFormAsync(formId);
-            if (formModel == null) return NotFound();
+            if (formModel == null) throw new ArgumentNullException($"Form {formId} not found.");
 
             var applicationId = FormSessionHelper.GetApplicantId(HttpContext.Session);
             var data = await _formAPIService.GetFormDataAsync(applicationId);
