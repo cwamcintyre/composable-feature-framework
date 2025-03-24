@@ -15,21 +15,6 @@ public class EmailHandlerTests
     }
 
     [Fact]
-    public void Get_ShouldReturnData_WhenNameExists()
-    {
-        var data = new Dictionary<string, string> { { "email", "test@example.com" } };
-        var result = _emailHandler.Get("email", data);
-        Assert.Equal("test@example.com", result);
-    }
-
-    [Fact]
-    public void GetFromObject_ShouldReturnString_WhenDataIsString()
-    {
-        var result = _emailHandler.GetFromObject("test@example.com");
-        Assert.Equal("test@example.com", result);
-    }
-
-    [Fact]
     public void GetDataType_ShouldReturnStringType()
     {
         var result = _emailHandler.GetDataType();

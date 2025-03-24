@@ -421,7 +421,8 @@ public class GetDataForPageTests
         {
             FormId = "test",
             PageId = "what-is-your-address",
-            ApplicantId = FormDataExamples.ApplicantId
+            ApplicantId = FormDataExamples.ApplicantId,
+            ExtraData = "2-do-you-want-to-add-another-task"
         };
 
         // Act
@@ -433,6 +434,7 @@ public class GetDataForPageTests
         Assert.Empty(response.Errors);
         Assert.Equal("tasks-repeat", response.PreviousPage);
         Assert.Equal("0-do-you-want-to-add-another-task", response.PreviousExtraData);
+        Assert.True(response.ForceRedirect);
     }
 
         [Fact]

@@ -5,27 +5,7 @@ using PhoneNumbers;
 namespace Component.Form.Application.ComponentHandler.PhoneNumber;
 
 public class PhoneNumberHandler: IComponentHandler
-{
-    public virtual object Get(string name, Dictionary<string, string> data)
-    {
-        if (data.ContainsKey(name))
-        {
-            return data[name];
-        }
-        
-        return "";
-    }
-
-    public object GetFromObject(object data)
-    {
-        if (data is string value)
-        {
-            return value;
-        }
-
-        throw new ArgumentException("Phone number data is not a string");
-    }
-    
+{   
     public string GetDataType()
     {
         return SafeJsonHelper.GetSafeType(typeof(string));

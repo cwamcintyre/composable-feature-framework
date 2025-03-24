@@ -15,21 +15,6 @@ public class PhoneNumberHandlerTests
     }
 
     [Fact]
-    public void Get_ShouldReturnPhoneNumber_WhenNameExistsInData()
-    {
-        var data = new Dictionary<string, string> { { "phone", "1234567890" } };
-        var result = _handler.Get("phone", data);
-        Assert.Equal("1234567890", result);
-    }
-
-    [Fact]
-    public void GetFromObject_ShouldReturnPhoneNumber_WhenDataIsString()
-    {
-        var result = _handler.GetFromObject("1234567890");
-        Assert.Equal("1234567890", result);
-    }
-
-    [Fact]
     public void GetDataType_ShouldReturnStringType()
     {
         var result = _handler.GetDataType();

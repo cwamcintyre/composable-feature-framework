@@ -6,27 +6,7 @@ using Component.Form.Model;
 namespace Component.Form.Application.ComponentHandler.Email;
 
 public class EmailHandler : IComponentHandler
-{
-    public virtual object Get(string name, Dictionary<string, string> data)
-    {
-        if (data.ContainsKey(name))
-        {
-            return data[name];
-        }
-        
-        return "";
-    }
-
-    public object GetFromObject(object data)
-    {
-        if (data is string value)
-        {
-            return value;
-        }
-
-        throw new ArgumentException("Email data is not a string");
-    }
-    
+{  
     public string GetDataType()
     {
         return SafeJsonHelper.GetSafeType(typeof(string));
