@@ -1,5 +1,4 @@
 using System.Dynamic;
-using System.Reflection.PortableExecutable;
 using Component.Form.Application.ComponentHandler;
 using Component.Form.Application.Helpers;
 using Component.Form.Application.Shared.Infrastructure;
@@ -424,97 +423,48 @@ public class InlineRepeatingPageHandler : IPageHandler
     {
         var repeatingSection = (InlineRepeatingPageSection)currentPage;
 
-        // if we're adding a new section, move to the next, if we're at the end and the condition has been met, move to the start of a new repeat
-        if (extraData.Contains("/add")) 
+        var repeatingData = (InlineRepeatingData)extraData;
+
+        InlineRepeatingPage repeatPage = null;
+        if (string.IsNullOrEmpty(repeatingData.PageId))
         {
-            var repeatingData = (InlineRepeatingData)extraData.Replace("/add", "");
-            
-            var repeatPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatingData.PageId);
-            if (repeatPage == null)
-            {
-                throw new ArgumentException($"Could not find repeating page with id {repeatingData.PageId}");
-            }
-            
-            if (repeatPage.RepeatEnd)
-            {
-                var conditionResult = await MeetsCondition(repeatPage, data, repeatingData.RepeatIndex);
-                if (conditionResult.MetCondition)
-                {
-                    return new WalkResult()
-                    {
-                        Page = repeatingSection.RepeatingPages.Find(p => p.RepeatStart),
-                        ExtraData = $"{conditionResult.ExtraData}/add",
-                        Stop = true
-                    };
-                }
+            repeatPage = repeatingSection.RepeatingPages.Find(p => p.RepeatStart);
+        }
+        else
+        {
+            repeatPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatingData.PageId);
+        }
 
-                return new WalkResult()
-                {
-                    Page = formModel.Pages.FirstOrDefault(p => p.PageId == repeatingSection.NextPageId),
-                    Stop = false
-                };
-            }
+        if (repeatPage == null)
+        {
+            throw new ArgumentException($"Could not find repeating page with id {repeatingData.PageId}");
+        }
 
-            var nextRepeatingPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatPage.NextPageId);
-            
-            if (nextRepeatingPage == null)
+        var nextRepeatingPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatPage.NextPageId);
+        
+        if (nextRepeatingPage != null && !nextRepeatingPage.RepeatEnd)
+        {
+            return new WalkResult()
             {
-                throw new ArgumentException($"Could not find repeating page with id {repeatPage.PageId}");
+                Page = repeatingSection,
+                ExtraData = $"{repeatingData.RepeatIndex}-{nextRepeatingPage.PageId}",
+                Stop = true
+            };
+        }
+        else
+        {
+            var nextPage = formModel.Pages.FirstOrDefault(p => p.PageId == repeatingSection.NextPageId);
+            
+            if (nextPage == null)
+            {
+                throw new ArgumentException($"Could not find next page with id {repeatingSection.NextPageId}");
             }
 
             return new WalkResult()
             {
-                Page = nextRepeatingPage,
-                ExtraData = $"{nextRepeatingPage.RepeatIndex}-{nextRepeatingPage.PageId}/add",
-                Stop = true
+                Page = nextPage,
+                Stop = false
             };
-        }
-        // if we're changing an existing, move next until we hit the end, then move outside the section
-        else 
-        {
-            var repeatingData = (InlineRepeatingData)extraData;
-
-            InlineRepeatingPage repeatPage = null;
-            if (string.IsNullOrEmpty(repeatingData.PageId))
-            {
-                repeatPage = repeatingSection.RepeatingPages.Find(p => p.RepeatStart);
-            }
-            else
-            {
-                repeatPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatingData.PageId);
-            }
-
-            if (repeatPage == null)
-            {
-                throw new ArgumentException($"Could not find repeating page with id {repeatingData.PageId}");
-            }
-
-            var nextRepeatingPage = repeatingSection.RepeatingPages.Find(p => p.PageId == repeatPage.NextPageId);
-            
-            if (nextRepeatingPage != null && !nextRepeatingPage.RepeatEnd)
-            {
-                return new WalkResult()
-                {
-                    Page = repeatingSection,
-                    ExtraData = $"{repeatingData.RepeatIndex}-{nextRepeatingPage.PageId}",
-                    Stop = true
-                };
-            }
-            else
-            {
-                var nextPage = formModel.Pages.FirstOrDefault(p => p.PageId == repeatingSection.NextPageId);
-                
-                if (nextPage == null)
-                {
-                    throw new ArgumentException($"Could not find next page with id {repeatingSection.NextPageId}");
-                }
-
-                return new WalkResult()
-                {
-                    Page = nextPage,
-                    Stop = false
-                };
-            }
         }
     }
 

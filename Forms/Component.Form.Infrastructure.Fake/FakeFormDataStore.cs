@@ -16,8 +16,7 @@ namespace Component.Form.Infrastructure.Fake
             {
                 return new FormData()
                 {
-                    Data = "",
-                    Route = new Stack<string>()
+                    Data = ""
                 };
             }
 

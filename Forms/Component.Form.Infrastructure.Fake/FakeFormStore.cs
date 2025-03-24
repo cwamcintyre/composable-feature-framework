@@ -5,17 +5,20 @@ using Component.Form.Application.Helpers;
 using Component.Form.Application.Shared.Infrastructure;
 using Component.Form.Model;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace Component.Form.Infrastructure.Fake
 {
     public class FakeFormStore : IFormStore
     {
-        private static Dictionary<string, FormModel> _formStore;
+        private readonly Dictionary<string, FormModel> _formStore;
         private readonly SafeJsonHelper _safeJsonHelper;
+        private readonly string _formStorePath;
 
-        public FakeFormStore(SafeJsonHelper safeJsonHelper)
+        public FakeFormStore(SafeJsonHelper safeJsonHelper, IConfiguration configuration)
         {
             _safeJsonHelper = safeJsonHelper;
+            _formStorePath = configuration["FakeFormDirectory"];
             
             if (_formStore == null) 
             {
@@ -26,7 +29,7 @@ namespace Component.Form.Infrastructure.Fake
 
         private void LoadForms()
         {        
-            var formFiles = Directory.GetFiles("..\\..\\..\\..\\Component.Form.Infrastructure.Fake", "*.json");
+            var formFiles = Directory.GetFiles(_formStorePath, "*.json");
             foreach (var file in formFiles)
             {
                 var json = File.ReadAllText(file);

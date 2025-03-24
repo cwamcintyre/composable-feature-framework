@@ -29,7 +29,7 @@
     <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Component.Core.Application\Component.Core.Application.csproj" />
+    <ProjectReference Include="..\..\Component.Core.Application\Component.Core.Application.csproj" />
     <ProjectReference Include="..\Component.Form.Application\Component.Form.Application.csproj" />
     <ProjectReference Include="..\Component.Form.Infrastructure.Fake\Component.Form.Infrastructure.Fake.csproj" />
     <ProjectReference Include="..\Component.Form.Infrastructure.Redis\Component.Form.Infrastructure.Redis.csproj" />

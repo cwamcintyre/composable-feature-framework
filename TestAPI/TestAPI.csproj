@@ -18,7 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Component.Files.API\Component.Files.API.csproj" />
-    <ProjectReference Include="..\Component.Form.API\Component.Form.API.csproj" />
+    <ProjectReference Include="..\Forms\Component.Form.API\Component.Form.API.csproj" />
     <ProjectReference Include="..\Component.Search.API\Component.Search.API.csproj" />
   </ItemGroup>
   <ItemGroup>

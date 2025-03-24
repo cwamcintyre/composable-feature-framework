@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Component.Core\Component.Core.csproj" />
+    <ProjectReference Include="..\..\Component.Core\Component.Core.csproj" />
     <ProjectReference Include="..\Component.Form.Application\Component.Form.Application.csproj" />
     <ProjectReference Include="..\Component.Form.Model\Component.Form.Model.csproj" />
   </ItemGroup>
@@ -60,10 +60,14 @@
     </None> 
     <None Update="ipComplaint.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>            
+    </None>   
+    <None Update="incorrectPageHandlerTest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>                
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

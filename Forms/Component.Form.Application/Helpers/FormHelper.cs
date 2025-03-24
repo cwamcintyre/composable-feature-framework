@@ -21,35 +21,6 @@ public static class FormHelper
         return data;
     }
 
-    public static IDictionary<string, object> MergeWalkedData(IDictionary<string, object> withMe, Dictionary<string, object> toMerge, int repeatIndex)
-    {
-        foreach (var item in toMerge)
-        {
-            if (item.Value is List<object>)
-            {
-                var repeatList = (List<object>)item.Value;
-                
-                if (!withMe.ContainsKey(item.Key))
-                {
-                    withMe.Add(item.Key, new List<object>());
-                }
-
-                var withMeRepeatList = (List<object>)withMe[item.Key];
-
-                if (withMeRepeatList.Count <= repeatIndex)
-                {
-                    withMeRepeatList.Add(repeatList[0]);
-                }                
-
-                continue;
-            }
-
-            withMe[item.Key] = item.Value;
-        }
-
-        return withMe;
-    }
-
     public static JsonSerializerSettings GetJsonSerializerSettings(IComponentHandlerFactory _componentHandlerFactory)
     {
         return new JsonSerializerSettings

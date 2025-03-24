@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Component.Form.Application\Component.Form.Application.csproj" />
-    <ProjectReference Include="..\..\Component.Form.Model\Component.Form.Model.csproj" />
+    <ProjectReference Include="..\Component.Form.Application\Component.Form.Application.csproj" />
+    <ProjectReference Include="..\Component.Form.Infrastructure.Fake\Component.Form.Infrastructure.Fake.csproj" />
+    <ProjectReference Include="..\Component.Form.Model\Component.Form.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
