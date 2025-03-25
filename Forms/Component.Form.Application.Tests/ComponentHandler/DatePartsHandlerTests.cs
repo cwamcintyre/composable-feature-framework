@@ -54,4 +54,43 @@ public class DatePartsHandlerTests
 
         Assert.Empty(result);
     }
+
+    [Fact]
+    public async Task Validate_ShouldReturnValidationErrors_ForRepeatingData()
+    {
+        var datePartsData = new DatePartsModel { Day = 32, Month = 13, Year = 1800 };
+
+        dynamic data = new ExpandoObject();
+        dynamic datePartItemData = new ExpandoObject();
+        datePartItemData.date = datePartsData;
+        data.repeat = new List<ExpandoObject>()
+        {
+            datePartItemData
+        };
+
+        var result = await _handler.Validate("date", data, null, true, "repeat", 0);
+
+        Assert.Contains(DatePartsHandler.ERR_DAY_OUT_OF_BOUNDS, result);
+        Assert.Contains(DatePartsHandler.ERR_MONTH_OUT_OF_BOUNDS, result);
+        Assert.Contains(DatePartsHandler.ERR_YEAR_OUT_OF_BOUNDS, result);
+    }
+
+    [Fact]
+    public async Task Validate_ShouldPassForValidData_ForRepeatingData()
+    {
+        var datePartsData = new DatePartsModel { Day = 15, Month = 8, Year = 2023 };
+        var validationRules = new List<ValidationRule>();
+
+        dynamic data = new ExpandoObject();
+        dynamic datePartItemData = new ExpandoObject();
+        datePartItemData.date = datePartsData;
+        data.repeat = new List<ExpandoObject>()
+        {
+            datePartItemData
+        };
+
+        var result = await _handler.Validate("date", data, validationRules, true, "repeat", 0);
+
+        Assert.Empty(result);
+    }
 }

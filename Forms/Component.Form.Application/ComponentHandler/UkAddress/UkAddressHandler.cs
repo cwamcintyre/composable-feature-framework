@@ -23,7 +23,7 @@ public class UkAddressHandler : IComponentHandler
 
     public async Task<List<string>> Validate(string name, object data, List<ValidationRule> validationExpressions, bool repeating = false, string repeatKey = "", int repeatIndex = 0)
     {
-        var prefix = repeating ? $"((IEnumerable<dynamic>)Data.{repeatKey}).Last()" : $"Data";
+        var prefix = repeating ? $"Data.{repeatKey}[{repeatIndex}]" : $"Data";
 
         var validationRules = new List<ValidationRule>
         {

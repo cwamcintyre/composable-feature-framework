@@ -20,7 +20,17 @@ public class PhoneNumberHandler: IComponentHandler
     {
         var errors = new List<string>();
 
-        var phoneNumber = ((IDictionary<string, object>)data)[name].ToString();        
+        var phoneNumber = "";
+
+        if (repeating)
+        {
+            var dataList = (IList<object>)((IDictionary<string, object>)data)[repeatKey];
+            phoneNumber = ((IDictionary<string, object>)dataList[repeatIndex])[name].ToString();
+        }
+        else
+        {
+            phoneNumber = ((IDictionary<string, object>)data)[name].ToString();
+        }        
 
         if (string.IsNullOrEmpty(phoneNumber) || 
             !IsValidPhoneNumber(phoneNumber, "GB") ||

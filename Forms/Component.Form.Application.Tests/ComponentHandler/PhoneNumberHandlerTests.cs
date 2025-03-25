@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 using Component.Form.Application.ComponentHandler.PhoneNumber;
 using Component.Form.Model;
 
@@ -58,6 +59,26 @@ public class PhoneNumberHandlerTests
         var data = new Dictionary<string, object> { { "phone", phoneNumber } };
         var validationRules = new List<ValidationRule>();
         var result = await _handler.Validate("phone", data, validationRules);
+        Assert.DoesNotContain("Enter a UK phone number", result);
+    }
+
+    [Fact]
+    public async Task Validate_ShouldReturnErrors_WhenPhoneNumberIsInvalidInRepeatSection()
+    {
+        var repeatItemData = new Dictionary<string, object> { { "phone", "" } };
+        var data = new Dictionary<string, object> { { "repeat", new List<object> { repeatItemData } } };
+        var validationRules = new List<ValidationRule>();
+        var result = await _handler.Validate("phone", data, validationRules, true, "repeat", 0);
+        Assert.Contains("Enter a UK phone number", result);
+    }
+
+    [Fact]
+    public async Task Validate_ShouldReturnNoErrors_WhenPhoneNumberIsValidInRepeatSection()
+    {
+        var repeatItemData = new Dictionary<string, object> { { "phone", "07911123456" } };
+        var data = new Dictionary<string, object> { { "repeat", new List<object> { repeatItemData } } };
+        var validationRules = new List<ValidationRule>();
+        var result = await _handler.Validate("phone", data, validationRules, true, "repeat", 0);
         Assert.DoesNotContain("Enter a UK phone number", result);
     }
 }

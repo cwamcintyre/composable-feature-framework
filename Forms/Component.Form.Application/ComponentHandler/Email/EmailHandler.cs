@@ -21,8 +21,6 @@ public class EmailHandler : IComponentHandler
     {
         var errors = new List<string>();
 
-        
-
         var email = ((IDictionary<string, object>)data)[name].ToString();        
 
         if (string.IsNullOrEmpty(email) || !IsValidEmail(email))
